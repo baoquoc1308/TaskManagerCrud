@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./App.css";
+import "../styles/App.css";
 import { Auth } from "./components/auth";
 import TaskManager from "./components/task-manager";
 import { supabase } from "./supabase-client";
@@ -35,7 +35,15 @@ function App() {
     <>
       {session ? (
         <>
-          <button onClick={logout}> Log Out</button>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              padding: "1rem",
+            }}
+          >
+            <button onClick={logout}>Log Out</button>
+          </div>
           <TaskManager session={session} />
         </>
       ) : (

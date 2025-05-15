@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../supabase-client";
 import type { FormEvent } from "react";
+import "../styles/App.css";
 
 export const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);

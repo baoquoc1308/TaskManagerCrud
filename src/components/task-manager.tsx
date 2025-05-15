@@ -1,81 +1,97 @@
-import { useState, useEffect, useRef } from "react";
-import type { Task } from "../types/task";
-import type { Session } from "@supabase/supabase-js";
-import { fetchTasks } from "./fetchTasks";
-import { deleteTask } from "./deleteTask";
-import { SubmitTaskForm } from "./submitTask";
-import { UpdateTask } from "./updateTask";
-import { supabase } from "../supabase-client";
-import "../styles/App.css";
+import { useState, useEffect, useRef } from 'react'
+import type { Task } from '../types/task'
+import type { Session } from '@supabase/supabase-js'
+import { fetchTasks } from './fetchTasks'
+import { deleteTask } from './deleteTask'
+import { SubmitTaskForm } from './submitTask'
+import { supabase } from '../supabase-client'
+import '../styles/App.css'
 
 function TaskManager({ session }: { session: Session }) {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
-  const [newTaskAdded, setNewTaskAdded] = useState<number | null>(null);
-  const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [newTask, setNewTask] = useState({ title: "", description: "" });
-  const [taskImage, setTaskImage] = useState<File | null>(null);
+  const [tasks, setTasks] = useState<Task[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [totalCount, setTotalCount] = useState(0)
+  const [newTaskAdded, setNewTaskAdded] = useState<number | null>(null)
+  const [taskToDelete, setTaskToDelete] = useState<Task | null>(null)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [newTask, setNewTask] = useState({ title: '', description: '' })
+  const [taskImage, setTaskImage] = useState<File | null>(null)
+  const [editingId, setEditingId] = useState<number | null>(null)
+  const [newDescription, setNewDescription] = useState('')
 
-  const lastTaskRef = useRef<HTMLLIElement | null>(null);
+  const lastTaskRef = useRef<HTMLLIElement | null>(null)
 
   useEffect(() => {
-    fetchTasks(currentPage, setTasks, setTotalPages, setTotalCount);
-  }, [currentPage, totalCount]);
+    fetchTasks(currentPage, setTasks, setTotalPages, setTotalCount)
+  }, [currentPage, totalCount])
 
   useEffect(() => {
     if (newTaskAdded !== null) {
-      const taskOnThisPage = tasks.find((task) => task.id === newTaskAdded);
+      const taskOnThisPage = tasks.find(task => task.id === newTaskAdded)
 
       if (taskOnThisPage && lastTaskRef.current) {
         lastTaskRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
+          behavior: 'smooth',
+          block: 'start',
+        })
       }
 
       const timer = setTimeout(() => {
-        setNewTaskAdded(null);
-      }, 2000);
+        setNewTaskAdded(null)
+      }, 2000)
 
-      return () => clearTimeout(timer);
+      return () => clearTimeout(timer)
     }
-  }, [tasks, newTaskAdded]);
+  }, [tasks, newTaskAdded])
 
   // Realtime subscription
   useEffect(() => {
-    const channel = supabase.channel("tasks-channel");
+    const channel = supabase.channel('tasks-channel')
     channel
       .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "tasks" },
-        (payload) => {
-          const newTask = payload.new as Task;
-          setTasks((prev) => [...prev, newTask]);
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'tasks' },
+        payload => {
+          const newTask = payload.new as Task
+          setTasks(prev => [...prev, newTask])
         }
       )
-      .subscribe();
+      .subscribe()
 
     return () => {
-      channel.unsubscribe();
-    };
-  }, []);
+      channel.unsubscribe()
+    }
+  }, [])
+  const updateTask = async (taskId: number) => {
+    const { error } = await supabase
+      .from('tasks')
+      .update({ description: newDescription })
+      .eq('id', taskId)
+
+    if (!error) {
+      setTasks(prev =>
+        prev.map(task =>
+          task.id === taskId ? { ...task, description: newDescription } : task
+        )
+      )
+      setEditingId(null)
+    }
+  }
 
   const confirmDeleteTask = (task: Task) => {
-    setTaskToDelete(task);
-    setShowDeleteModal(true);
-  };
+    setTaskToDelete(task)
+    setShowDeleteModal(true)
+  }
 
   const cancelDelete = () => {
-    setShowDeleteModal(false);
-    setTaskToDelete(null);
-  };
+    setShowDeleteModal(false)
+    setTaskToDelete(null)
+  }
 
   const handleConfirmDelete = async () => {
-    if (!taskToDelete) return;
+    if (!taskToDelete) return
     await deleteTask(
       taskToDelete,
       tasks,
@@ -86,8 +102,8 @@ function TaskManager({ session }: { session: Session }) {
       setTotalPages,
       setShowDeleteModal,
       setTaskToDelete
-    );
-  };
+    )
+  }
 
   return (
     <div className="task-manager">
@@ -110,20 +126,58 @@ function TaskManager({ session }: { session: Session }) {
           <li
             key={task.id}
             className={`task-item ${
-              newTaskAdded === task.id ? "new-task" : ""
+              newTaskAdded === task.id ? 'new-task' : ''
             }`}
             ref={index === tasks.length - 1 ? lastTaskRef : null}
           >
             <h3>{task.title}</h3>
+
             <p>{task.description}</p>
             {task.image_url && <img src={task.image_url} alt="task" />}
-            <UpdateTask task={task} setTasks={setTasks} />
-            <button
-              className="delete-btn"
-              onClick={() => confirmDeleteTask(task)}
-            >
-              Delete
-            </button>
+
+            {editingId === task.id ? (
+              <>
+                <textarea
+                  value={newDescription}
+                  onChange={e => setNewDescription(e.target.value)}
+                  placeholder="Updated description..."
+                />
+                <div className="task-actions">
+                  <button
+                    className="save-btn"
+                    onClick={() => updateTask(task.id)}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="cancel-btn"
+                    onClick={() => setEditingId(null)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="task-actions">
+                  <button
+                    className="edit-btn"
+                    onClick={() => {
+                      setEditingId(task.id)
+                      setNewDescription(task.description)
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="delete-btn"
+                    onClick={() => confirmDeleteTask(task)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </>
+            )}
           </li>
         ))}
       </ul>
@@ -143,24 +197,20 @@ function TaskManager({ session }: { session: Session }) {
       <div className="pagination">
         <button
           disabled={currentPage === 1}
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
         >
           Prev
         </button>
-        <span>
-          Page {currentPage} / {totalPages}
-        </span>
+        <span>Page {currentPage}</span>
         <button
           disabled={currentPage === totalPages}
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-          }
+          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
         >
           Next
         </button>
       </div>
     </div>
-  );
+  )
 }
 
-export default TaskManager;
+export default TaskManager

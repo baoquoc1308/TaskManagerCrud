@@ -1,35 +1,35 @@
-import { useEffect, useState } from "react";
-import "../styles/App.css";
-import { Auth } from "./components/auth";
-import TaskManager from "./components/task-manager";
-import { supabase } from "./supabase-client";
+import { useEffect, useState } from 'react'
+import './styles/App.css'
+import { Auth } from './components/auth'
+import TaskManager from './components/task-manager'
+import { supabase } from './supabase-client'
 
 function App() {
-  const [session, setSession] = useState<any>(null);
+  const [session, setSession] = useState<any>(null)
 
   const fetchSession = async () => {
-    const currentSession = await supabase.auth.getSession();
-    console.log(currentSession);
-    setSession(currentSession.data.session);
-  };
+    const currentSession = await supabase.auth.getSession()
+    console.log(currentSession)
+    setSession(currentSession.data.session)
+  }
 
   useEffect(() => {
-    fetchSession();
+    fetchSession()
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
-        setSession(session);
+        setSession(session)
       }
-    );
+    )
 
     return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, []);
+      authListener.subscription.unsubscribe()
+    }
+  }, [])
 
   const logout = async () => {
-    await supabase.auth.signOut();
-  };
+    await supabase.auth.signOut()
+  }
 
   return (
     <>
@@ -37,9 +37,9 @@ function App() {
         <>
           <div
             style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              padding: "1rem",
+              display: 'flex',
+              justifyContent: 'flex-end',
+              padding: '1rem',
             }}
           >
             <button onClick={logout}>Log Out</button>
@@ -50,7 +50,7 @@ function App() {
         <Auth />
       )}
     </>
-  );
+  )
 }
 
-export default App;
+export default App

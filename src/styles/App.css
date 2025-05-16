@@ -82,6 +82,9 @@
   margin-bottom: 1.5rem;
   color: #333;
 }
+.task-manager {
+  max-width: 1140px;
+}
 
 /* Input and Textarea */
 input[type="text"],
@@ -115,7 +118,7 @@ button {
   border-radius: 10px;
   border: none;
   cursor: pointer;
-  background: #00b0b3;
+  background: #3fcf8e;
   color: white;
   font-weight: 500;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
@@ -124,21 +127,21 @@ button {
 button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-  background: #00888a;
+  background: #35b97f;
   color: white;
 }
 
 /* Switch Auth Mode */
 .switch-btn {
-  background: #00b0b3;
-  border: 2px solid #00b0b3;
+  background: #3fcf8e;
+  border: 2px solid #3fcf8e;
   color: white;
   margin-top: 1rem;
   transition: all 0.3s ease;
 }
 
 .switch-btn:hover {
-  background: #00888a;
+  background: #35b97f;
   color: white;
   border: none;
 }
@@ -149,6 +152,16 @@ button:hover {
   padding: 0;
   margin-top: 2rem;
   animation: fadeIn 0.5s ease-in;
+}
+.task-list button {
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  background: #3fcf8e;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+  flex: 1;
 }
 
 /* Task Item */
@@ -188,7 +201,7 @@ button:hover {
   padding: 0.5rem 1.2rem;
   border-radius: 8px;
   border: none;
-  background: #00b0b3;
+  background: #3fcf8e;
   color: white;
   cursor: pointer;
   transition: background 0.3s ease, color 0.3s ease;
@@ -196,7 +209,7 @@ button:hover {
 }
 
 .task-actions button:hover {
-  background: #00888a;
+  background: #35b97f;
   color: white;
 }
 
@@ -210,8 +223,8 @@ button:hover {
 }
 
 .new-task {
-  background-color: #d1f7d1; /* Light green background */
-  border-left: 5px solid rgb(182, 226, 182); /* Green left border */
+  background-color: #dbe7db; /* Light green background */
+  border-left: 5px solid rgb(202, 224, 202); /* Green left border */
   animation: highlight 2s ease-in-out; /* Smooth highlight effect */
 }
 
@@ -220,34 +233,17 @@ button:hover {
     background-color: #d1f7d1;
   }
   50% {
-    background-color: #b0f0b0;
+    background-color: #d7e6d7;
   }
   100% {
     background-color: #d1f7d1;
   }
 }
-
-.pagination-controls {
+.pagination {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-.pagination-controls button {
-  padding: 0.5rem 1.2rem;
-  border-radius: 8px;
-  border: none;
-  background: #00b0b3;
-  color: white;
-  cursor: pointer;
-  transition: background 0.3s ease, color 0.3s ease;
-}
-
-.pagination-controls button:hover {
-  background: #00888a;
-  color: white;
+  justify-content: center;
+  gap: 20px; /* Khoảng cách 20px giữa các phần tử con */
 }
 
 .modal-overlay {
@@ -301,22 +297,48 @@ button:hover {
 }
 
 .confirm-btn {
-  background-color: #00b0b3;
+  background-color: #3fcf8e;
   color: white;
 }
 
 .confirm-btn:hover {
-  background-color: #00888a;
+  background-color: #35b97f;
 }
 
 .cancel-btn {
-  background-color: #00b0b3;
+  background-color: #3fcf8e;
   border: 1px solid #cbd5e1;
 }
 
 .cancel-btn:hover {
-  background-color: #00888a;
+  background-color: #35b97f;
 }
 .custom-file-upload input[type="file"] {
   display: none;
+}
+.auth-page {
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form {
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px 0 rgba(151, 155, 207, 0.37);
+  width: 350px;
+  color: #fff;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
 }

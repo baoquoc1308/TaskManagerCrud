@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import "../styles/App.css";
-import { Auth } from "./components/auth";
+import "./styles/App.css";
 import TaskManager from "./components/task-manager";
 import { supabase } from "./supabase-client";
+import AuthPage from "./components/AuthPage";
 
 function App() {
   const [session, setSession] = useState<any>(null);
@@ -37,17 +37,21 @@ function App() {
         <>
           <div
             style={{
+              color: "black",
               display: "flex",
               justifyContent: "flex-end",
+              alignItems: "center",
               padding: "1rem",
+              gap: "1rem",
             }}
           >
+            <span>{session.user?.email}</span>
             <button onClick={logout}>Log Out</button>
           </div>
           <TaskManager session={session} />
         </>
       ) : (
-        <Auth />
+        <AuthPage />
       )}
     </>
   );

@@ -4,7 +4,6 @@ import type { Session } from "@supabase/supabase-js";
 import { fetchTasks } from "./fetchTasks";
 import { deleteTask } from "./deleteTask";
 import { SubmitTaskForm } from "./submitTask";
-import { UpdateTask } from "./updateTask";
 import { supabase } from "../supabase-client";
 import "../styles/App.css";
 
@@ -19,6 +18,8 @@ function TaskManager({ session }: { session: Session }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [newTask, setNewTask] = useState({ title: "", description: "" });
   const [taskImage, setTaskImage] = useState<File | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [newDescription, setNewDescription] = useState("");
 
   const lastTaskRef = useRef<HTMLLIElement | null>(null);
 
@@ -63,6 +64,21 @@ function TaskManager({ session }: { session: Session }) {
       channel.unsubscribe();
     };
   }, []);
+  const updateTask = async (taskId: number) => {
+    const { error } = await supabase
+      .from("tasks")
+      .update({ description: newDescription })
+      .eq("id", taskId);
+
+    if (!error) {
+      setTasks((prev) =>
+        prev.map((task) =>
+          task.id === taskId ? { ...task, description: newDescription } : task
+        )
+      );
+      setEditingId(null);
+    }
+  };
 
   const confirmDeleteTask = (task: Task) => {
     setTaskToDelete(task);
@@ -117,13 +133,49 @@ function TaskManager({ session }: { session: Session }) {
             <h3>{task.title}</h3>
             <p>{task.description}</p>
             {task.image_url && <img src={task.image_url} alt="task" />}
-            <UpdateTask task={task} setTasks={setTasks} />
-            <button
-              className="delete-btn"
-              onClick={() => confirmDeleteTask(task)}
-            >
-              Delete
-            </button>
+            {editingId === task.id ? (
+              <>
+                <textarea
+                  value={newDescription}
+                  onChange={(e) => setNewDescription(e.target.value)}
+                  placeholder="Updated description..."
+                />
+                <div className="task-actions">
+                  <button
+                    className="save-btn"
+                    onClick={() => updateTask(task.id)}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="cancel-btn"
+                    onClick={() => setEditingId(null)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="task-actions">
+                  <button
+                    className="edit-btn"
+                    onClick={() => {
+                      setEditingId(task.id);
+                      setNewDescription(task.description);
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="delete-btn"
+                    onClick={() => confirmDeleteTask(task)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </>
+            )}
           </li>
         ))}
       </ul>
@@ -147,9 +199,7 @@ function TaskManager({ session }: { session: Session }) {
         >
           Prev
         </button>
-        <span>
-          Page {currentPage} / {totalPages}
-        </span>
+        <span>{currentPage}</span>
         <button
           disabled={currentPage === totalPages}
           onClick={() =>

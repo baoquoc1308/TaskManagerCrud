@@ -6,8 +6,20 @@ import { deleteTask } from './deleteTask'
 import { SubmitTaskForm } from './submitTask'
 import { supabase } from '../supabase-client'
 import '../styles/App.css'
+import { Pagination } from 'antd'
+import ThemeToggle from '../components/ThemeToggle'
+import ScrollButtons from './ScrollButton'
+import { Link } from 'react-router-dom'
 
-function TaskManager({ session }: { session: Session }) {
+function TaskManager({
+  session,
+  onLogout,
+  userEmail,
+}: {
+  session: Session
+  onLogout: () => void
+  userEmail: string
+}) {
   const [tasks, setTasks] = useState<Task[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -22,10 +34,11 @@ function TaskManager({ session }: { session: Session }) {
   const [newDescription, setNewDescription] = useState('')
 
   const lastTaskRef = useRef<HTMLLIElement | null>(null)
+  const [pageSize, setPageSize] = useState(5)
 
   useEffect(() => {
-    fetchTasks(currentPage, setTasks, setTotalPages, setTotalCount)
-  }, [currentPage, totalCount])
+    fetchTasks(currentPage, pageSize, setTasks, setTotalPages, setTotalCount)
+  }, [currentPage, pageSize, totalCount])
 
   useEffect(() => {
     if (newTaskAdded !== null) {
@@ -101,12 +114,18 @@ function TaskManager({ session }: { session: Session }) {
       setTotalCount,
       setTotalPages,
       setShowDeleteModal,
-      setTaskToDelete
+      setTaskToDelete,
+      pageSize
     )
   }
 
   return (
     <div className="task-manager">
+      <div className="task-header">
+        <ThemeToggle />
+        <span>{userEmail}</span>
+        <button onClick={onLogout}>Log Out</button>
+      </div>
       <h2>Task Manager CRUD</h2>
 
       <SubmitTaskForm
@@ -119,6 +138,7 @@ function TaskManager({ session }: { session: Session }) {
         setTotalCount={setTotalCount}
         setNewTaskAdded={setNewTaskAdded}
         fileInputRef={fileInputRef as React.RefObject<HTMLInputElement>}
+        pageSize={pageSize}
       />
 
       <ul className="task-list">
@@ -130,11 +150,11 @@ function TaskManager({ session }: { session: Session }) {
             }`}
             ref={index === tasks.length - 1 ? lastTaskRef : null}
           >
-            <h3>{task.title}</h3>
-
+            <Link to={`/task/${task.id}`} className="task-link">
+              <h3>{task.title}</h3>
+            </Link>
             <p>{task.description}</p>
             {task.image_url && <img src={task.image_url} alt="task" />}
-
             {editingId === task.id ? (
               <>
                 <textarea
@@ -193,21 +213,21 @@ function TaskManager({ session }: { session: Session }) {
           </div>
         </div>
       )}
-
-      <div className="pagination">
-        <button
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-        >
-          Prev
-        </button>
-        <span>Page {currentPage}</span>
-        <button
-          disabled={currentPage === totalPages}
-          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-        >
-          Next
-        </button>
+      <ScrollButtons scrollToBottomRef={lastTaskRef} />
+      <div
+        style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
+      >
+        <Pagination
+          current={currentPage}
+          pageSize={pageSize}
+          total={totalCount}
+          onChange={(page, size) => {
+            setCurrentPage(page)
+            if (size !== pageSize) setPageSize(size)
+          }}
+          showSizeChanger={true}
+          pageSizeOptions={['5', '10', '20', '50']}
+        />
       </div>
     </div>
   )

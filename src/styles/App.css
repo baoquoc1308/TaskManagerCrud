@@ -109,6 +109,9 @@
   margin-bottom: 1.5rem;
   color: #333;
 }
+.task-manager {
+  max-width: 1280px;
+}
 
 /* Input and Textarea */
 input[type='text'],
@@ -149,6 +152,7 @@ button {
 
 button:hover {
   transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
   background: #35b97f;
   color: white;
 }
@@ -182,6 +186,14 @@ button:focus {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
+}
+.task-list button {
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+  flex: 1;
 }
 
 /* Task Item */
@@ -246,16 +258,10 @@ button:focus {
   margin-top: auto;
 }
 
-.task-actions button {
-  flex: 1;
-  padding: 0.5rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 0.9rem;
-}
 
+.task-actions button:hover {
+  background: #35b97f;
+}
 .edit-btn {
   background-color: #f0ad4e;
   color: white;
@@ -287,6 +293,9 @@ button:focus {
 }
 
 .new-task {
+  background-color: #dbe7db; /* Light green background */
+  border-left: 5px solid rgb(202, 224, 202); /* Green left border */
+  animation: highlight 2s ease-in-out; /* Smooth highlight effect */
   background-color: #dbe7db;
   /* Light green background */
   border-left: 5px solid rgb(202, 224, 202);
@@ -313,8 +322,7 @@ button:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
-  /* Khoảng cách 20px giữa các phần tử con */
+  gap: 20px; /* Khoảng cách 20px giữa các phần tử con */
 }
 
 .modal-overlay {
@@ -398,7 +406,7 @@ button:focus {
 }
 
 .login-form {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
   padding: 30px;
   border-radius: 10px;

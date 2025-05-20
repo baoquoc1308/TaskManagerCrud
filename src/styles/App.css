@@ -195,6 +195,16 @@ button:focus {
   transition: background 0.3s ease, color 0.3s ease;
   flex: 1;
 }
+.task-list button {
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  background: #3fcf8e;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+  flex: 1;
+}
 
 /* Task Item */
 .task-item {
@@ -317,7 +327,6 @@ button:focus {
     background-color: #d1f7d1;
   }
 }
-
 .pagination {
   display: flex;
   align-items: center;
@@ -396,7 +405,6 @@ button:focus {
 .custom-file-upload input[type='file'] {
   display: none;
 }
-
 .auth-page {
   background-size: cover;
   background-position: center;

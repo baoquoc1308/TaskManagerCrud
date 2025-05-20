@@ -5,7 +5,6 @@
   padding: 0;
   text-align: center;
 }
-
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -97,8 +96,10 @@
   margin: 0;
   border-radius: 0;
   box-shadow: none;
-  background: linear-gradient(to bottom right, #ffffff, #f2f5ff);
+  /* background: linear-gradient(to bottom right, #ffffff, #f2f5ff); */
   animation: fadeIn 0.5s ease;
+  background-color: var(--bg-color);
+    color: var(--text-color);
 }
 
 /* Title */
@@ -107,7 +108,6 @@
   text-align: center;
   font-size: 2rem;
   margin-bottom: 1.5rem;
-  color: #333;
 }
 .task-manager {
   max-width: 1280px;
@@ -125,6 +125,8 @@ textarea {
   border: 1px solid #ddd;
   background-color: #fff;
   transition: border 0.3s, box-shadow 0.3s;
+  resize: none;
+  
 }
 
 input:focus,
@@ -208,7 +210,7 @@ button:focus {
 
 /* Task Item */
 .task-item {
-  background: #ffffff;
+  /* background: #ffffff; */
   border: 1px solid #eaeaea;
   padding: 1rem;
   border-radius: 15px;
@@ -224,7 +226,7 @@ button:focus {
 .task-item h3 {
   font-weight: bold;
   font-size: 1.1rem;
-  color: #333;
+  color: var(--text-color);
   margin-bottom: 0.5rem;
   height: 3rem;
   /* CHIỀU CAO CỐ ĐỊNH: 2 dòng khoảng 1.5rem mỗi dòng */
@@ -238,7 +240,7 @@ button:focus {
 
 /* Description */
 .task-item p {
-  color: #666;
+  color: var(--text-color);
   font-size: 0.95rem;
   margin-bottom: 0.5rem;
   height: 3rem;
@@ -334,6 +336,24 @@ button:focus {
   gap: 20px; /* Khoảng cách 20px giữa các phần tử con */
 }
 
+/* Hover light mode */
+.custom-pagination .ant-pagination-item-link:hover {
+  color: #1677ff !important;
+  border-color: #1677ff !important;
+}
+
+/* Dark mode */
+.dark .custom-pagination .ant-pagination-item-link,
+.dark .custom-pagination .ant-pagination-item-ellipsis {
+  color: #ddd !important;
+  border-color: #555 !important;
+}
+
+/* Hover dark mode */
+.dark .custom-pagination .ant-pagination-item-link:hover {
+  color: #fff !important;
+  border-color: #999 !important;
+}
 .modal-overlay {
   position: fixed;
   inset: 0;

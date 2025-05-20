@@ -1,4 +1,5 @@
-import { createContext, useState, useContext } from 'react'
+// ThemeContext.tsx
+import { createContext, useState, useContext, useEffect } from 'react'
 import type { ReactNode } from 'react'
 
 type ThemeContextType = {
@@ -11,8 +12,22 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [isDarkMode, setIsDarkMode] = useState(false)
 
+  useEffect(() => {
+    const storedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
+    const initialTheme = storedTheme === 'dark'
+    setIsDarkMode(initialTheme)
+    document.documentElement.setAttribute(
+      'data-theme',
+      initialTheme ? 'dark' : 'light'
+    )
+  }, [])
+
   const toggleTheme = () => {
-    setIsDarkMode(prev => !prev)
+    const newTheme = !isDarkMode
+    setIsDarkMode(newTheme)
+    const themeStr = newTheme ? 'dark' : 'light'
+    localStorage.setItem('theme', themeStr)
+    document.documentElement.setAttribute('data-theme', themeStr)
   }
 
   return (

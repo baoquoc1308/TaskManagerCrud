@@ -10,6 +10,7 @@ import { Pagination } from 'antd'
 import ThemeToggle from '../components/ThemeToggle'
 import ScrollButtons from './ScrollButton'
 import { Link } from 'react-router-dom'
+import '../styles/index.css'
 
 function TaskManager({
   session,
@@ -218,6 +219,7 @@ function TaskManager({
         style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
       >
         <Pagination
+          className="custom-pagination"
           current={currentPage}
           pageSize={pageSize}
           total={totalCount}

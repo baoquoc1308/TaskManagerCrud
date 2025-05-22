@@ -1,0 +1,31 @@
+.theme-toggle {
+    width: 60px;
+    height: 30px;
+    background-color: #ccc;
+    border-radius: 9999px;
+    padding: 2px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.theme-toggle .slider {
+    width: 26px;
+    height: 26px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    transition: transform 0.3s ease;
+    font-size: 14px;
+}
+
+.theme-toggle .slider.dark {
+    transform: translateX(30px);
+}

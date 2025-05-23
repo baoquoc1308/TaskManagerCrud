@@ -1,31 +1,35 @@
-import { useParams, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { supabase } from '../supabase-client'
-import type { Task } from '../types/task'
-import '../styles/TaskDetail.css'
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "../supabase-client";
+import type { Task } from "../types/task";
+import "../styles/TaskDetail.css";
+import {
+  getPriorityBadgeClass,
+  getStatusBadgeClass,
+} from "../utils/taskHelpers";
 
 function TaskDetail() {
-  const { id } = useParams()
-  const [task, setTask] = useState<Task | null>(null)
-  const navigate = useNavigate()
+  const { id } = useParams();
+  const [task, setTask] = useState<Task | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTask = async () => {
       const { data, error } = await supabase
-        .from('tasks')
-        .select('*')
-        .eq('id', id)
-        .single()
+        .from("tasks")
+        .select("*")
+        .eq("id", id)
+        .single();
 
       if (!error) {
-        setTask(data)
+        setTask(data);
       }
-    }
+    };
 
-    fetchTask()
-  }, [id])
+    fetchTask();
+  }, [id]);
 
-  if (!task) return <p>Loading...</p>
+  if (!task) return <p>Loading...</p>;
 
   return (
     <div className="task-detail-container">
@@ -47,10 +51,28 @@ function TaskDetail() {
         <div className="task-info-section">
           <h2>{task.title}</h2>
           <p>{task.description}</p>
+          <p>
+            <strong>Time:</strong> {task.time}
+          </p>
+
+          <div className="meta-row">
+            <span className="task-meta">
+              <strong>Priority:</strong>
+              <span className={getPriorityBadgeClass(task.priority)}>
+                {task.priority}
+              </span>
+            </span>
+            <span className="task-meta">
+              <strong>Status:</strong>
+              <span className={getStatusBadgeClass(task.status)}>
+                {task.status}
+              </span>
+            </span>
+          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default TaskDetail
+export default TaskDetail;

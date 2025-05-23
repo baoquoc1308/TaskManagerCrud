@@ -47,7 +47,7 @@
 /* Reset */
 * {
   box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -65,7 +65,7 @@
   }
 }
 .login-page {
-  background-image: url('https://img.lovepik.com/background/20211022/large/lovepik-scientific-and-technological-line-background-image_500870307.jpg');
+  background-image: url("https://img.lovepik.com/background/20211022/large/lovepik-scientific-and-technological-line-background-image_500870307.jpg");
   background-size: cover;
   /* Giúp ảnh phủ kín phần tử nhưng không méo */
   background-repeat: no-repeat;
@@ -99,7 +99,7 @@
   /* background: linear-gradient(to bottom right, #ffffff, #f2f5ff); */
   animation: fadeIn 0.5s ease;
   background-color: var(--bg-color);
-    color: var(--text-color);
+  color: var(--text-color);
 }
 
 /* Title */
@@ -109,14 +109,13 @@
   font-size: 2rem;
   margin-bottom: 1.5rem;
 }
-.task-manager {
-  max-width: 1280px;
-}
 
 /* Input and Textarea */
-input[type='text'],
-input[type='email'],
-input[type='password'],
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="datetime-local"],
+select,
 textarea {
   width: 100%;
   padding: 0.8rem;
@@ -126,7 +125,6 @@ textarea {
   background-color: #fff;
   transition: border 0.3s, box-shadow 0.3s;
   resize: none;
-  
 }
 
 input:focus,
@@ -137,7 +135,7 @@ textarea:focus {
 }
 
 /* File Input */
-input[type='file'] {
+input[type="file"] {
   margin-bottom: 1rem;
 }
 
@@ -175,7 +173,6 @@ button:focus {
   background: #35b97f;
   color: white;
   border: none;
-  
 }
 
 /* Task List */
@@ -202,7 +199,6 @@ button:focus {
   padding: 0.5rem 1.2rem;
   border-radius: 8px;
   border: none;
-  background: #3fcf8e;
   color: white;
   cursor: pointer;
   transition: background 0.3s ease, color 0.3s ease;
@@ -253,6 +249,63 @@ button:focus {
   text-overflow: ellipsis;
   line-clamp: 2;
 }
+.task-item span {
+  color: var(--text-color);
+  font-size: 0.8rem;
+  height: auto;
+  display: block;
+  text-align: left;
+}
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.task-item span.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px; /* tạo khoảng cách giữa "Priority:" và badge */
+}
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: white;
+  margin-left: 8px;
+  white-space: nowrap;
+  width: fit-content; /* <-- thêm dòng này */
+  max-width: max-content; /* backup cho trình duyệt hỗ trợ */
+}
+
+/* Priority colors */
+.badge-priority-low {
+  background-color: #34d399; /* xanh lá */
+}
+
+.badge-priority-medium {
+  background-color: #f59e0b; /* cam */
+}
+
+.badge-priority-high {
+  background-color: #ef4444; /* đỏ */
+}
+
+/* Status colors */
+.badge-status-todo {
+  background-color: #ef4444; /* đỏ */
+}
+.badge-status-in-progress {
+  background-color: #f59e0b; /* cam */
+}
+.badge-status-done {
+  background-color: #34d399; /* xanh lá */
+}
 
 /* Image */
 .task-item img {
@@ -270,7 +323,6 @@ button:focus {
   gap: 0.5rem;
   margin-top: auto;
 }
-
 
 .task-actions button:hover {
   background: #35b97f;
@@ -386,7 +438,7 @@ button:focus {
 }
 
 .modal h3::before {
-  content: '';
+  content: "";
   font-size: 18px;
 }
 
@@ -423,7 +475,7 @@ button:focus {
   background-color: #35b97f;
 }
 
-.custom-file-upload input[type='file'] {
+.custom-file-upload input[type="file"] {
   display: none;
 }
 .auth-page {
@@ -458,4 +510,16 @@ button:focus {
   align-items: center;
   gap: 1rem;
   margin-bottom: 1rem;
+}
+.social-login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  width: 100%;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
 }

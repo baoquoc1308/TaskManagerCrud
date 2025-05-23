@@ -24,10 +24,13 @@
 
 .task-image-section {
   flex: 1;
+  margin-left: 100px;
+  position: relative;
 }
 
 .task-image {
-  width: 100%;
+  display: block;
+  width: 500px;
   height: auto;
   border-radius: 8px;
   object-fit: cover;
@@ -35,8 +38,9 @@
 
 .task-buttons {
   margin-top: 20px;
-  display: flex;
-  gap: 10px;
+  display: inline-flex;
+  gap: 100px;
+  justify-content: center;
 }
 
 .edit-button {

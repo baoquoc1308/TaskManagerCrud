@@ -1,0 +1,56 @@
+/* Fade in animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.login-page {
+  background-image: url("https://img.lovepik.com/background/20211022/large/lovepik-scientific-and-technological-line-background-image_500870307.jpg");
+  background-size: cover;
+  /* Giúp ảnh phủ kín phần tử nhưng không méo */
+  background-repeat: no-repeat;
+  /* Không lặp lại ảnh */
+  background-position: center;
+  /* Căn giữa ảnh */
+  width: 100%;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+}
+.login-form {
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px 0 rgba(151, 155, 207, 0.37);
+  width: 350px;
+  color: #fff;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+.social-login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  width: 100%;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+}

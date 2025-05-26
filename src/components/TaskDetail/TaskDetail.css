@@ -1,0 +1,58 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background-color: white;
+  width: 1000px;
+  height: 800px;
+  overflow-y: auto;
+  border-radius: 8px;
+  padding: 20px;
+  position: relative;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Nút đóng modal */
+.close-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Nội dung chi tiết task */
+.task-detail-content {
+  display: flex;
+  gap: 20px;
+}
+
+.task-image-section {
+  flex: 1;
+}
+
+.task-info-section {
+  flex: 2;
+  overflow-wrap: break-word;
+}
+
+.task-image {
+  width: 500px;
+  height: 500px;
+  border-radius: 8px;
+}
+
+.task-buttons button {
+  margin-right: 8px;
+}

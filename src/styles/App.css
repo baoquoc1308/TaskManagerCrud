@@ -52,32 +52,6 @@
   padding: 0;
 }
 
-/* Fade in animation */
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.login-page {
-  background-image: url("https://img.lovepik.com/background/20211022/large/lovepik-scientific-and-technological-line-background-image_500870307.jpg");
-  background-size: cover;
-  /* Giúp ảnh phủ kín phần tử nhưng không méo */
-  background-repeat: no-repeat;
-  /* Không lặp lại ảnh */
-  background-position: center;
-  /* Căn giữa ảnh */
-  width: 100%;
-  min-height: 100vh;
-  margin: 0 auto;
-  padding: 0;
-  text-align: center;
-}
 /* Page Container */
 .auth-container {
   width: 700px;
@@ -89,22 +63,9 @@
   background: linear-gradient(to bottom right, #ffffff, #f2f5ff);
   animation: fadeIn 0.5s ease;
 }
-.task-manager {
-  width: 100%;
-  min-height: 100vh;
-  padding: 2rem;
-  margin: 0;
-  border-radius: 0;
-  box-shadow: none;
-  /* background: linear-gradient(to bottom right, #ffffff, #f2f5ff); */
-  animation: fadeIn 0.5s ease;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-}
 
 /* Title */
-.auth-container h2,
-.task-manager h2 {
+.auth-container h2 {
   text-align: center;
   font-size: 2rem;
   margin-bottom: 1.5rem;
@@ -137,6 +98,7 @@ textarea:focus {
 /* File Input */
 input[type="file"] {
   margin-bottom: 1rem;
+  padding-bottom: 10px;
 }
 
 /* Buttons */
@@ -160,115 +122,6 @@ button:focus {
   outline: none;
 }
 
-/* Switch Auth Mode */
-.switch-btn {
-  background: #3fcf8e;
-  border: 2px solid #3fcf8e;
-  color: white;
-  margin-top: 1rem;
-  transition: all 0.3s ease;
-}
-
-.switch-btn:hover {
-  background: #35b97f;
-  color: white;
-  border: none;
-}
-
-/* Task List */
-/* Task List Grid */
-.task-list {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1.5rem;
-  padding: 1rem;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-.task-list button {
-  padding: 0.5rem 1.2rem;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: background 0.3s ease, color 0.3s ease;
-  flex: 1;
-}
-.task-list button {
-  padding: 0.5rem 1.2rem;
-  border-radius: 8px;
-  border: none;
-  color: white;
-  cursor: pointer;
-  transition: background 0.3s ease, color 0.3s ease;
-  flex: 1;
-}
-
-/* Task Item */
-.task-item {
-  /* background: #ffffff; */
-  border: 1px solid #eaeaea;
-  padding: 1rem;
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 400px;
-  overflow: hidden;
-}
-
-/* Title */
-.task-item h3 {
-  font-weight: bold;
-  font-size: 1.1rem;
-  color: var(--text-color);
-  margin-bottom: 0.5rem;
-  height: 3rem;
-  /* CHIỀU CAO CỐ ĐỊNH: 2 dòng khoảng 1.5rem mỗi dòng */
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-clamp: 2;
-}
-
-/* Description */
-.task-item p {
-  color: var(--text-color);
-  font-size: 0.95rem;
-  margin-bottom: 0.5rem;
-  height: 3rem;
-  /* CHIỀU CAO CỐ ĐỊNH: 2 dòng */
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-clamp: 2;
-}
-.task-item span {
-  color: var(--text-color);
-  font-size: 0.8rem;
-  height: auto;
-  display: block;
-  text-align: left;
-}
-.meta-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: center;
-  margin-top: 0.5rem;
-}
-
-.task-item span.task-meta {
-  display: flex;
-  align-items: center;
-  gap: 4px; /* tạo khoảng cách giữa "Priority:" và badge */
-}
 .badge {
   display: inline-block;
   padding: 4px 10px;
@@ -279,75 +132,34 @@ button:focus {
   color: white;
   margin-left: 8px;
   white-space: nowrap;
-  width: fit-content; /* <-- thêm dòng này */
-  max-width: max-content; /* backup cho trình duyệt hỗ trợ */
+  width: fit-content;
+  max-width: max-content;
 }
 
 /* Priority colors */
 .badge-priority-low {
-  background-color: #34d399; /* xanh lá */
+  background-color: #34d399;
 }
 
 .badge-priority-medium {
-  background-color: #f59e0b; /* cam */
+  background-color: #f59e0b;
 }
 
 .badge-priority-high {
-  background-color: #ef4444; /* đỏ */
+  background-color: #ef4444;
 }
 
 /* Status colors */
 .badge-status-todo {
-  background-color: #ef4444; /* đỏ */
+  background-color: #ef4444;
 }
 .badge-status-in-progress {
-  background-color: #f59e0b; /* cam */
+  background-color: #f59e0b;
 }
 .badge-status-done {
-  background-color: #34d399; /* xanh lá */
+  background-color: #34d399;
 }
 
-/* Image */
-.task-item img {
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin: 0.5rem 0;
-}
-
-/* Task Action Buttons */
-.task-actions {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin-top: auto;
-}
-
-.task-actions button:hover {
-  background: #35b97f;
-}
-.edit-btn {
-  background-color: #f0ad4e;
-  color: white;
-}
-
-.delete-btn {
-  background-color: #d9534f;
-  color: white;
-}
-
-.save-btn {
-  background-color: #5cb85c;
-  color: white;
-}
-
-.cancel-btn {
-  background-color: #6c757d;
-  color: white;
-}
-
-/* Scrollbar (optional) */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -355,124 +167,6 @@ button:focus {
 ::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 6px;
-}
-
-.new-task {
-  background-color: #dbe7db; /* Light green background */
-  border-left: 5px solid rgb(202, 224, 202); /* Green left border */
-  animation: highlight 2s ease-in-out; /* Smooth highlight effect */
-  background-color: #dbe7db;
-  /* Light green background */
-  border-left: 5px solid rgb(202, 224, 202);
-  /* Green left border */
-  animation: highlight 2s ease-in-out;
-  /* Smooth highlight effect */
-}
-
-@keyframes highlight {
-  0% {
-    background-color: #d1f7d1;
-  }
-
-  50% {
-    background-color: #d7e6d7;
-  }
-
-  100% {
-    background-color: #d1f7d1;
-  }
-}
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px; /* Khoảng cách 20px giữa các phần tử con */
-}
-
-/* Hover light mode */
-.custom-pagination .ant-pagination-item-link:hover {
-  color: #1677ff !important;
-  border-color: #1677ff !important;
-}
-
-/* Dark mode */
-.dark .custom-pagination .ant-pagination-item-link,
-.dark .custom-pagination .ant-pagination-item-ellipsis {
-  color: #ddd !important;
-  border-color: #555 !important;
-}
-
-/* Hover dark mode */
-.dark .custom-pagination .ant-pagination-item-link:hover {
-  color: #fff !important;
-  border-color: #999 !important;
-}
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal {
-  background-color: white;
-  border-radius: 12px;
-  padding: 24px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  text-align: center;
-  font-family: sans-serif;
-}
-
-.modal h3 {
-  font-size: 16px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  justify-content: center;
-}
-
-.modal h3::before {
-  content: "";
-  font-size: 18px;
-}
-
-.modal-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.modal-buttons button {
-  border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.confirm-btn {
-  background-color: #3fcf8e;
-  color: white;
-}
-
-.confirm-btn:hover {
-  background-color: #35b97f;
-}
-
-.cancel-btn {
-  background-color: #3fcf8e;
-  border: 1px solid #cbd5e1;
-}
-
-.cancel-btn:hover {
-  background-color: #35b97f;
 }
 
 .custom-file-upload input[type="file"] {
@@ -484,42 +178,4 @@ button:focus {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.login-form {
-  background-color: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 8px 32px 0 rgba(151, 155, 207, 0.37);
-  width: 350px;
-  color: #fff;
-}
-
-.login-form input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
-  border: none;
-  border-radius: 5px;
-  outline: none;
-}
-.task-header {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-.social-login-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px;
-  width: 100%;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  cursor: pointer;
 }

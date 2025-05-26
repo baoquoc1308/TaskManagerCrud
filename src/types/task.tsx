@@ -10,4 +10,5 @@ export interface Task {
   time?: string;
   priority?: Priority;
   status?: Status;
+  avatar_url?: string;
 }

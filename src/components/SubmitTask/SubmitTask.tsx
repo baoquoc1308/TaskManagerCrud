@@ -1,8 +1,8 @@
-import { supabase } from "../supabase-client";
-import { uploadImage } from "../utils/uploadImage";
-import "../styles/App.css";
+import { supabase } from "../../supabase-client";
 import Select from "react-select";
-
+import { uploadImage } from "../../utils/UploadImage";
+import { commonSelectStyles, selectWidth } from "../../utils/SelectStyles";
+import "./SubmitTask.css";
 interface SubmitTaskProps {
   session: any;
   newTask: {
@@ -39,7 +39,6 @@ const statusOptions = [
   { value: "in-progress", label: "In Progress" },
   { value: "done", label: "Done" },
 ];
-const selectWidth = "200px";
 export const SubmitTaskForm = ({
   session,
   newTask,
@@ -105,44 +104,10 @@ export const SubmitTaskForm = ({
     const pages = Math.ceil((count ?? 0) / pageSize);
     setCurrentPage(pages);
   };
-  const commonSelectStyles = {
-    container: (base: any) => ({
-      ...base,
-      width: selectWidth,
-      marginBottom: "1rem",
-    }),
-    control: (base: any) => ({
-      ...base,
-      padding: "0.6rem",
-      borderRadius: "12px",
-      border: "1px solid #ddd",
-      backgroundColor: "#fff",
-      transition: "all 0.3s ease",
-      boxShadow: "none",
-      width: "100%",
-    }),
-    menu: (base: any) => ({
-      ...base,
-      borderRadius: "12px",
-      padding: "0.2rem",
-      backgroundColor: "#fff",
-      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-      width: selectWidth,
-    }),
-    option: (base: any, state: any) => ({
-      ...base,
-      backgroundColor: state.isFocused ? "#f5f5f5" : "#fff",
-      color: "#000",
-      padding: "0.6rem",
-      borderRadius: "8px",
-      cursor: "pointer",
-      transform: state.isFocused ? "scale(1.02)" : "scale(1)",
-      transition: "all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)",
-    }),
-  };
+
   return (
     <form onSubmit={handleSubmit} className="task-form">
-      <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
+      <div className="input-row">
         <input
           type="text"
           placeholder="Task Title"
@@ -160,14 +125,6 @@ export const SubmitTaskForm = ({
             setNewTask((prev) => ({ ...prev, time: e.target.value }))
           }
           required
-          style={{
-            padding: "0.8rem",
-            borderRadius: "12px",
-            border: "1px solid #ddd",
-            backgroundColor: "#fff",
-            transition: "border 0.3s, box-shadow 0.3s",
-            width: selectWidth,
-          }}
         />
         <Select
           options={priorityOptions}
@@ -200,15 +157,29 @@ export const SubmitTaskForm = ({
         required
       />
 
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => e.target.files && setTaskImage(e.target.files[0])}
-        ref={fileInputRef}
-        required
-      />
+      <div className="form-bottom-row">
+        <div className="file-upload-container">
+          <label htmlFor="file-upload" className="file-upload-button">
+            Choose File
+          </label>
+          <span className="file-upload-info">
+            {taskImage?.name || "Max size 2MB, file format .jpg/.png"}
+          </span>
+          <input
+            id="file-upload"
+            type="file"
+            accept="image/*"
+            onChange={(e) => e.target.files && setTaskImage(e.target.files[0])}
+            ref={fileInputRef}
+            className="file-upload-input"
+            required
+          />
+        </div>
 
-      <button type="submit">Add Task</button>
+        <button type="submit" className="submit-button">
+          Add Task
+        </button>
+      </div>
     </form>
   );
 };

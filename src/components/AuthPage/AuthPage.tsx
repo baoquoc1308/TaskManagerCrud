@@ -1,9 +1,9 @@
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { supabase } from "../supabase-client";
+import { supabase } from "../../supabase-client";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
-import "../styles/App.css";
+import "./AuthPage.css";
 import { useState, useEffect, useRef } from "react";
 
 export default function AuthPage() {

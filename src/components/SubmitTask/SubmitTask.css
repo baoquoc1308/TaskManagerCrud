@@ -1,0 +1,70 @@
+.task-form input[type="datetime-local"] {
+  padding: 0.8rem;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  transition: border 0.3s, box-shadow 0.3s;
+  width: 200px;
+}
+.task-form > div.input-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.file-upload-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 10px 0;
+}
+
+.file-upload-button {
+  padding: 10px 16px;
+  border: 2px solid #3fcf8e;
+  border-radius: 8px;
+  background-color: #3fcf8e;
+  color: white;
+  font-weight: 550;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.file-upload-button:hover {
+  background-color: #35b97f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  color: white;
+}
+
+.file-upload-info {
+  color: #6c757d;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 250px;
+}
+
+.file-upload-input {
+  display: none;
+}
+.form-bottom-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.submit-button {
+  background-color: #3fcf8e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #35b97f;
+}

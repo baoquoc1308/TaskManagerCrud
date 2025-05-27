@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import type { Task } from "../../types/Task";
+import type { Task } from "../../types/Task_123";
 import type { Session } from "@supabase/supabase-js";
 import { fetchTasks } from "../FetchTasks";
 import { SubmitTaskForm } from "../SubmitTask/SubmitTask";

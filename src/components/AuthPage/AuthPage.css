@@ -32,6 +32,7 @@
   box-shadow: 0 8px 32px 0 rgba(151, 155, 207, 0.37);
   width: 350px;
   color: #fff;
+  margin-top: 50%;
 }
 
 .login-form input {

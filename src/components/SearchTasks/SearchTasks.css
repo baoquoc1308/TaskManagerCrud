@@ -1,0 +1,110 @@
+/* Container tổng cho search và icon */
+.search-tasks-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  margin-left: auto;
+}
+
+/* Input search */
+.search-input {
+  flex-grow: 1;
+  min-width: 0; /* để flex-grow không bị overflow */
+  height: 40px;
+  font-size: 14px;
+  outline: none;
+  padding: 0.8rem 1rem;
+  border-radius: 999px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  transition: border 0.3s, box-shadow 0.3s;
+  resize: none;
+}
+
+/* Wrapper icon (priority và date picker) */
+.icon-wrapper {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  bottom: auto;
+  display: flex;
+  align-items: center; /* Căn dọc giữa */
+  gap: 8px;
+  z-index: 10;
+}
+
+/* Icon chung */
+.icon {
+  cursor: pointer;
+  font-size: 18px;
+  user-select: none;
+  padding: 6px 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  color: #999;
+  margin-bottom: 0; /* bỏ margin dưới */
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+.icon:hover,
+.icon.active {
+  background-color: #eee;
+  color: #007bff;
+}
+
+/* Dropdown chung (priority và date picker) */
+.priority-dropdown,
+.calendar-picker {
+  position: absolute;
+  top: 48px; /* ngay dưới input và icon */
+  right: 0;
+  z-index: 1000;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 0.1);
+  font-size: 14px;
+}
+
+/* Dropdown priority */
+.priority-dropdown {
+  width: 160px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Option trong dropdown priority */
+.priority-option {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  user-select: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.priority-option:hover,
+.priority-option.selected {
+  background-color: #679bd3;
+  color: white;
+}
+
+/* Input calendar */
+.calendar-picker {
+  padding: 6px 10px;
+  width: 160px;
+  cursor: pointer;
+  user-select: none;
+  transition: box-shadow 0.2s ease;
+}
+
+.calendar-picker:hover {
+  box-shadow: 0 0 8px #629ad6;
+  border-color: #4f7cad;
+}

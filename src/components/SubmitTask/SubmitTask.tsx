@@ -34,6 +34,7 @@ const priorityOptions = [
   { value: "medium", label: "Medium" },
   { value: "high", label: "High" },
 ];
+
 const statusOptions = [
   { value: "todo", label: "To Do" },
   { value: "in-progress", label: "In Progress" },
@@ -53,7 +54,10 @@ export const SubmitTaskForm = ({
 }: SubmitTaskProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    if (!taskImage) {
+      alert("Please choose an image before submitting the task.");
+      return;
+    }
     let imageUrl: string | null = null;
     if (taskImage) {
       imageUrl = await uploadImage(taskImage);
@@ -130,7 +134,10 @@ export const SubmitTaskForm = ({
           options={priorityOptions}
           placeholder="Priority"
           isSearchable={false}
-          value={priorityOptions.find((opt) => opt.value === newTask.priority)}
+          value={
+            priorityOptions.find((opt) => opt.value === newTask.priority) ||
+            null
+          }
           onChange={(option) =>
             setNewTask((prev) => ({ ...prev, priority: option?.value }))
           }
@@ -140,7 +147,9 @@ export const SubmitTaskForm = ({
           options={statusOptions}
           placeholder="Status"
           isSearchable={false}
-          value={statusOptions.find((opt) => opt.value === newTask.status)}
+          value={
+            statusOptions.find((opt) => opt.value === newTask.status) || null
+          }
           onChange={(option) =>
             setNewTask((prev) => ({ ...prev, status: option?.value }))
           }

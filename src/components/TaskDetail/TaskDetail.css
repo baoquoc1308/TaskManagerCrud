@@ -1,3 +1,47 @@
+/* Dark mode overlay */
+.dark .modal-overlay {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Modal content dark background and text */
+.dark .modal-content {
+  background-color: var(--bg-color);
+  color: #ffffff;
+}
+
+/* Close button */
+.dark .close-button {
+  color: #ffffff;
+}
+
+/* Info section text */
+.dark .task-info-section h2,
+.dark .task-info-section p,
+.dark .task-info-section strong {
+  color: #ffffff;
+}
+
+/* Related task card styles */
+.dark .related-task-card {
+  background-color: var(--bg-color);
+  border-color: #444;
+  color: #ffffff;
+}
+
+.dark .related-task-card:hover {
+  background-color: #333;
+}
+
+/* If you use priority or status badges */
+.dark .task-meta span {
+  color: #ffffff;
+}
+
+/* If you want related-task-list background or spacing improved */
+.dark .related-task-list {
+  background-color: transparent;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -14,7 +58,7 @@
 .modal-content {
   background-color: white;
   width: 1000px;
-  height: 800px;
+  max-width: 100%;
   overflow-y: auto;
   border-radius: 8px;
   padding: 20px;
@@ -30,6 +74,7 @@
   background: none;
   border: none;
   cursor: pointer;
+  font-size: 20px;
 }
 
 /* Nội dung chi tiết task */
@@ -50,9 +95,241 @@
 .task-image {
   width: 500px;
   height: 500px;
+  max-height: 500px;
+  object-fit: cover;
   border-radius: 8px;
 }
 
 .task-buttons button {
   margin-right: 8px;
+  margin-top: 12px;
+}
+
+/* Task liên quan */
+.related-tasks-section {
+  margin-top: 24px;
+  border-top: 1px solid #ccc;
+  padding-top: 16px;
+}
+
+.related-task-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  width: 100%;
+  padding-top: 10px;
+}
+
+.related-task-card {
+  width: 140px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 8px;
+  text-align: center;
+  transition: transform 0.2s;
+  background-color: #fafafa;
+}
+
+.related-task-card:hover {
+  transform: scale(1.05);
+  background-color: #f0f0f0;
+}
+
+.related-task-img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.related-task-title {
+  font-size: 16px;
+  margin: 6px 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.task-description {
+  max-height: 120px;
+  overflow: hidden;
+  white-space: pre-wrap;
+}
+.task-title {
+  max-height: 60px; /* Giữ chiều cao cố định */
+  overflow: hidden;
+  white-space: pre-wrap;
+}
+.title-wrapper,
+.description-wrapper {
+  margin-bottom: 1rem;
+}
+
+.expandable-content {
+  padding-right: 8px;
+}
+
+.expandable-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.expandable-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.toggle-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+.description-wrapper {
+  margin-bottom: 1rem;
+}
+
+.clamped-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 6; /* Giới hạn 6 dòng */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  position: relative;
+  font-size: 1rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.read-more {
+  color: #007bff;
+  cursor: pointer;
+  font-weight: 500;
+  margin-left: 4px;
+  white-space: nowrap;
+}
+
+.scrollable-text {
+  max-height: 300px;
+  overflow-y: auto;
+  font-size: 1rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  position: relative;
+}
+
+.scrollable-text .read-more {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.9rem;
+}
+.text-wrapper {
+  position: relative;
+  margin-bottom: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.text-content {
+  white-space: pre-wrap;
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: max-height 0.3s ease;
+}
+
+.clamped-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.clamped-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.expanded {
+  max-height: none;
+  overflow: visible;
+}
+
+.read-toggle {
+  display: inline-block;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-top: 4px;
+}
+.modal-content {
+  width: 1000px;
+  max-width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  position: relative;
+}
+
+/* Giới hạn phần text hiển thị */
+.text-wrapper {
+  max-width: 100%;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.text-content {
+  font-size: 1rem;
+  line-height: 1.5;
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+/* Clamp hiển thị title và description */
+.clamped-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.clamped-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.expanded {
+  overflow-y: auto;
+  max-height: 300px;
+  padding-right: 4px;
+}
+
+/* Nút xem thêm / thu gọn */
+.read-toggle {
+  display: inline-block;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-top: 4px;
+}
+/* Scroll riêng cho title */
+.expanded-title {
+  overflow-y: auto;
+  max-height: 100px; /* Giới hạn title không quá 100px */
+  padding-right: 4px;
+}
+
+/* Scroll riêng cho description */
+.expanded-desc {
+  overflow-y: auto;
+  max-height: 300px; /* Cho phép description dài hơn */
+  padding-right: 4px;
 }

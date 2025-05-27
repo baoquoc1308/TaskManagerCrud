@@ -6,6 +6,7 @@ import {
 } from "../../utils/TaskHelpers";
 import "./TaskList.css";
 import TaskDetail from "../TaskDetail";
+import { Empty } from "antd"; // Import Empty component của antd
 
 interface TaskListProps {
   tasks: Task[];
@@ -42,6 +43,14 @@ export default function TaskList({
   const handleCloseModal = () => {
     setSelectedTaskId(null);
   };
+
+  if (tasks.length === 0) {
+    return (
+      <div style={{ marginTop: 50, textAlign: "center" }}>
+        <Empty description="No tasks found" />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -129,7 +138,11 @@ export default function TaskList({
 
       {/* Modal hiển thị task detail */}
       {selectedTaskId && (
-        <TaskDetail taskId={selectedTaskId} onClose={handleCloseModal} />
+        <TaskDetail
+          taskId={selectedTaskId}
+          onClose={handleCloseModal}
+          setTaskId={setSelectedTaskId}
+        />
       )}
     </>
   );

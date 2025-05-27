@@ -14,6 +14,7 @@ function App() {
   useEffect(() => {
     const fetchSession = async () => {
       const { data } = await supabase.auth.getSession();
+      console.log("Access token:", session?.access_token);
       setSession(data.session);
       setLoading(false);
     };
@@ -32,7 +33,21 @@ function App() {
   }, []);
 
   const logout = async () => {
-    await supabase.auth.signOut();
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        if (error.status === 403) {
+          console.warn("Token expired or invalid, clearing session locally.");
+        } else {
+          console.error("Logout error:", error.message);
+          return;
+        }
+      }
+    } catch (e) {
+      console.error("Unexpected error during logout:", e);
+    } finally {
+      setSession(null); // Luôn clear session local dù lỗi gì xảy ra
+    }
   };
 
   if (loading) return <p>Loading...</p>;

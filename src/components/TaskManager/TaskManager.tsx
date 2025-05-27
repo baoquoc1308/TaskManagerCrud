@@ -12,6 +12,7 @@ import TaskManagerHeader from "../TaskManagerHeader";
 import TaskList from "../TaskList";
 import "./TaskManager.css";
 import { toast } from "react-toastify";
+import SearchTasks from "../SearchTasks";
 
 function TaskManager({
   session,
@@ -37,7 +38,11 @@ function TaskManager({
   const [originalDescription, setOriginalDescription] = useState("");
   const lastTaskRef = useRef<HTMLLIElement | null>(null);
   const [pageSize, setPageSize] = useState(5);
-
+  const [searchFilters, setSearchFilters] = useState({
+    keyword: "",
+    priority: "",
+    time: "",
+  });
   useEffect(() => {
     fetchTasks(currentPage, pageSize, setTasks, setTotalPages, setTotalCount);
   }, [currentPage, pageSize, totalCount]);
@@ -135,7 +140,19 @@ function TaskManager({
       toast.error("❌ Failed to delete the task!");
     }
   };
-
+  const handleSearchResults = (filteredTasks: Task[]) => {
+    setTasks(filteredTasks);
+    setCurrentPage(1);
+    setTotalCount(filteredTasks.length);
+    setTotalPages(Math.ceil(filteredTasks.length / pageSize));
+  };
+  const handleUpdateFilters = (filters: {
+    keyword: string;
+    priority: string;
+    time: string;
+  }) => {
+    setSearchFilters(filters);
+  };
   return (
     <div className="task-manager">
       <TaskManagerHeader userEmail={userEmail} onLogout={onLogout} />
@@ -153,7 +170,9 @@ function TaskManager({
         fileInputRef={fileInputRef as React.RefObject<HTMLInputElement>}
         pageSize={pageSize}
       />
-
+      <SearchTasks
+        onResults={(filteredTasks: Task[]) => setTasks(filteredTasks)}
+      />
       <TaskList
         tasks={tasks}
         editingId={editingId}

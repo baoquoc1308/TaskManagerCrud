@@ -1,9 +1,9 @@
 import { useState } from "react";
-import type { Task } from "../../types/Task_123";
+import type { Task } from "../../types/Task";
 import {
   getPriorityBadgeClass,
   getStatusBadgeClass,
-} from "../../utils/TaskHelpers_123";
+} from "../../utils/TaskHelpers";
 import "./TaskList.css";
 import TaskDetail from "../TaskDetail";
 

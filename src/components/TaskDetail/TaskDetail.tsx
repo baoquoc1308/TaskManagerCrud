@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase-client";
-import type { Task } from "../../types/Task_123";
+import type { Task } from "../../types/Task";
 import "./TaskDetail.css";
 import {
   getPriorityBadgeClass,
   getStatusBadgeClass,
-} from "../../utils/TaskHelpers_123";
+} from "../../utils/TaskHelpers";
 
 interface TaskDetailProps {
   taskId: string | null;

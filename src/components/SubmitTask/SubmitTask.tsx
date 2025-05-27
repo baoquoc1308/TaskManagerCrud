@@ -1,6 +1,6 @@
 import { supabase } from "../../supabase-client";
 import Select from "react-select";
-import { uploadImage } from "../../utils/UploadImage_123";
+import { uploadImage } from "../../utils/UploadImage";
 import { commonSelectStyles, selectWidth } from "../../utils/SelectStyles";
 import "./SubmitTask.css";
 interface SubmitTaskProps {

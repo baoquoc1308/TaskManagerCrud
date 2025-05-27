@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabase-client";
-import { uploadImage } from "../utils/UploadImage_123";
+import { uploadImage } from "../utils/UploadImage";
 
 interface AvatarUploaderProps {
   userId: string;

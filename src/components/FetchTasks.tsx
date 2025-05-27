@@ -1,5 +1,5 @@
 import { supabase } from "../supabase-client";
-import type { Task } from "../types/Task_123";
+import type { Task } from "../types/Task";
 import "../styles/App.css";
 
 export const fetchTasks = async (

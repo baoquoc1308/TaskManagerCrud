@@ -2,18 +2,18 @@ import { supabase } from "../supabase-client";
 import type { Task } from "../types/Task";
 import "../styles/App.css";
 
-interface DeleteTaskProps {
-  taskToDelete: Task | null;
-  setTaskToDelete: React.Dispatch<React.SetStateAction<Task | null>>;
-  showDeleteModal: boolean;
-  setShowDeleteModal: React.Dispatch<React.SetStateAction<boolean>>;
-  tasks: Task[];
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
-  currentPage: number;
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-  setTotalCount: React.Dispatch<React.SetStateAction<number>>;
-  setTotalPages: React.Dispatch<React.SetStateAction<number>>;
-}
+// interface DeleteTaskProps {
+//   taskToDelete: Task | null;
+//   setTaskToDelete: React.Dispatch<React.SetStateAction<Task | null>>;
+//   showDeleteModal: boolean;
+//   setShowDeleteModal: React.Dispatch<React.SetStateAction<boolean>>;
+//   tasks: Task[];
+//   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+//   currentPage: number;
+//   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+//   setTotalCount: React.Dispatch<React.SetStateAction<number>>;
+//   setTotalPages: React.Dispatch<React.SetStateAction<number>>;
+// }
 
 export const deleteTask = async (
   task: Task,

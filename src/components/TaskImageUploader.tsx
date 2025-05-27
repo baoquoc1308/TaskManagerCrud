@@ -21,6 +21,7 @@ export const TaskImageUploader = ({
 
   return (
     <div className="task-list">
+      {taskImage && false}
       <input
         type="file"
         accept="image/*"

@@ -185,6 +185,7 @@ function TaskManager({
         currentPage={currentPage}
         pageSize={pageSize}
         totalCount={totalCount}
+        totalPages={totalPages}
         onPageChange={(page, size) => {
           setCurrentPage(page);
           if (size !== pageSize) setPageSize(size);

@@ -9,6 +9,8 @@ export default function PaginationControl({
   currentPage: number;
   pageSize: number;
   totalCount: number;
+  totalPages: number;
+
   onPageChange: (page: number, size: number) => void;
 }) {
   return (

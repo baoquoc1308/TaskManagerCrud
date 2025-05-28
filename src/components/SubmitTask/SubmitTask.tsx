@@ -3,6 +3,10 @@ import Select from "react-select";
 import { uploadImage } from "../../utils/UploadImage";
 import { commonSelectStyles } from "../../utils/SelectStyles";
 import "./SubmitTask.css";
+import { fetchTasks } from "../FetchTasks";
+import {} from "antd/es/input";
+import type { Dispatch, SetStateAction } from "react";
+
 interface SubmitTaskProps {
   session: any;
   newTask: {
@@ -22,12 +26,21 @@ interface SubmitTaskProps {
     }>
   >;
   taskImage: File | null;
+  currentPage: number;
+  setTasks: React.Dispatch<React.SetStateAction<any[]>>;
+  setTotalPages: React.Dispatch<React.SetStateAction<number>>;
   setTaskImage: React.Dispatch<React.SetStateAction<File | null>>;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   setTotalCount: React.Dispatch<React.SetStateAction<number>>;
   setNewTaskAdded: React.Dispatch<React.SetStateAction<number | null>>;
   fileInputRef: React.RefObject<HTMLInputElement>;
   pageSize: number;
+  setFilteredTasks?: React.Dispatch<React.SetStateAction<any[] | null>>;
+  setKeyword?: Dispatch<SetStateAction<string>>;
+  setPriority?: Dispatch<SetStateAction<string>>;
+  setDate?: Dispatch<SetStateAction<Date | null>>;
+  setShowPriority?: Dispatch<SetStateAction<boolean>>;
+  setShowDatePicker?: Dispatch<SetStateAction<boolean>>;
 }
 const priorityOptions = [
   { value: "low", label: "Low" },
@@ -42,15 +55,20 @@ const statusOptions = [
 ];
 export const SubmitTaskForm = ({
   session,
+  setTasks,
   newTask,
   setNewTask,
   taskImage,
   setTaskImage,
+  currentPage,
   setCurrentPage,
+  setTotalPages,
   setTotalCount,
   setNewTaskAdded,
   fileInputRef,
   pageSize,
+  setFilteredTasks,
+  setKeyword,
 }: SubmitTaskProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,7 +98,6 @@ export const SubmitTaskForm = ({
       console.error("Error adding task: ", error.message);
       return;
     }
-
     const { count, error: countError } = await supabase
       .from("tasks")
       .select("*", { count: "exact", head: true });
@@ -89,6 +106,9 @@ export const SubmitTaskForm = ({
       console.error("Error fetching count:", countError.message);
       return;
     }
+
+    console.log("🚀 ~ handleSubmit ~ setKeyword:", setKeyword);
+    console.log("tesststs");
 
     setTotalCount(count ?? 0);
     setNewTaskAdded(data?.id ?? null);
@@ -107,7 +127,10 @@ export const SubmitTaskForm = ({
 
     const pages = Math.ceil((count ?? 0) / pageSize);
     setCurrentPage(pages);
+    fetchTasks(pages, pageSize, setTasks, setTotalPages, setTotalCount);
   };
+  console.log("🚀 ~ handleSubmit ~ currentPage:", currentPage);
+  setFilteredTasks?.(null);
 
   return (
     <form onSubmit={handleSubmit} className="task-form">

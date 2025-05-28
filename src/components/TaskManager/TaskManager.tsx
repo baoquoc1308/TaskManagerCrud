@@ -38,18 +38,25 @@ function TaskManager({
   const [originalDescription, setOriginalDescription] = useState("");
   const lastTaskRef = useRef<HTMLLIElement | null>(null);
   const [pageSize, setPageSize] = useState(5);
+
+  const [filteredTasks, setFilteredTasks] = useState<Task[] | null>(null);
+  const [displayedTasks, setDisplayedTasks] = useState<Task[]>([]);
   const [searchFilters, setSearchFilters] = useState({
     keyword: "",
     priority: "",
     time: "",
   });
+
   useEffect(() => {
     fetchTasks(currentPage, pageSize, setTasks, setTotalPages, setTotalCount);
-  }, [currentPage, pageSize, totalCount]);
+  }, [currentPage]);
 
   useEffect(() => {
     if (newTaskAdded !== null) {
-      const taskOnThisPage = tasks.find((task) => task.id === newTaskAdded);
+      const dataSource = filteredTasks ?? tasks;
+      const taskOnThisPage = dataSource.find(
+        (task) => task.id === newTaskAdded
+      );
 
       if (taskOnThisPage && lastTaskRef.current) {
         lastTaskRef.current.scrollIntoView({
@@ -64,7 +71,7 @@ function TaskManager({
 
       return () => clearTimeout(timer);
     }
-  }, [tasks, newTaskAdded]);
+  }, [displayedTasks, tasks, newTaskAdded]);
 
   // Realtime subscription
   useEffect(() => {
@@ -75,7 +82,16 @@ function TaskManager({
         { event: "INSERT", schema: "public", table: "tasks" },
         (payload) => {
           const newTask = payload.new as Task;
-          setTasks((prev) => [...prev, newTask]);
+          setTasks((prev) => {
+            const updatedTasks = [...prev, newTask];
+            const lastPage = Math.ceil(updatedTasks.length / pageSize);
+            setCurrentPage(lastPage);
+            return updatedTasks;
+          });
+
+          if (filteredTasks !== null) {
+            setFilteredTasks((prev) => [...(prev ?? []), newTask]);
+          }
         }
       )
       .subscribe();
@@ -83,7 +99,8 @@ function TaskManager({
     return () => {
       channel.unsubscribe();
     };
-  }, []);
+  }, [filteredTasks, pageSize]);
+
   const updateTask = async (taskId: number) => {
     if (newDescription === originalDescription) {
       setEditingId(null);
@@ -140,12 +157,21 @@ function TaskManager({
       toast.error("❌ Failed to delete the task!");
     }
   };
-  const handleSearchResults = (filteredTasks: Task[]) => {
-    setTasks(filteredTasks);
+  const handleSearchResults = (results: Task[]) => {
+    setFilteredTasks(results);
     setCurrentPage(1);
-    setTotalCount(filteredTasks.length);
-    setTotalPages(Math.ceil(filteredTasks.length / pageSize));
+    setTotalCount(results.length);
+    setTotalPages(Math.ceil(results.length / pageSize));
   };
+
+  const handleClearSearch = async () => {
+    setFilteredTasks(null);
+    setCurrentPage(1);
+
+    // Gọi lại fetchTasks từ API
+    await fetchTasks(1, pageSize, setTasks, setTotalPages, setTotalCount);
+  };
+
   const handleUpdateFilters = (filters: {
     keyword: string;
     priority: string;
@@ -153,6 +179,14 @@ function TaskManager({
   }) => {
     setSearchFilters(filters);
   };
+
+  useEffect(() => {
+    console.log("TestTesst5");
+    const dataSource = filteredTasks ?? tasks;
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    setTasks(dataSource.slice(start, end));
+  }, [currentPage, pageSize, filteredTasks]); // Thêm tasks và filteredTasks vào
   return (
     <div className="task-manager">
       <TaskManagerHeader userEmail={userEmail} onLogout={onLogout} />
@@ -169,9 +203,13 @@ function TaskManager({
         setNewTaskAdded={setNewTaskAdded}
         fileInputRef={fileInputRef as React.RefObject<HTMLInputElement>}
         pageSize={pageSize}
+        currentPage={currentPage} // ✅ THÊM
+        setTasks={setTasks} // ✅ THÊM
+        setTotalPages={setTotalPages}
       />
       <SearchTasks
-        onResults={(filteredTasks: Task[]) => setTasks(filteredTasks)}
+        onResults={handleSearchResults}
+        onClear={handleClearSearch}
       />
       <TaskList
         tasks={tasks}

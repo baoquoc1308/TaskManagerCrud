@@ -61,7 +61,7 @@ export default function TaskList({
             className={`task-item ${
               newTaskAdded === task.id ? "new-task" : ""
             }`}
-            ref={index === tasks.length - 1 ? lastTaskRef : null}
+            ref={task.id === newTaskAdded ? lastTaskRef : null}
           >
             {/* Thay Link bằng div clickable */}
             <div

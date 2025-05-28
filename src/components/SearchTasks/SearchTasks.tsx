@@ -1,7 +1,12 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react"; // Import useCallback
 import { supabase } from "../../supabase-client";
 import type { Task } from "../../types/Task";
 import "./SearchTasks.css";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
+import { format } from "date-fns";
+import { toast } from "react-toastify";
+
 const priorityOptions = [
   { value: "", label: "All" },
   { value: "low", label: "Low" },
@@ -11,34 +16,52 @@ const priorityOptions = [
 
 interface SearchTasksProps {
   onResults: (tasks: Task[]) => void;
+  onClear: () => void;
 }
 
-export function SearchTasks({ onResults }: SearchTasksProps) {
+export function SearchTasks({ onResults, onClear }: SearchTasksProps) {
   const [keyword, setKeyword] = useState("");
   const [priority, setPriority] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState<Date | null>(null);
 
   const [showPriority, setShowPriority] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const containerRef = useRef<HTMLDivElement>(null);
+  const datePickerWrapperRef = useRef<HTMLDivElement>(null);
+  const priorityDropdownRef = useRef<HTMLDivElement>(null);
 
-  // Đóng dropdown khi click ngoài
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        setShowPriority(false);
-        setShowDatePicker(false);
-      }
+  const priorityIconRef = useRef<HTMLSpanElement>(null);
+  const dateIconRef = useRef<HTMLSpanElement>(null);
+
+  // Sử dụng useCallback để memoize hàm handleClickOutside
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    // Logic cho Priority Dropdown
+    if (
+      priorityDropdownRef.current &&
+      !priorityDropdownRef.current.contains(event.target as Node) &&
+      priorityIconRef.current &&
+      !priorityIconRef.current.contains(event.target as Node)
+    ) {
+      setShowPriority(false);
     }
+
+    // Logic cho DatePicker (khi dùng inline trong một wrapper div)
+    // Đảm bảo rằng click không nằm trong wrapper của date picker HOẶC icon kích hoạt nó
+    if (
+      datePickerWrapperRef.current &&
+      !datePickerWrapperRef.current.contains(event.target as Node) &&
+      dateIconRef.current &&
+      !dateIconRef.current.contains(event.target as Node)
+    ) {
+      setShowDatePicker(false);
+    }
+  }, []); // Không có dependencies vì không truy cập state hay prop trong hàm này
+
+  useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [handleClickOutside]); // Thêm handleClickOutside vào dependency array
 
-  // Hàm gọi API Supabase tìm tasks theo filter
   const fetchFilteredTasks = async () => {
     let query = supabase.from("tasks").select("*");
 
@@ -52,9 +75,10 @@ export function SearchTasks({ onResults }: SearchTasksProps) {
       query = query.eq("priority", priority);
     }
 
-    if (date !== "") {
-      const startDate = date + "T00:00:00";
-      const endDate = date + "T23:59:59";
+    if (date) {
+      const formattedDate = format(date, "yyyy-MM-dd");
+      const startDate = formattedDate + "T00:00:00";
+      const endDate = formattedDate + "T23:59:59";
       query = query.gte("created_at", startDate).lte("created_at", endDate);
     }
 
@@ -72,6 +96,31 @@ export function SearchTasks({ onResults }: SearchTasksProps) {
     fetchFilteredTasks();
   }, [keyword, priority, date]);
 
+  const handleDateChange = (selectedDate: Date | null) => {
+    setDate(selectedDate);
+    // Vẫn đóng lịch sau khi chọn
+    setShowDatePicker(false);
+  };
+  const handleClearSearch = (e: React.MouseEvent<HTMLSpanElement>) => {
+    e.stopPropagation();
+    setKeyword("");
+    setPriority("");
+    setDate(null);
+    onClear();
+    setShowPriority(false);
+    setShowDatePicker(false);
+
+    // Hiển thị toast notification
+    toast.info("Search filters cleared!", {
+      position: "top-right",
+      autoClose: 2000, // Tự động đóng sau 2 giây
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
   return (
     <div className="search-tasks-wrapper">
       <input
@@ -85,37 +134,72 @@ export function SearchTasks({ onResults }: SearchTasksProps) {
 
       <div className="icon-wrapper">
         <span
-          onClick={() => {
+          ref={priorityIconRef}
+          onClick={(e) => {
+            // Thêm e vào đây
+            e.stopPropagation(); // Ngăn sự kiện click lan truyền lên document
             setShowPriority(!showPriority);
             setShowDatePicker(false);
           }}
           className={`icon ${showPriority ? "active" : ""}`}
           title="Priority"
         >
-          🎯
+          <img
+            width="28"
+            height="28"
+            src="https://img.icons8.com/scribby/50/high-priority.png"
+            alt="high-priority"
+          />
         </span>
 
         <span
-          onClick={() => {
+          ref={dateIconRef}
+          onClick={(e) => {
+            // Thêm e vào đây
+            e.stopPropagation(); // Ngăn sự kiện click lan truyền lên document
             setShowDatePicker(!showDatePicker);
             setShowPriority(false);
           }}
           className={`icon ${showDatePicker ? "active" : ""}`}
           title="Date"
         >
-          📅
+          <img
+            width="28"
+            height="28"
+            src="https://img.icons8.com/color/48/calendar--v1.png"
+            alt="calendar--v1"
+          />
+        </span>
+
+        <span
+          onClick={handleClearSearch}
+          className="icon clear-icon"
+          title="Clear Search"
+        >
+          <img
+            width="28"
+            height="28"
+            src="https://img.icons8.com/pulsar-gradient/50/clear-search.png"
+            alt="clear-search"
+          />
         </span>
       </div>
 
       {showPriority && (
-        <div className="priority-dropdown">
+        <div
+          ref={priorityDropdownRef}
+          className="priority-dropdown"
+          onClick={(e) => e.stopPropagation()}
+        >
           {priorityOptions.map((opt) => (
             <div
               key={opt.value}
               className={`priority-option ${
                 opt.value === priority ? "selected" : ""
               }`}
-              onClick={() => {
+              onClick={(e) => {
+                // Thêm e vào đây
+                e.stopPropagation(); // Ngăn sự kiện click lan truyền từ option
                 setPriority(opt.value);
                 setShowPriority(false);
               }}
@@ -127,16 +211,19 @@ export function SearchTasks({ onResults }: SearchTasksProps) {
       )}
 
       {showDatePicker && (
-        <input
-          type="date"
-          className="calendar-picker"
-          value={date}
-          onChange={(e) => {
-            setDate(e.target.value);
-            setShowDatePicker(false);
-          }}
-          autoFocus
-        />
+        <div
+          ref={datePickerWrapperRef}
+          className="date-picker-container"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <DatePicker
+            selected={date}
+            onChange={handleDateChange}
+            inline
+            dateFormat="dd/MM/yyyy"
+            dropdownMode="select"
+          />
+        </div>
       )}
     </div>
   );

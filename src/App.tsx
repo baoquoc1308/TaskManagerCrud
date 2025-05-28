@@ -6,6 +6,7 @@ import AuthPage from "./components/AuthPage";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./components/SearchTasks/SearchTasks.css";
 
 function App() {
   const [session, setSession] = useState<any>(null);

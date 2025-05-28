@@ -33,7 +33,7 @@
   bottom: auto;
   display: flex;
   align-items: center; /* Căn dọc giữa */
-  gap: 8px;
+  gap: 4px;
   z-index: 10;
 }
 
@@ -43,25 +43,25 @@
   font-size: 18px;
   user-select: none;
   padding: 6px 8px;
-  border-radius: 8px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s;
-  color: #999;
   margin-bottom: 0; /* bỏ margin dưới */
-  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.icon:hover,
-.icon.active {
+.icon:hover {
   background-color: #eee;
-  color: #007bff;
 }
-
+.icon.active {
+  background-color: rgba(33, 150, 243, 0.1);
+}
+.clear-icon:hover {
+  background-color: #e27373;
+}
 /* Dropdown chung (priority và date picker) */
-.priority-dropdown,
-.calendar-picker {
+.priority-dropdown {
   position: absolute;
   top: 48px; /* ngay dưới input và icon */
   right: 0;
@@ -95,16 +95,102 @@
   color: white;
 }
 
-/* Input calendar */
-.calendar-picker {
-  padding: 6px 10px;
-  width: 160px;
-  cursor: pointer;
-  user-select: none;
-  transition: box-shadow 0.2s ease;
+.date-picker-container {
+  position: absolute; /* Quan trọng: Hiển thị chồng lên các phần tử khác */
+  top: calc(100% + 10px); /* Đặt ngay dưới .search-tasks-wrapper, cách 10px */
+  /* Điều chỉnh left để nó hiển thị gần icon Date. Bạn có thể cần thử nghiệm giá trị này. */
+  /* left: 380px; */ /* Ví dụ, giả sử icon date cách icon priority khoảng 80px */
+  /* Hoặc bạn có thể canh theo chiều phải nếu muốn */
+  right: 0; /* Đặt lịch căn phải của search-tasks-wrapper */
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Đảm bảo nó hiển thị trên cùng */
+}
+.react-datepicker {
+  font-family: "Segoe UI", "Roboto", "Helvetica Neue", sans-serif; /* Font chữ dễ đọc */
+  border: none; /* Bỏ viền mặc định */
+  border-radius: 10px; /* Bo góc lịch tổng thể */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Bóng đổ mềm mại và rõ ràng hơn */
+  overflow: hidden; /* Đảm bảo các góc bo tròn đẹp */
+  background-color: #ffffff; /* Nền trắng tinh khôi */
 }
 
-.calendar-picker:hover {
-  box-shadow: 0 0 8px #629ad6;
-  border-color: #4f7cad;
+h2.react-datepicker__current-month {
+  font-size: 20px;
+}
+/* Header của lịch (tháng, năm và nút điều hướng) */
+.react-datepicker__header {
+  background-color: #f7f7f7; /* Nền header nhẹ */
+  border-bottom: 1px solid #eee; /* Đường kẻ dưới nhẹ */
+  padding-top: 12px;
+  padding-bottom: 10px;
+  text-align: center;
+  border-top-left-radius: 10px; /* Bo góc trên khớp với tổng thể */
+  border-top-right-radius: 10px;
+  position: relative; /* Cho phép nút điều hướng định vị tuyệt đối */
+}
+
+/* Tiêu đề tháng và năm */
+.react-datepicker__current-month {
+  font-size: 1.1em;
+  font-weight: 600; /* Đậm hơn một chút */
+  color: #333; /* Màu chữ đậm hơn */
+  margin-bottom: 5px;
+}
+.react-datepicker__navigation {
+  top: 5px !important;
+}
+.react-datepicker__navigation:hover {
+  background: #d8d8d8;
+}
+
+/* Thứ trong tuần (Sun, Mon, Tue...) */
+.react-datepicker__day-name {
+  color: #888; /* Màu xám nhẹ nhàng */
+  font-size: 0.85em;
+  font-weight: 500;
+  margin-top: 8px; /* Khoảng cách với header */
+  width: 2.2em; /* Độ rộng các ô ngày */
+  line-height: 2.2em; /* Chiều cao các ô ngày */
+}
+
+/* Các ngày trong tháng */
+.react-datepicker__day {
+  color: #4a4a4a; /* Màu chữ ngày */
+  font-size: 0.9em;
+  font-weight: 400;
+  width: 2.2em;
+  line-height: 2.2em;
+  margin: 0.166em; /* Khoảng cách giữa các ngày */
+  border-radius: 50%; /* Làm cho ngày trông như một chấm tròn */
+  transition: background-color 0.2s ease, color 0.2s ease; /* Hiệu ứng mượt mà */
+}
+
+/* Khi hover vào ngày */
+.react-datepicker__day:not(.react-datepicker__day--selected):not(
+    .react-datepicker__day--outside-month
+  ):hover {
+  background-color: #f0f0f0; /* Nền hover nhẹ nhàng */
+  color: #333;
+}
+
+/* Ngày hiện tại (Today) */
+.react-datepicker__day--today {
+  font-weight: 600;
+  color: #1a73e8; /* Màu xanh nổi bật */
+}
+
+/* Ngày được chọn */
+.react-datepicker__day--selected,
+.react-datepicker__day--selected:hover {
+  background-color: #1a73e8 !important; /* Màu xanh đậm cho ngày chọn */
+  color: white !important; /* Chữ trắng */
+  border-radius: 50%; /* Vẫn giữ hình tròn */
+}
+
+/* Ngày thuộc tháng khác (mờ hơn) */
+.react-datepicker__day--outside-month {
+  color: #ccc; /* Làm mờ các ngày ngoài tháng hiện tại */
 }

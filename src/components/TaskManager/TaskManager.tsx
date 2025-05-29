@@ -24,6 +24,8 @@ function TaskManager({
   userEmail: string;
 }) {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [taskId, setTaskId] = useState<string | null>(null);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
@@ -39,6 +41,12 @@ function TaskManager({
   const lastTaskRef = useRef<HTMLLIElement | null>(null);
   const [pageSize, setPageSize] = useState(5);
 
+  const [keyword, setKeyword] = useState("");
+  const [priority, setPriority] = useState("");
+  const [date, setDate] = useState<Date | null>(null);
+  const [showPriority, setShowPriority] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
   const [filteredTasks, setFilteredTasks] = useState<Task[] | null>(null);
   const [displayedTasks, setDisplayedTasks] = useState<Task[]>([]);
   const [searchFilters, setSearchFilters] = useState({
@@ -47,9 +55,9 @@ function TaskManager({
     time: "",
   });
 
-  useEffect(() => {
-    fetchTasks(currentPage, pageSize, setTasks, setTotalPages, setTotalCount);
-  }, [currentPage]);
+  // useEffect(() => {
+  //   fetchTasks(currentPage, pageSize, setTasks, setTotalPages, setTotalCount);
+  // }, [currentPage]);
 
   useEffect(() => {
     if (newTaskAdded !== null) {
@@ -138,25 +146,36 @@ function TaskManager({
     if (!taskToDelete) return;
 
     try {
-      await deleteTask(
-        taskToDelete,
-        tasks,
-        currentPage,
-        setTasks,
-        setCurrentPage,
-        setTotalCount,
-        setTotalPages,
-        setShowDeleteModal,
-        setTaskToDelete,
-        pageSize
+      const updatedTasks = (filteredTasks ?? tasks).filter(
+        (task) => task.id !== taskToDelete.id
       );
 
+      // Cập nhật dữ liệu gốc
+      if (filteredTasks) {
+        setFilteredTasks(updatedTasks);
+      } else {
+        setTasks(updatedTasks);
+      }
+      // Xóa 1 task --> tự động lắp đầy
+      const totalAfterDelete = updatedTasks.length;
+      const newTotalPages = Math.ceil(totalAfterDelete / pageSize);
+      if (currentPage > newTotalPages) {
+        setCurrentPage(Math.max(1, currentPage - 1));
+      } else {
+        setCurrentPage(currentPage);
+      }
+
+      setTotalCount(totalAfterDelete);
+      setTotalPages(newTotalPages);
+      setShowDeleteModal(false);
+      setTaskToDelete(null);
       toast.success("🗑️ Task deleted successfully!");
     } catch (error) {
       console.error("Delete failed:", error);
       toast.error("❌ Failed to delete the task!");
     }
   };
+
   const handleSearchResults = (results: Task[]) => {
     setFilteredTasks(results);
     setCurrentPage(1);
@@ -203,14 +222,33 @@ function TaskManager({
         setNewTaskAdded={setNewTaskAdded}
         fileInputRef={fileInputRef as React.RefObject<HTMLInputElement>}
         pageSize={pageSize}
-        currentPage={currentPage} // ✅ THÊM
-        setTasks={setTasks} // ✅ THÊM
+        currentPage={currentPage}
+        setTasks={setTasks}
         setTotalPages={setTotalPages}
+        setKeyword={setKeyword}
+        setPriority={setPriority}
+        setDate={setDate}
+        setShowPriority={setShowPriority}
+        setShowDatePicker={setShowDatePicker}
+        setFilteredTasks={setFilteredTasks}
       />
       <SearchTasks
+        keyword={keyword}
+        setKeyword={setKeyword}
+        priority={priority}
+        setPriority={setPriority}
+        date={date}
+        setDate={setDate}
+        showPriority={showPriority}
+        setShowPriority={setShowPriority}
+        showDatePicker={showDatePicker}
+        setShowDatePicker={setShowDatePicker}
+        filteredTasks={filteredTasks}
+        setFilteredTasks={setFilteredTasks}
         onResults={handleSearchResults}
         onClear={handleClearSearch}
       />
+
       <TaskList
         tasks={tasks}
         editingId={editingId}
@@ -230,6 +268,8 @@ function TaskManager({
         updateTask={updateTask}
         newTaskAdded={newTaskAdded}
         lastTaskRef={lastTaskRef}
+        setTaskId={setTaskId}
+        setTasks={setTasks}
       />
 
       <DeleteModal

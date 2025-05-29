@@ -15,7 +15,6 @@ function App() {
   useEffect(() => {
     const fetchSession = async () => {
       const { data } = await supabase.auth.getSession();
-      console.log("Access token:", session?.access_token);
       setSession(data.session);
       setLoading(false);
     };

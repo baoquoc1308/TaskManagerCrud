@@ -67,11 +67,19 @@ export const SubmitTaskForm = ({
   setNewTaskAdded,
   fileInputRef,
   pageSize,
-  setFilteredTasks,
   setKeyword,
+  setPriority,
+  setDate,
+  setShowPriority,
+  setShowDatePicker,
+  setFilteredTasks,
 }: SubmitTaskProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setPriority!("");
+    setDate!(null);
+    setShowPriority!(false);
+    setShowDatePicker!(false);
     if (!taskImage) {
       alert("Please choose an image before submitting the task.");
       return;
@@ -129,8 +137,6 @@ export const SubmitTaskForm = ({
     setCurrentPage(pages);
     fetchTasks(pages, pageSize, setTasks, setTotalPages, setTotalCount);
   };
-  console.log("🚀 ~ handleSubmit ~ currentPage:", currentPage);
-  setFilteredTasks?.(null);
 
   return (
     <form onSubmit={handleSubmit} className="task-form">

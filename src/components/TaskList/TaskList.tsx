@@ -6,7 +6,7 @@ import {
 } from "../../utils/TaskHelpers";
 import "./TaskList.css";
 import TaskDetail from "../TaskDetail";
-import { Empty } from "antd"; // Import Empty component của antd
+import { Empty, Modal } from "antd";
 
 interface TaskListProps {
   tasks: Task[];
@@ -18,6 +18,8 @@ interface TaskListProps {
   updateTask: (taskId: number) => Promise<void>;
   newTaskAdded: number | null;
   lastTaskRef: React.RefObject<HTMLLIElement | null>;
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  setTaskId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export default function TaskList({
@@ -30,18 +32,40 @@ export default function TaskList({
   updateTask,
   newTaskAdded,
   lastTaskRef,
+  setTasks,
+  setTaskId,
 }: TaskListProps) {
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  const [isDeleteConfirmModalVisible, setIsDeleteConfirmModalVisible] =
+    useState(false);
+  const [taskToDeleteFromDetail, setTaskToDeleteFromDetail] =
+    useState<Task | null>(null);
 
-  // Mở modal detail khi click vào item (ngoại trừ khi đang edit)
   const handleClickTask = (taskId: string) => {
-    if (editingId !== null) return; // tránh mở modal khi đang edit task khác
-    setSelectedTaskId(taskId);
+    if (editingId === null) setSelectedTaskId(taskId);
   };
 
-  // Đóng modal
   const handleCloseModal = () => {
     setSelectedTaskId(null);
+    setEditingId(null);
+  };
+
+  const handleOpenDeleteConfirmModal = (task: Task) => {
+    setTaskToDeleteFromDetail(task);
+    setIsDeleteConfirmModalVisible(true);
+  };
+
+  const handleCloseDeleteConfirmModal = () => {
+    setIsDeleteConfirmModalVisible(false);
+    setTaskToDeleteFromDetail(null);
+  };
+
+  const handleConfirmDeleteFromDetail = () => {
+    if (taskToDeleteFromDetail) {
+      confirmDeleteTask(taskToDeleteFromDetail);
+      handleCloseModal();
+      handleCloseDeleteConfirmModal();
+    }
   };
 
   if (tasks.length === 0) {
@@ -55,7 +79,7 @@ export default function TaskList({
   return (
     <>
       <ul className="task-list">
-        {tasks.map((task, index) => (
+        {tasks.map((task) => (
           <li
             key={task.id}
             className={`task-item ${
@@ -63,7 +87,6 @@ export default function TaskList({
             }`}
             ref={task.id === newTaskAdded ? lastTaskRef : null}
           >
-            {/* Thay Link bằng div clickable */}
             <div
               className="task-link"
               onClick={() => handleClickTask(String(task.id))}
@@ -136,14 +159,40 @@ export default function TaskList({
         ))}
       </ul>
 
-      {/* Modal hiển thị task detail */}
       {selectedTaskId && (
         <TaskDetail
           taskId={selectedTaskId}
           onClose={handleCloseModal}
           setTaskId={setSelectedTaskId}
+          editingId={editingId}
+          setEditingId={setEditingId}
+          newDescription={newDescription}
+          setNewDescription={setNewDescription}
+          updateTask={updateTask}
+          onDeleteSuccess={(deletedId) => {
+            setTaskId(null); // Đóng modal
+            setTasks((prevTasks) =>
+              prevTasks.filter((t) => t.id !== deletedId)
+            ); // Cập nhật danh sách
+          }}
         />
       )}
+
+      <Modal
+        title="Confirm Delete"
+        open={isDeleteConfirmModalVisible}
+        onOk={handleConfirmDeleteFromDetail}
+        onCancel={handleCloseDeleteConfirmModal}
+        okText="Delete"
+        cancelText="Cancel"
+        okButtonProps={{ danger: true }}
+      >
+        <p>
+          Are you sure you want to delete the task: "
+          <strong>{taskToDeleteFromDetail?.title}</strong>"?
+        </p>
+        <p>This action cannot be undone.</p>
+      </Modal>
     </>
   );
 }

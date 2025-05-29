@@ -17,16 +17,39 @@ const priorityOptions = [
 interface SearchTasksProps {
   onResults: (tasks: Task[]) => void;
   onClear: () => void;
+  keyword: string;
+  setKeyword: React.Dispatch<React.SetStateAction<string>>;
+
+  priority: string;
+  setPriority: React.Dispatch<React.SetStateAction<string>>;
+
+  date: Date | null;
+  setDate: React.Dispatch<React.SetStateAction<Date | null>>;
+
+  showPriority: boolean;
+  setShowPriority: React.Dispatch<React.SetStateAction<boolean>>;
+
+  showDatePicker: boolean;
+  setShowDatePicker: React.Dispatch<React.SetStateAction<boolean>>;
+
+  filteredTasks?: Task[] | null;
+  setFilteredTasks: React.Dispatch<React.SetStateAction<Task[] | null>>;
 }
 
-export function SearchTasks({ onResults, onClear }: SearchTasksProps) {
-  const [keyword, setKeyword] = useState("");
-  const [priority, setPriority] = useState("");
-  const [date, setDate] = useState<Date | null>(null);
-
-  const [showPriority, setShowPriority] = useState(false);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
+export function SearchTasks({
+  keyword,
+  setKeyword,
+  priority,
+  setPriority,
+  date,
+  setDate,
+  showPriority,
+  setShowPriority,
+  showDatePicker,
+  setShowDatePicker,
+  onResults,
+  onClear,
+}: SearchTasksProps) {
   const datePickerWrapperRef = useRef<HTMLDivElement>(null);
   const priorityDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -81,7 +104,7 @@ export function SearchTasks({ onResults, onClear }: SearchTasksProps) {
       const endDate = formattedDate + "T23:59:59";
       query = query.gte("created_at", startDate).lte("created_at", endDate);
     }
-
+    query = query.order("created_at", { ascending: true });
     const { data, error } = await query;
 
     if (error) {

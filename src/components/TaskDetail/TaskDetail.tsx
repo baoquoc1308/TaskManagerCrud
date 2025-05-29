@@ -6,34 +6,56 @@ import {
   getPriorityBadgeClass,
   getStatusBadgeClass,
 } from "../../utils/TaskHelpers";
+import DeleteModal from "../DeleteModal";
+import { toast } from "react-toastify";
 
 interface TaskDetailProps {
   taskId: string | null;
   onClose: () => void;
   setTaskId: (id: string) => void;
+  editingId: number | null;
+  setEditingId: React.Dispatch<React.SetStateAction<number | null>>;
+  newDescription: string;
+  setNewDescription: React.Dispatch<React.SetStateAction<string>>;
+  updateTask: (taskId: number) => Promise<void>;
+  // Thêm prop mới để mở modal xác nhận xóa
+  onDeleteSuccess: (deletedId: number) => void; // thêm mới
 }
 
-function TaskDetail({ taskId, onClose, setTaskId }: TaskDetailProps) {
+function TaskDetail({
+  taskId,
+  onClose,
+  setTaskId,
+  editingId,
+  setEditingId,
+  newDescription,
+  setNewDescription,
+  updateTask,
+  onDeleteSuccess, // Nhận prop mới
+}: TaskDetailProps) {
+  if (!taskId) return null;
   const [task, setTask] = useState<Task | null>(null);
   const [relatedTasks, setRelatedTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  // State + ref cho title
-  const [titleFontSize, setTitleFontSize] = useState(24); // font mặc định lớn hơn cho title
+  const [titleFontSize, setTitleFontSize] = useState(24);
   const titleRef = useRef<HTMLHeadingElement>(null);
 
-  // State + ref cho description
   const [descFontSize, setDescFontSize] = useState(18);
   const descRef = useRef<HTMLParagraphElement>(null);
   const [showFullDesc, setShowFullDesc] = useState(false);
   const [showFullTitle, setShowFullTitle] = useState(false);
 
+  const isEditingThisTask = editingId === Number(taskId);
+
+  // --- THAY ĐỔI Ở ĐÂY ---
   useEffect(() => {
     if (!taskId) return;
 
     const fetchTask = async () => {
       setLoading(true);
-      setTask(null); // clear current task
+      // Không setTask(null) ở đây nữa để tránh nháy
       const { data, error } = await supabase
         .from("tasks")
         .select("*")
@@ -43,17 +65,26 @@ function TaskDetail({ taskId, onClose, setTaskId }: TaskDetailProps) {
       if (!error && data) {
         setTask(data);
         fetchRelatedTasks(data.priority, data.id);
+        // setNewDescription chỉ được gọi khi task thực sự thay đổi hoặc khi bắt đầu chỉnh sửa
+        // Chúng ta sẽ handle việc setNewDescription trong handleEditClick
       }
       setLoading(false);
     };
 
+    // Chỉ fetch task khi taskId thay đổi
     fetchTask();
-  }, [taskId]);
+  }, [taskId]); // Chỉ phụ thuộc vào taskId
+
+  // Effect để cập nhật newDescription khi chuyển sang chế độ edit
+  useEffect(() => {
+    if (isEditingThisTask && task) {
+      setNewDescription(task.description);
+    }
+  }, [isEditingThisTask, task, setNewDescription]); // Phụ thuộc vào isEditingThisTask và task
 
   useEffect(() => {
     if (!task) return;
 
-    // Reset font size mỗi lần task mới load
     setTitleFontSize(24);
     setDescFontSize(18);
 
@@ -76,12 +107,11 @@ function TaskDetail({ taskId, onClose, setTaskId }: TaskDetailProps) {
       return fontSize;
     };
 
-    // Đợi DOM cập nhật rồi đo
     setTimeout(() => {
-      const newTitleFontSize = adjustFontSize(titleRef.current, 60, 14, 24); // vd maxHeight 60px cho title
+      const newTitleFontSize = adjustFontSize(titleRef.current, 60, 14, 24);
       setTitleFontSize(newTitleFontSize);
 
-      const newDescFontSize = adjustFontSize(descRef.current, 120, 12, 18); // maxHeight 120px cho description
+      const newDescFontSize = adjustFontSize(descRef.current, 120, 12, 18);
       setDescFontSize(newDescFontSize);
     }, 50);
   }, [task]);
@@ -96,6 +126,58 @@ function TaskDetail({ taskId, onClose, setTaskId }: TaskDetailProps) {
 
     if (!error) {
       setRelatedTasks(data);
+    }
+  };
+
+  const handleEditClick = () => {
+    if (task) {
+      setEditingId(task.id);
+      setNewDescription(task.description);
+    }
+  };
+
+  const handleSaveClick = async () => {
+    if (task) {
+      await updateTask(task.id); // chắc chắn updateTask đúng
+
+      setEditingId(null);
+
+      // Re-fetch task to show updated description
+      const { data, error } = await supabase
+        .from("tasks")
+        .select("*")
+        .eq("id", Number(taskId)) // ép kiểu number nhất quán
+        .single();
+
+      if (!error && data) {
+        setTask(data);
+        console.log("Task updated:", data);
+      } else {
+        console.error("Fetch updated task failed:", error);
+      }
+    }
+  };
+
+  const handleCancelClick = () => {
+    setEditingId(null);
+    if (task) {
+      setNewDescription(task.description);
+    }
+  };
+
+  const handleDeleteTask = async () => {
+    if (!task) return;
+
+    const { error } = await supabase.from("tasks").delete().eq("id", task.id);
+
+    if (error) {
+      console.error("Xoá thất bại:", error.message);
+      toast.error("❌ Failed to delete task");
+    } else {
+      toast.success("🗑️ Task deleted successfully!");
+      setShowDeleteModal(false);
+      onClose(); // đóng TaskDetail modal
+      onDeleteSuccess(task.id); // callback cho cha xoá trong UI
     }
   };
 
@@ -123,15 +205,33 @@ function TaskDetail({ taskId, onClose, setTaskId }: TaskDetailProps) {
               <img src={task.image_url} alt="task" className="task-image" />
             )}
             <div className="task-buttons">
-              <button className="edit-button">Edit</button>
-              <button className="delete-button">Delete</button>
+              {isEditingThisTask ? (
+                <>
+                  <button className="save-button" onClick={handleSaveClick}>
+                    Save
+                  </button>
+                  <button className="cancel-button" onClick={handleCancelClick}>
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button className="edit-button" onClick={handleEditClick}>
+                    Edit
+                  </button>
+                  <button onClick={() => setShowDeleteModal(true)}>
+                    Delete
+                  </button>
+                </>
+              )}
             </div>
           </div>
 
           <div className="task-info-section">
-            {/* Title */}
             <div className="text-wrapper">
               <h2
+                ref={titleRef}
+                style={{ fontSize: `${titleFontSize}px` }}
                 className={`text-content ${
                   showFullTitle ? "expanded-title" : "clamped-title"
                 }`}
@@ -148,16 +248,26 @@ function TaskDetail({ taskId, onClose, setTaskId }: TaskDetailProps) {
               )}
             </div>
 
-            {/* Description */}
             <div className="text-wrapper">
-              <p
-                className={`text-content ${
-                  showFullDesc ? "expanded-desc" : "clamped-desc"
-                }`}
-              >
-                {task.description}
-              </p>
-              {task.description.length > 200 && (
+              {isEditingThisTask ? (
+                <textarea
+                  value={newDescription}
+                  onChange={(e) => setNewDescription(e.target.value)}
+                  placeholder="Updated description..."
+                  className="edit-description-textarea"
+                />
+              ) : (
+                <p
+                  ref={descRef}
+                  style={{ fontSize: `${descFontSize}px` }}
+                  className={`text-content ${
+                    showFullDesc ? "expanded-desc" : "clamped-desc"
+                  }`}
+                >
+                  {task.description}
+                </p>
+              )}
+              {!isEditingThisTask && task.description.length > 200 && (
                 <span
                   className="read-toggle"
                   onClick={() => setShowFullDesc(!showFullDesc)}
@@ -197,9 +307,10 @@ function TaskDetail({ taskId, onClose, setTaskId }: TaskDetailProps) {
                   key={t.id}
                   className="related-task-card"
                   onClick={() => {
-                    setTask(null); // clear current to show loading
+                    setTask(null);
                     setRelatedTasks([]);
                     setTaskId(String(t.id));
+                    setEditingId(null);
                   }}
                 >
                   {t.image_url && (
@@ -216,6 +327,11 @@ function TaskDetail({ taskId, onClose, setTaskId }: TaskDetailProps) {
           </div>
         )}
       </div>
+      <DeleteModal
+        show={showDeleteModal}
+        onCancel={() => setShowDeleteModal(false)}
+        onConfirm={handleDeleteTask}
+      />
     </div>
   );
 }

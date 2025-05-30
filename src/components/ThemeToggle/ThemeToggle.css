@@ -1,31 +1,52 @@
 .theme-toggle {
-    width: 60px;
-    height: 30px;
-    background-color: #ccc;
-    border-radius: 9999px;
-    padding: 2px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    display: flex;
-    align-items: center;
-    position: relative;
+  width: 60px;
+  height: 30px;
+  background-color: #ccc;
+  border-radius: 9999px;
+  padding: 2px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  position: relative;
 }
 
 .theme-toggle .slider {
-    width: 26px;
-    height: 26px;
-    background-color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    left: 2px;
-    top: 2px;
-    transition: transform 0.3s ease;
-    font-size: 14px;
+  width: 26px;
+  height: 26px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s ease;
+  font-size: 14px;
 }
 
+/* Dark mode: trượt về phải */
 .theme-toggle .slider.dark {
-    transform: translateX(30px);
+  transform: translateX(30px);
+}
+
+@media (max-width: 500px) {
+  .theme-toggle {
+    width: 40px;
+    height: 20px;
+    padding: 2px;
+  }
+
+  .theme-toggle .slider {
+    width: 16px;
+    height: 16px;
+    top: 2px;
+    left: 2px;
+    font-size: 12px;
+  }
+
+  .theme-toggle .slider.dark {
+    transform: translateX(20px);
+  }
 }

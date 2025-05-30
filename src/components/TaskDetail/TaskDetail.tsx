@@ -138,7 +138,7 @@ function TaskDetail({
 
   const handleSaveClick = async () => {
     if (task) {
-      await updateTask(task.id); // chắc chắn updateTask đúng
+      await updateTask(task.id);
 
       setEditingId(null);
 
@@ -146,7 +146,7 @@ function TaskDetail({
       const { data, error } = await supabase
         .from("tasks")
         .select("*")
-        .eq("id", Number(taskId)) // ép kiểu number nhất quán
+        .eq("id", Number(taskId))
         .single();
 
       if (!error && data) {

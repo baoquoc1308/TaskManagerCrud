@@ -68,13 +68,14 @@
 
 /* Nút đóng modal */
 .close-button {
+  color: #080808;
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 2px;
+  right: 2px;
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 16px;
 }
 
 /* Nội dung chi tiết task */
@@ -332,4 +333,94 @@
   overflow-y: auto;
   max-height: 300px; /* Cho phép description dài hơn */
   padding-right: 4px;
+}
+@media (max-width: 1024px) {
+  .modal-content {
+    background-color: white;
+    width: 800px;
+    max-width: 100%;
+    overflow-y: auto;
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  }
+  .task-image {
+    width: 450px;
+    height: 450px;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  .related-task-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 10px;
+    width: 100%;
+    padding-top: 10px;
+  }
+  .related-task-card {
+    width: 110px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 8px;
+    text-align: center;
+    transition: transform 0.2s;
+    background-color: #fafafa;
+  }
+  .close-button {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+  }
+}
+@media (max-width: 768px) {
+  .modal-content {
+    background-color: white;
+    width: 600px;
+    max-width: 100%;
+    overflow-y: auto;
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  }
+  .task-image {
+    width: 350px;
+    height: 350px;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  .related-task-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+    width: 100%;
+    padding-top: 10px;
+  }
+  .related-task-card {
+    width: 80px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 8px;
+    text-align: center;
+    transition: transform 0.2s;
+    background-color: #fafafa;
+  }
+  .close-button {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+  }
 }

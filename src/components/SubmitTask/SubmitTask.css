@@ -1,7 +1,6 @@
 .task-form input[type="datetime-local"] {
   padding: 0.8rem;
   border-radius: 12px;
-  border: 1px solid #ddd;
   background-color: #fff;
   transition: border 0.3s, box-shadow 0.3s;
   width: 200px;
@@ -11,6 +10,65 @@
   gap: 10px;
   margin-bottom: 10px;
 }
+.task-form input[type="text"] {
+  padding: 0.8rem;
+  border-radius: 12px;
+  margin-bottom: 1rem; /* Tạo khoảng cách giữa title và phần còn lại */
+  min-height: 64px; /* Đảm bảo không bị co */
+}
+.react-select__container {
+  width: 200px;
+  margin-bottom: 1rem;
+}
+
+.react-select__control {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border-radius: 12px !important;
+  background-color: #fff;
+  transition: border 0.3s, box-shadow 0.3s;
+  resize: none;
+  box-sizing: border-box;
+}
+.react-select__control--is-focused {
+  border-color: #007bff !important;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3) !important;
+  outline: none;
+}
+
+.react-select__menu {
+  border-radius: 12px;
+  padding: 0.2rem;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.react-select__option {
+  background-color: #fff;
+  color: #000;
+  padding: 0.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.dark .react-select__option {
+  background-color: #fff;
+  color: #000;
+  padding: 0.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.dark .react-select__option:hover {
+  background-color: #7574da;
+  color: #000;
+  padding: 0.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
 .file-upload-container {
   display: flex;
   align-items: center;
@@ -67,4 +125,83 @@
 
 .submit-button:hover {
   background-color: #35b97f;
+}
+.input-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap; /* Không xuống dòng */
+}
+
+/* Khi màn hình nhỏ hơn 1200px */
+@media (max-width: 1024px) {
+  .input-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap; /* Không xuống dòng */
+  }
+
+  /* width tổng ~ 100%, tính toán luôn phần gap */
+  .input-group input,
+  .input-group .priority-select,
+  .input-group .status-select {
+    flex: 1; /* Mỗi field chiếm 1 phần bằng nhau */
+    min-width: 0; /* Giúp flex chia đều */
+  }
+  .input-row {
+    flex-direction: column;
+  }
+
+  .input-group {
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+
+  .input-group input,
+  .input-group .priority-select,
+  .input-group .status-select {
+    flex: 1;
+  }
+}
+@media (max-width: 500px) {
+  .input-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .input-group input[type="datetime-local"] {
+    width: 100%;
+  }
+
+  /* Cho priority và status nằm cùng hàng */
+  .input-group .priority-select,
+  .input-group .status-select {
+    width: 100%;
+  }
+
+  .priority-select + .status-select {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .priority-select + .status-select > * {
+    flex: 1;
+    min-width: 0;
+  }
+  .file-upload-button {
+    font-size: 14px;
+  }
 }

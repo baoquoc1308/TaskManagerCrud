@@ -1,7 +1,6 @@
 import { supabase } from "../../supabase-client";
 import Select from "react-select";
 import { uploadImage } from "../../utils/UploadImage";
-import { commonSelectStyles } from "../../utils/SelectStyles";
 import "./SubmitTask.css";
 import { fetchTasks } from "../FetchTasks";
 import {} from "antd/es/input";
@@ -60,7 +59,6 @@ export const SubmitTaskForm = ({
   setNewTask,
   taskImage,
   setTaskImage,
-  currentPage,
   setCurrentPage,
   setTotalPages,
   setTotalCount,
@@ -72,7 +70,6 @@ export const SubmitTaskForm = ({
   setDate,
   setShowPriority,
   setShowDatePicker,
-  setFilteredTasks,
 }: SubmitTaskProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -151,39 +148,43 @@ export const SubmitTaskForm = ({
           required
           style={{ flex: 2 }}
         />
-        <input
-          type="datetime-local"
-          value={newTask.time || ""}
-          onChange={(e) =>
-            setNewTask((prev) => ({ ...prev, time: e.target.value }))
-          }
-          required
-        />
-        <Select
-          options={priorityOptions}
-          placeholder="Priority"
-          isSearchable={false}
-          value={
-            priorityOptions.find((opt) => opt.value === newTask.priority) ||
-            null
-          }
-          onChange={(option) =>
-            setNewTask((prev) => ({ ...prev, priority: option?.value }))
-          }
-          styles={commonSelectStyles}
-        />
-        <Select
-          options={statusOptions}
-          placeholder="Status"
-          isSearchable={false}
-          value={
-            statusOptions.find((opt) => opt.value === newTask.status) || null
-          }
-          onChange={(option) =>
-            setNewTask((prev) => ({ ...prev, status: option?.value }))
-          }
-          styles={commonSelectStyles}
-        />
+        <div className="input-group">
+          <input
+            type="datetime-local"
+            value={newTask.time || ""}
+            onChange={(e) =>
+              setNewTask((prev) => ({ ...prev, time: e.target.value }))
+            }
+            required
+          />
+          <Select
+            options={priorityOptions}
+            placeholder="Priority"
+            isSearchable={false}
+            value={
+              priorityOptions.find((opt) => opt.value === newTask.priority) ||
+              null
+            }
+            onChange={(option) =>
+              setNewTask((prev) => ({ ...prev, priority: option?.value }))
+            }
+            className="priority-select"
+            classNamePrefix="react-select"
+          />
+          <Select
+            options={statusOptions}
+            placeholder="Status"
+            isSearchable={false}
+            value={
+              statusOptions.find((opt) => opt.value === newTask.status) || null
+            }
+            onChange={(option) =>
+              setNewTask((prev) => ({ ...prev, status: option?.value }))
+            }
+            className="status-select"
+            classNamePrefix="react-select"
+          />
+        </div>
       </div>
 
       <textarea

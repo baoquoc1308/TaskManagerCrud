@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react"; // Import useCallback
+import { useRef, useEffect, useCallback } from "react";
 import { supabase } from "../../supabase-client";
 import type { Task } from "../../types/Task";
 import "./SearchTasks.css";
@@ -68,8 +68,6 @@ export function SearchTasks({
       setShowPriority(false);
     }
 
-    // Logic cho DatePicker (khi dùng inline trong một wrapper div)
-    // Đảm bảo rằng click không nằm trong wrapper của date picker HOẶC icon kích hoạt nó
     if (
       datePickerWrapperRef.current &&
       !datePickerWrapperRef.current.contains(event.target as Node) &&
@@ -78,7 +76,7 @@ export function SearchTasks({
     ) {
       setShowDatePicker(false);
     }
-  }, []); // Không có dependencies vì không truy cập state hay prop trong hàm này
+  }, []);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);

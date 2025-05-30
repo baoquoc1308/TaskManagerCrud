@@ -8,14 +8,7 @@
   max-width: 100%;
   overflow-x: hidden;
 }
-.task-list button {
-  padding: 0.5rem 1.2rem;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: background 0.3s ease, color 0.3s ease;
-  flex: 1;
-}
+
 .task-list button {
   padding: 0.5rem 1.2rem;
   border-radius: 8px;
@@ -75,7 +68,7 @@
 }
 .meta-row {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 1rem;
   align-items: center;
   margin-top: 0.5rem;
@@ -150,5 +143,204 @@
 
   100% {
     background-color: #d1f7d1;
+  }
+}
+/* --- Responsive Styles*/
+
+@media (max-width: 1440px) {
+  .task-list {
+    gap: 1.2rem; /* Giảm khoảng cách */
+  }
+  .task-item span {
+    font-size: 0.6rem;
+    height: auto;
+    display: block;
+    text-align: left;
+  }
+  /* .task-item span strong {
+    font-size: 0.7rem;
+  } */
+  .task-item span.time-meta {
+    font-size: 0.8rem;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5px;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+
+  .task-item span.task-meta {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+}
+@media (max-width: 1280px) {
+  .task-list {
+    grid-template-columns: repeat(3, 1fr); /* 3 cột */
+    gap: 1.2rem; /* Giảm khoảng cách */
+  }
+  .task-item span {
+    color: var(--text-color);
+    font-size: 0.7rem;
+    height: auto;
+    display: block;
+    text-align: left;
+  }
+  .task-item {
+    min-height: 380px; /* Điều chỉnh chiều cao tối thiểu nếu cần */
+  }
+
+  .task-item img {
+    height: 250px; /* Điều chỉnh chiều cao ảnh */
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+
+  .task-item span.task-meta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+/* For screens smaller than 992px (e.g., most tablets in landscape) */
+@media (max-width: 991px) {
+  .task-list {
+    grid-template-columns: repeat(3, 1fr); /* 2 cột */
+    gap: 1rem;
+    padding: 0 1rem; /* Thêm padding ngang để không bị sát lề */
+  }
+
+  .task-item {
+    min-height: 380px; /* Điều chỉnh chiều cao tối thiểu nếu cần */
+  }
+
+  .task-item img {
+    height: 250px; /* Điều chỉnh chiều cao ảnh */
+  }
+
+  .task-item h3 {
+    font-size: 1rem; /* Giảm kích thước tiêu đề */
+  }
+
+  .task-item p {
+    font-size: 0.9rem; /* Giảm kích thước mô tả */
+    height: auto;
+  }
+
+  .task-actions {
+    flex-direction: column; /* Nút hành động xếp chồng trên màn hình nhỏ */
+    gap: 0.8rem;
+  }
+}
+
+/* For screens smaller than 768px (e.g., tablets in portrait, large phones) */
+@media (max-width: 768px) {
+  .task-list {
+    grid-template-columns: repeat(2, 1fr); /* 2 cột */
+
+    gap: 1.2rem;
+    padding: 0 0.8rem; /* Tăng padding ngang một chút */
+  }
+
+  .task-item {
+    min-height: auto; /* Cho phép chiều cao tự động, hoặc đặt giá trị phù hợp */
+    max-height: 500px; /* Giới hạn chiều cao để tránh quá dài trên mobile */
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
+    padding: 0.8rem;
+  }
+
+  .task-item img {
+    height: 200px; /* Có thể giữ nguyên hoặc điều chỉnh */
+    margin: 0.8rem 0;
+  }
+
+  .task-item h3 {
+    font-size: 1.1rem; /* Có thể tăng lại một chút cho dễ đọc */
+    -webkit-line-clamp: 2; /* Đặt lại giới hạn 2 dòng nếu muốn */
+    line-clamp: 2;
+  }
+
+  .task-item p {
+    font-size: 0.95rem;
+    -webkit-line-clamp: 3; /* Tăng giới hạn dòng cho mô tả */
+    line-clamp: 3;
+  }
+  .task-item span {
+    font-size: 0.8rem;
+  }
+  .task-actions {
+    flex-direction: row; /* Có thể giữ hàng ngang nếu nút không quá nhiều */
+    gap: 0.5rem;
+    justify-content: center; /* Căn giữa các nút nếu ít */
+  }
+
+  .task-list button {
+    font-size: 0.9rem;
+    padding: 0.4rem 1rem;
+  }
+}
+
+/* For very small screens (e.g., iPhone 5/SE, older Androids) or specific iPhone 12 Pro portrait */
+@media (max-width: 480px) {
+  .task-list {
+    grid-template-columns: 1fr; /* 2 cột */
+
+    gap: 1.2rem;
+    padding: 0 0.8rem; /* Tăng padding ngang một chút */
+  }
+  .task-list {
+    padding: 0 0.5rem;
+    gap: 1rem;
+  }
+
+  .task-item {
+    padding: 0.7rem;
+  }
+
+  .task-item img {
+    height: 180px;
+  }
+
+  .task-item h3 {
+    font-size: 1rem;
+  }
+
+  .task-item p {
+    font-size: 0.85rem;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+
+  .task-item span.task-meta {
+    display: flex;
+    align-items: center;
+  }
+  .task-actions {
+    flex-direction: column; /* Chắc chắn xếp chồng trên màn hình rất nhỏ */
+    gap: 0.5rem;
+  }
+
+  .task-list button {
+    width: 100%; /* Đảm bảo nút chiếm toàn bộ chiều rộng */
+    padding: 0.6rem 1rem;
+  }
+}
+@media (max-width: 320px) {
+  .meta-row {
+    flex-wrap: wrap;
   }
 }

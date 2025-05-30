@@ -5,7 +5,6 @@ import { fetchTasks } from "../FetchTasks";
 import { SubmitTaskForm } from "../SubmitTask/SubmitTask";
 import { supabase } from "../../supabase-client";
 import ScrollButtons from "../ScrollButton";
-import { deleteTask } from "../DeleteTask";
 import PaginationControl from "../PaginationControl";
 import DeleteModal from "../DeleteModal";
 import TaskManagerHeader from "../TaskManagerHeader";
@@ -39,6 +38,8 @@ function TaskManager({
   const [newDescription, setNewDescription] = useState("");
   const [originalDescription, setOriginalDescription] = useState("");
   const lastTaskRef = useRef<HTMLLIElement | null>(null);
+  const scrollBottomRef = useRef<HTMLDivElement | null>(null);
+
   const [pageSize, setPageSize] = useState(5);
 
   const [keyword, setKeyword] = useState("");
@@ -278,6 +279,8 @@ function TaskManager({
         onCancel={cancelDelete}
       />
       <ScrollButtons scrollToBottomRef={lastTaskRef} />
+      <ScrollButtons scrollToBottomRef={scrollBottomRef} />
+      <div ref={scrollBottomRef} style={{ height: "1px" }} />
       <PaginationControl
         currentPage={currentPage}
         pageSize={pageSize}

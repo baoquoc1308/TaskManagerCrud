@@ -75,7 +75,6 @@ export default function TaskList({
       </div>
     );
   }
-
   return (
     <>
       <ul className="task-list">
@@ -94,7 +93,7 @@ export default function TaskList({
             >
               <h3>{task.title}</h3>
               <p>{task.description}</p>
-              <span>
+              <span className="time-meta">
                 <strong>Time:</strong> {task.time}
               </span>
               <div className="meta-row">

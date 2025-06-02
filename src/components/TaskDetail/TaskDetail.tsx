@@ -278,7 +278,8 @@ function TaskDetail({
             </div>
 
             <p>
-              <strong style={{ display: "block" }}>Time:</strong> {task.time}
+              <strong>Time:</strong>
+              {task.time}
             </p>
 
             <div className="meta-row">

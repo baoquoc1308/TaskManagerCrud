@@ -150,7 +150,6 @@ export function SearchTasks({
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
         className="search-input"
-        style={{ width: "300px" }}
       />
 
       <div className="icon-wrapper">

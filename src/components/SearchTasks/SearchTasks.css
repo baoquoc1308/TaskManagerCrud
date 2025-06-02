@@ -5,8 +5,7 @@
   gap: 12px;
   justify-content: flex-end;
   position: relative;
-  width: 100%;
-  max-width: 350px;
+  width: 350px;
   margin-left: auto;
 }
 
@@ -27,12 +26,10 @@
 /* Wrapper icon (priority và date picker) */
 .icon-wrapper {
   position: absolute;
-  right: 10px;
   top: 0;
   bottom: auto;
   display: flex;
   align-items: center; /* Căn dọc giữa */
-  gap: 4px;
   z-index: 10;
 }
 
@@ -192,4 +189,51 @@ h2.react-datepicker__current-month {
 /* Ngày thuộc tháng khác (mờ hơn) */
 .react-datepicker__day--outside-month {
   color: #ccc; /* Làm mờ các ngày ngoài tháng hiện tại */
+}
+@media (max-width: 1669px) {
+  .search-tasks-wrapper {
+    width: 300px;
+  }
+  span .icon {
+    padding: 6px 8px;
+  }
+  .search-input {
+    font-size: 12px;
+  }
+}
+@media (max-width: 1629px) {
+  .search-tasks-wrapper {
+    width: 294px;
+  }
+}
+@media (max-width: 1440px) {
+  .search-tasks-wrapper {
+    width: 260px;
+  }
+  .search-input {
+    font-size: 10px;
+  }
+}
+@media (max-width: 1024px) {
+  .search-tasks-wrapper {
+    width: 307px;
+  }
+
+  .search-input {
+    font-size: 12px;
+  }
+}
+@media (max-width: 768px) {
+  .search-tasks-wrapper {
+    width: 342px;
+  }
+
+  .search-input {
+    font-size: 14px;
+  }
+}
+@media (max-width: 480px) {
+  .search-tasks-wrapper {
+    width: 361px;
+  }
 }

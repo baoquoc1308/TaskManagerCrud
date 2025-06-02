@@ -125,6 +125,7 @@
 .cancel-btn:hover {
   background-color: #35b97f;
 }
+
 .new-task {
   background-color: #dbe7db;
   border-left: 5px solid rgb(202, 224, 202);
@@ -145,8 +146,38 @@
     background-color: #d1f7d1;
   }
 }
-/* --- Responsive Styles*/
 
+/* --- Responsive Styles*/
+@media (max-width: 1669px) {
+  .task-list {
+    gap: 1.2rem; /* Giảm khoảng cách */
+  }
+  .task-item span {
+    font-size: 0.75rem;
+    height: auto;
+    display: block;
+    text-align: left;
+  }
+  /* .task-item span strong {
+    font-size: 0.7rem;
+  } */
+  .task-item span.time-meta {
+    font-size: 0.8rem;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5px;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+
+  .task-item span.task-meta {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+}
 @media (max-width: 1440px) {
   .task-list {
     gap: 1.2rem; /* Giảm khoảng cách */
@@ -248,7 +279,7 @@
     grid-template-columns: repeat(2, 1fr); /* 2 cột */
 
     gap: 1.2rem;
-    padding: 0 0.8rem; /* Tăng padding ngang một chút */
+    padding: 0; /* Tăng padding ngang một chút */
   }
 
   .task-item {
@@ -295,10 +326,8 @@
     grid-template-columns: 1fr; /* 2 cột */
 
     gap: 1.2rem;
-    padding: 0 0.8rem; /* Tăng padding ngang một chút */
   }
   .task-list {
-    padding: 0 0.5rem;
     gap: 1rem;
   }
 
@@ -324,7 +353,9 @@
     align-items: center;
     margin-top: 0.5rem;
   }
-
+  .task-meta strong {
+    font-size: 0.8rem;
+  }
   .task-item span.task-meta {
     display: flex;
     align-items: center;

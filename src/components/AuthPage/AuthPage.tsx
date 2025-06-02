@@ -7,9 +7,7 @@ import "./AuthPage.css";
 import { useState, useEffect, useRef } from "react";
 
 export default function AuthPage() {
-  const [authView, setAuthView] = useState<
-    "sign_in" | "sign_up" | "forgotten_password"
-  >("sign_in");
+  const [authView, setAuthView] = useState<"sign_in" | "sign_up" | "forgotten_password">("sign_in");
   const authRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -17,16 +15,61 @@ export default function AuthPage() {
       const node = authRef.current;
       if (!node) return;
 
-      // Dò tìm các nội dung đặc trưng để xác định chế độ
-      const html = node.innerHTML.toLowerCase();
+      let newCalculatedView: "sign_in" | "sign_up" | "forgotten_password";
 
-      if (html.includes("reset password")) {
-        setAuthView("forgotten_password");
-      } else if (html.includes("sign up")) {
-        setAuthView("sign_up");
+      // ✅ Truy cập nút submit chính
+      const submitButton = node.querySelector('button[type="submit"]');
+      const submitButtonText =
+        submitButton instanceof HTMLElement ? submitButton.innerText.toLowerCase().trim() : "";
+
+      // Xác định chế độ theo text của nút
+      if (submitButtonText === "sign in") {
+        newCalculatedView = "sign_in";
+      } else if (submitButtonText === "sign up") {
+        newCalculatedView = "sign_up";
+      } else if (
+        submitButtonText.includes("send") &&
+        (submitButtonText.includes("instructions") || submitButtonText.includes("link"))
+      ) {
+        newCalculatedView = "forgotten_password";
       } else {
-        setAuthView("sign_in");
+        const html = node.innerHTML.toLowerCase();
+
+        const isForgottenPasswordView =
+          html.includes("reset your password") ||
+          html.includes("send reset link") ||
+          html.includes("send magic link") ||
+          html.includes("send recovery link") ||
+          html.includes("send instructions");
+
+        const isSignUpViewSpecific =
+          html.includes("create an account") ||
+          html.includes("create your account") ||
+          html.includes("confirm password");
+
+        if (isForgottenPasswordView) {
+          newCalculatedView = "forgotten_password";
+        } else if (isSignUpViewSpecific) {
+          newCalculatedView = "sign_up";
+        } else {
+          const mainHeaderElement = node.querySelector(".supabase-auth-ui_ui-typography-headline");
+          const mainHeaderText =
+            mainHeaderElement instanceof HTMLElement
+              ? mainHeaderElement.textContent?.toLowerCase().trim() || ""
+              : "";
+
+          if (mainHeaderText === "sign up") {
+            newCalculatedView = "sign_up";
+          } else if (mainHeaderText === "reset your password") {
+            newCalculatedView = "forgotten_password";
+          } else {
+            newCalculatedView = "sign_in";
+          }
+        }
       }
+
+      // Chỉ cập nhật nếu có sự thay đổi
+      setAuthView((currentView) => (currentView !== newCalculatedView ? newCalculatedView : currentView));
     });
 
     if (authRef.current) {
@@ -82,17 +125,11 @@ export default function AuthPage() {
               gap: "10px",
             }}
           >
-            <button
-              className="social-login-btn"
-              onClick={() => handleSocialLogin("google")}
-            >
+            <button className="social-login-btn" onClick={() => handleSocialLogin("google")}>
               <FcGoogle size={14} />
               Continue with Google
             </button>
-            <button
-              className="social-login-btn"
-              onClick={() => handleSocialLogin("github")}
-            >
+            <button className="social-login-btn" onClick={() => handleSocialLogin("github")}>
               <FaGithub size={14} />
               Continue with GitHub
             </button>

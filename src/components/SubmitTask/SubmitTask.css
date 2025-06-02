@@ -22,7 +22,7 @@
 }
 
 .react-select__control {
-  width: 100%;
+  width: 170px;
   padding: 0.8rem;
   margin-bottom: 1rem;
   border-radius: 12px !important;
@@ -131,9 +131,90 @@
   gap: 10px;
   flex-wrap: wrap; /* Không xuống dòng */
 }
+/* SubmitTask.css */
 
+/* ... các style hiện có của bạn ... */
+
+.file-upload-input {
+  display: none; /* Ẩn input file gốc */
+}
+
+.file-upload-container {
+  position: relative; /* Quan trọng: Để định vị tuyệt đối cho thông báo lỗi bên trong nó */
+  /* Thêm padding-bottom nếu muốn có không gian cho lỗi xuất hiện bên dưới mà không bị cắt */
+  /* padding-bottom: 30px; */ /* Ví dụ, điều chỉnh nếu cần */
+}
+
+.file-error-message-bubble {
+  position: absolute;
+  /* Định vị bong bóng lỗi: */
+  /* Cách 1: Phía trên nút "Choose File" */
+  bottom: calc(100% + 5px); /* 100% chiều cao của container + 5px khoảng cách */
+  left: 0; /* Hoặc căn giữa: left: 50%; transform: translateX(-50%); */
+
+  /* Cách 2: Phía dưới thông tin file (file-upload-info) - có thể cần điều chỉnh 'top' */
+  /* top: calc(100% + 5px); */ /* Nếu muốn nó xuất hiện dưới dòng thông tin file */
+  /* left: 0; */
+
+  background-color: #fff; /* Màu nền của bong bóng */
+  border: 1px solid red; /* Viền đỏ cho lỗi */
+  color: red; /* Màu chữ đỏ */
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.85em; /* Kích thước chữ nhỏ hơn một chút */
+  z-index: 10; /* Đảm bảo nó hiển thị trên các phần tử khác */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Đổ bóng nhẹ cho hiệu ứng nổi */
+  white-space: nowrap; /* Ngăn không cho chữ xuống dòng nếu không muốn */
+  /* min-width: 180px; */ /* Đặt độ rộng tối thiểu nếu cần */
+}
+
+/* Tùy chọn: Tạo mũi tên nhỏ cho bong bóng (ví dụ: chỉ xuống nếu bong bóng ở trên) */
+.file-error-message-bubble::after {
+  content: "";
+  position: absolute;
+  /* Nếu bong bóng ở trên, mũi tên sẽ ở dưới cùng của bong bóng và chỉ xuống */
+  top: 100%; /* Đặt ở dưới cùng của bong bóng */
+  left: 20px; /* Điều chỉnh vị trí ngang của mũi tên (ví dụ: gần đầu bên trái) */
+  /* Hoặc căn giữa mũi tên:
+  left: 50%;
+  transform: translateX(-50%);
+  */
+  border-width: 5px;
+  border-style: solid;
+  /* Mũi tên chỉ xuống: viền trên có màu, các viền khác trong suốt */
+  border-color: red transparent transparent transparent; /* Màu của viền bong bóng */
+}
+
+/* Nếu bạn muốn bong bóng lỗi xuất hiện bên dưới và mũi tên chỉ lên: */
+/*
+.file-error-message-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: 100%; // Đặt ở trên cùng của bong bóng
+  left: 20px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent red transparent; // Mũi tên chỉ lên
+}
+*/
+
+/* Điều chỉnh style cho nút upload và thông tin file nếu cần để không bị che khuất */
+.file-upload-button {
+  /* ... style hiện tại của bạn ... */
+  margin-bottom: 5px; /* Tạo khoảng trống nếu lỗi xuất hiện ngay dưới nút */
+}
+
+.file-upload-info {
+  /* ... style hiện tại của bạn ... */
+  display: block; /* Đảm bảo nó chiếm một dòng nếu lỗi xuất hiện dưới nó */
+  margin-bottom: 5px;
+}
+/* ... các style khác ... */
 /* Khi màn hình nhỏ hơn 1200px */
 @media (max-width: 1024px) {
+  .react-select__control {
+    width: 100%;
+  }
   .input-row {
     display: flex;
     flex-direction: column;
@@ -183,6 +264,7 @@
 
   .input-group input[type="datetime-local"] {
     width: 100%;
+    min-height: 64px;
   }
 
   /* Cho priority và status nằm cùng hàng */
@@ -202,6 +284,9 @@
     min-width: 0;
   }
   .file-upload-button {
+    font-size: 10px;
+  }
+  .submit-button {
     font-size: 14px;
   }
 }

@@ -7,11 +7,14 @@ import {
 import "./TaskList.css";
 import TaskDetail from "../TaskDetail";
 import { Empty, Modal } from "antd";
+import FormattedTime from "../../utils/FormattedTime";
 
 interface TaskListProps {
   tasks: Task[];
   editingId: number | null;
   setEditingId: React.Dispatch<React.SetStateAction<number | null>>;
+  // newTitle: string;
+  // setNewTitle: React.Dispatch<React.SetStateAction<string>>;
   newDescription: string;
   setNewDescription: React.Dispatch<React.SetStateAction<string>>;
   confirmDeleteTask: (task: Task) => void;
@@ -26,6 +29,8 @@ export default function TaskList({
   tasks,
   editingId,
   setEditingId,
+  // newTitle,
+  // setNewTitle,
   newDescription,
   setNewDescription,
   confirmDeleteTask,
@@ -96,7 +101,7 @@ export default function TaskList({
               <h3>{task.title}</h3>
               <p>{task.description}</p>
               <span className="time-meta">
-                <strong>Time:</strong> {task.time}
+                <strong>Time:</strong> <FormattedTime isoString={task.time} />
               </span>
               <div className="meta-row">
                 <span className="task-meta">
@@ -167,14 +172,16 @@ export default function TaskList({
           setTaskId={setSelectedTaskId}
           editingId={editingId}
           setEditingId={setEditingId}
+          // newTitle={newTitle}
+          // setNewTitle={setNewTitle}
           newDescription={newDescription}
           setNewDescription={setNewDescription}
           updateTask={updateTask}
           onDeleteSuccess={(deletedId) => {
-            setTaskId(null); // Đóng modal
+            setTaskId(null);
             setTasks((prevTasks) =>
               prevTasks.filter((t) => t.id !== deletedId)
-            ); // Cập nhật danh sách
+            );
           }}
         />
       )}

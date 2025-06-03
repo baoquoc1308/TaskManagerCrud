@@ -278,3 +278,8 @@
     font-size: 14px;
   }
 }
+@media (max-width: 320px) {
+  .file-upload-container {
+    display: block;
+  }
+}

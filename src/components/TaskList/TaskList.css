@@ -127,7 +127,11 @@
 .cancel-btn:hover {
   background-color: #35b97f;
 }
-
+.task-item span.time-meta {
+  display: flex;
+  font-size: 0.8rem;
+  gap: 10px;
+}
 .new-task {
   background-color: #dbe7db;
   border-left: 5px solid rgb(202, 224, 202);
@@ -371,5 +375,8 @@
 @media (max-width: 320px) {
   .meta-row {
     flex-wrap: wrap;
+  }
+  .task-item {
+    max-height: 600px;
   }
 }

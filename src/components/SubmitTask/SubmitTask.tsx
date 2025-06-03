@@ -5,6 +5,7 @@ import { uploadImage } from "../../utils/UploadImage";
 import "./SubmitTask.css";
 import { fetchTasks } from "../FetchTasks";
 import type { Dispatch, SetStateAction } from "react";
+import { toast } from "react-toastify";
 
 interface SubmitTaskProps {
   session: any;
@@ -138,8 +139,14 @@ export const SubmitTaskForm = ({
       time: newTask.time || null,
       priority: newTask.priority || "low",
       status: newTask.status || "todo",
+      user_id: session.user.id,
     };
-
+    const user = session?.user;
+    if (!user) {
+      toast.error("Không tìm thấy thông tin người dùng.");
+      return;
+    }
+    taskToInsert.user_id = user.id;
     const { data, error } = await supabase
       .from("tasks")
       .insert(taskToInsert)

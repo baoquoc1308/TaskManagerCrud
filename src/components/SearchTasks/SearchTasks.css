@@ -220,3 +220,19 @@ h2.react-datepicker__current-month {
     width: 361px;
   }
 }
+@media (max-width: 375px) {
+  .search-tasks-wrapper {
+    width: 311px;
+  }
+}
+@media (max-width: 320px) {
+  .search-tasks-wrapper {
+    width: 256px;
+  }
+  .search-input {
+    font-size: 10px;
+  }
+  span .icon {
+    padding: 4px 6px;
+  }
+}

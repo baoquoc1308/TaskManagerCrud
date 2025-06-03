@@ -35,6 +35,7 @@ function TaskManager({
   const [newTask, setNewTask] = useState({ title: "", description: "" });
   const [taskImage, setTaskImage] = useState<File | null>(null);
   const [editingId, setEditingId] = useState<number | null>(null);
+  // const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [originalDescription, setOriginalDescription] = useState("");
   const lastTaskRef = useRef<HTMLLIElement | null>(null);
@@ -147,6 +148,12 @@ function TaskManager({
     if (!taskToDelete) return;
 
     try {
+      const { error } = await supabase
+        .from("tasks")
+        .delete()
+        .eq("id", taskToDelete.id);
+
+      if (error) throw error;
       const updatedTasks = (filteredTasks ?? tasks).filter(
         (task) => task.id !== taskToDelete.id
       );
@@ -271,6 +278,8 @@ function TaskManager({
             }
           }
         }}
+        // newTitle={newTitle}
+        // setNewTitle={setNewTitle}
         newDescription={newDescription}
         setNewDescription={setNewDescription}
         confirmDeleteTask={confirmDeleteTask}

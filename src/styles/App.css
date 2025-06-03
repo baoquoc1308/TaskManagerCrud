@@ -240,3 +240,32 @@ button:focus {
     font-size: 12px;
   }
 }
+@media (max-width: 390px) {
+  .badge-priority-low {
+    background-color: #34d399;
+    font-size: 0.7rem;
+  }
+
+  .badge-priority-medium {
+    background-color: #f59e0b;
+    font-size: 0.7rem;
+  }
+
+  .badge-priority-high {
+    background-color: #ef4444;
+    font-size: 0.7rem;
+  }
+
+  .badge-status-todo {
+    background-color: #ef4444;
+    font-size: 0.7rem;
+  }
+  .badge-status-in-progress {
+    background-color: #f59e0b;
+    font-size: 0.7rem;
+  }
+  .badge-status-done {
+    background-color: #34d399;
+    font-size: 0.7rem;
+  }
+}

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "../../supabase-client";
 import type { Task } from "../../types/Task";
 import "./TaskDetail.css";
@@ -8,6 +8,8 @@ import {
 } from "../../utils/TaskHelpers";
 import DeleteModal from "../DeleteModal";
 import { toast } from "react-toastify";
+import ExpandableText from "../ExpandableText/ExpandableText";
+import FormattedTime from "../../utils/FormattedTime";
 
 interface TaskDetailProps {
   taskId: string | null;
@@ -15,6 +17,8 @@ interface TaskDetailProps {
   setTaskId: (id: string) => void;
   editingId: number | null;
   setEditingId: React.Dispatch<React.SetStateAction<number | null>>;
+  // newTitle: string;
+  // setNewTitle: React.Dispatch<React.SetStateAction<string>>;
   newDescription: string;
   setNewDescription: React.Dispatch<React.SetStateAction<string>>;
   updateTask: (taskId: number) => Promise<void>;
@@ -27,6 +31,8 @@ function TaskDetail({
   setTaskId,
   editingId,
   setEditingId,
+  // newTitle,
+  // setNewTitle,
   newDescription,
   setNewDescription,
   updateTask,
@@ -38,13 +44,11 @@ function TaskDetail({
   const [loading, setLoading] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const [titleFontSize, setTitleFontSize] = useState(24);
-  const titleRef = useRef<HTMLHeadingElement>(null);
+  // const titleRef = useRef<HTMLHeadingElement>(null);
 
-  const [descFontSize, setDescFontSize] = useState(18);
-  const descRef = useRef<HTMLParagraphElement>(null);
-  const [showFullDesc, setShowFullDesc] = useState(false);
-  const [showFullTitle, setShowFullTitle] = useState(false);
+  // const descRef = useRef<HTMLParagraphElement>(null);
+  // const [showFullDesc, setShowFullDesc] = useState(false);
+  // const [showFullTitle, setShowFullTitle] = useState(false);
 
   const isEditingThisTask = editingId === Number(taskId);
 
@@ -67,47 +71,48 @@ function TaskDetail({
     };
 
     fetchTask();
-  }, [taskId]);
+  }, [taskId, editingId]);
 
   useEffect(() => {
     if (isEditingThisTask && task) {
+      // setNewTitle(task.title);
       setNewDescription(task.description);
     }
   }, [isEditingThisTask, task, setNewDescription]);
 
-  useEffect(() => {
-    if (!task) return;
+  // useEffect(() => {
+  //   if (!task) return;
 
-    setTitleFontSize(24);
-    setDescFontSize(18);
+  //   setTitleFontSize(24);
+  //   setDescFontSize(18);
 
-    const adjustFontSize = (
-      element: HTMLElement | null,
-      maxHeight: number,
-      minFontSize: number,
-      currentFontSize: number
-    ): number => {
-      if (!element) return currentFontSize;
+  //   const adjustFontSize = (
+  //     element: HTMLElement | null,
+  //     maxHeight: number,
+  //     minFontSize: number,
+  //     currentFontSize: number
+  //   ): number => {
+  //     if (!element) return currentFontSize;
 
-      let fontSize = currentFontSize;
-      element.style.fontSize = `${fontSize}px`;
+  //     let fontSize = currentFontSize;
+  //     element.style.fontSize = `${fontSize}px`;
 
-      while (element.scrollHeight > maxHeight && fontSize > minFontSize) {
-        fontSize -= 1;
-        element.style.fontSize = `${fontSize}px`;
-      }
+  //     while (element.scrollHeight > maxHeight && fontSize > minFontSize) {
+  //       fontSize -= 1;
+  //       element.style.fontSize = `${fontSize}px`;
+  //     }
 
-      return fontSize;
-    };
+  //     return fontSize;
+  //   };
 
-    setTimeout(() => {
-      const newTitleFontSize = adjustFontSize(titleRef.current, 60, 14, 24);
-      setTitleFontSize(newTitleFontSize);
+  //   setTimeout(() => {
+  //     const newTitleFontSize = adjustFontSize(titleRef.current, 60, 14, 24);
+  //     setTitleFontSize(newTitleFontSize);
 
-      const newDescFontSize = adjustFontSize(descRef.current, 120, 12, 18);
-      setDescFontSize(newDescFontSize);
-    }, 50);
-  }, [task]);
+  //     const newDescFontSize = adjustFontSize(descRef.current, 120, 12, 18);
+  //     setDescFontSize(newDescFontSize);
+  //   }, 50);
+  // }, [task]);
 
   const fetchRelatedTasks = async (priority: string, excludeId: string) => {
     const { data, error } = await supabase
@@ -125,7 +130,7 @@ function TaskDetail({
   const handleEditClick = () => {
     if (task) {
       setEditingId(task.id);
-      setNewDescription(task.description);
+      // setNewDescription(task.description);
     }
   };
 
@@ -154,6 +159,7 @@ function TaskDetail({
   const handleCancelClick = () => {
     setEditingId(null);
     if (task) {
+      // setNewTitle(task.title);
       setNewDescription(task.description);
     }
   };
@@ -164,13 +170,13 @@ function TaskDetail({
     const { error } = await supabase.from("tasks").delete().eq("id", task.id);
 
     if (error) {
-      console.error("Xoá thất bại:", error.message);
+      console.error("Delete failed:", error.message);
       toast.error("❌ Failed to delete task");
     } else {
       toast.success("🗑️ Task deleted successfully!");
       setShowDeleteModal(false);
-      onClose();
       onDeleteSuccess(task.id);
+      onClose();
     }
   };
 
@@ -225,7 +231,11 @@ function TaskDetail({
 
           <div className="task-info-section">
             <div className="text-wrapper">
-              <h2
+              <h2>
+                <ExpandableText text={task.title} maxLines={2} />
+              </h2>
+
+              {/* <h2
                 ref={titleRef}
                 style={{ fontSize: `${titleFontSize}px` }}
                 className={`text-content ${
@@ -233,49 +243,50 @@ function TaskDetail({
                 }`}
               >
                 {task.title}
-              </h2>
-              {task.title.length > 100 && (
+              </h2> */}
+              {/* {task.title.length > 100 && (
                 <span
                   className="read-toggle"
                   onClick={() => setShowFullTitle(!showFullTitle)}
                 >
                   {showFullTitle ? "Thu gọn" : "Xem thêm"}
                 </span>
-              )}
+              )} */}
             </div>
 
-            <div className="text-wrapper">
+            <div className="text-wrapper description-wrapper">
               {isEditingThisTask ? (
                 <textarea
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
                   placeholder="Updated description..."
                   className="edit-description-textarea"
+                  rows={5}
                 />
               ) : (
-                <p
-                  ref={descRef}
-                  style={{ fontSize: `${descFontSize}px` }}
-                  className={`text-content ${
-                    showFullDesc ? "expanded-desc" : "clamped-desc"
-                  }`}
-                >
-                  {task.description}
-                </p>
+                <ExpandableText text={task.description} maxLines={3} />
+                // <p
+                //   ref={descRef}
+                //   style={{ fontSize: `${descFontSize}px` }}
+                //   className={`text-content ${
+                //     showFullDesc ? "expanded-desc" : "clamped-desc"
+                //   }`}
+                // >
+                //   {task.description}
+                // </p>
               )}
-              {!isEditingThisTask && task.description.length > 200 && (
+              {/* {!isEditingThisTask && task.description.length > 200 && (
                 <span
                   className="read-toggle"
                   onClick={() => setShowFullDesc(!showFullDesc)}
                 >
                   {showFullDesc ? "Thu gọn" : "Xem thêm"}
                 </span>
-              )}
+              )} */}
             </div>
 
             <p>
-              <strong>Time:</strong>
-              {task.time}
+              <strong>Time:</strong> <FormattedTime isoString={task.time} />
             </p>
 
             <div className="meta-row">

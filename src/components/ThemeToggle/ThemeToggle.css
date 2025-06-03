@@ -49,3 +49,22 @@
     transform: translateX(20px);
   }
 }
+@media (max-width: 320px) {
+  .theme-toggle {
+    width: 32px;
+    height: 18px;
+    padding: 1px;
+  }
+
+  .theme-toggle .slider {
+    width: 14px;
+    height: 14px;
+    top: 2px;
+    left: 2px;
+    font-size: 10px;
+  }
+
+  .theme-toggle .slider.dark {
+    transform: translateX(16px);
+  }
+}

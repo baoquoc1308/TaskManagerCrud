@@ -1,20 +1,36 @@
-.task-form input[type="datetime-local"] {
+.input-group input[type="datetime-local"] {
   padding: 0.8rem;
   border-radius: 12px;
-  background-color: #fff;
   transition: border 0.3s, box-shadow 0.3s;
   width: 200px;
+}
+.input-placeholder {
+  color: hsl(0, 0%, 50%);
+}
+.dark .input-placeholder {
+  color: hsl(0, 0%, 50%);
+  background-color: #333;
+}
+.input-filled {
+  color: #181717;
+}
+.dark .input-filled {
+  color: #fff;
+  background-color: #333;
 }
 .task-form > div.input-row {
   display: flex;
   gap: 10px;
   margin-bottom: 10px;
 }
+/* .dark input[type="datetime-local"] {
+  color: #fff;
+} */
 .task-form input[type="text"] {
   padding: 0.8rem;
   border-radius: 12px;
-  margin-bottom: 1rem; /* Tạo khoảng cách giữa title và phần còn lại */
-  min-height: 64px; /* Đảm bảo không bị co */
+  margin-bottom: 1rem;
+  min-height: 64px;
 }
 .react-select__container {
   width: 200px;
@@ -36,14 +52,21 @@
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.3) !important;
   outline: none;
 }
-
+.dark .react-select__control {
+  background-color: #333;
+}
+.dark .priority-select {
+  color: #fff;
+}
 .react-select__menu {
   border-radius: 12px;
   padding: 0.2rem;
   background-color: #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-
+.dark .react-select__single-value {
+  color: #fff;
+}
 .react-select__option {
   background-color: #fff;
   color: #000;
@@ -92,7 +115,9 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
   color: white;
 }
-
+.dark .file-upload-button {
+  border: none;
+}
 .file-upload-info {
   color: #6c757d;
   font-size: 14px;
@@ -129,88 +154,53 @@
 .input-group {
   display: flex;
   gap: 10px;
-  flex-wrap: wrap; /* Không xuống dòng */
+  flex-wrap: wrap;
 }
-/* SubmitTask.css */
-
-/* ... các style hiện có của bạn ... */
 
 .file-upload-input {
-  display: none; /* Ẩn input file gốc */
+  display: none;
 }
 
 .file-upload-container {
-  position: relative; /* Quan trọng: Để định vị tuyệt đối cho thông báo lỗi bên trong nó */
-  /* Thêm padding-bottom nếu muốn có không gian cho lỗi xuất hiện bên dưới mà không bị cắt */
-  /* padding-bottom: 30px; */ /* Ví dụ, điều chỉnh nếu cần */
+  position: relative;
 }
 
 .file-error-message-bubble {
   position: absolute;
-  /* Định vị bong bóng lỗi: */
-  /* Cách 1: Phía trên nút "Choose File" */
-  bottom: calc(100% + 5px); /* 100% chiều cao của container + 5px khoảng cách */
-  left: 0; /* Hoặc căn giữa: left: 50%; transform: translateX(-50%); */
 
-  /* Cách 2: Phía dưới thông tin file (file-upload-info) - có thể cần điều chỉnh 'top' */
-  /* top: calc(100% + 5px); */ /* Nếu muốn nó xuất hiện dưới dòng thông tin file */
-  /* left: 0; */
+  bottom: calc(100% + 5px);
+  left: 0;
 
-  background-color: #fff; /* Màu nền của bong bóng */
-  border: 1px solid red; /* Viền đỏ cho lỗi */
-  color: red; /* Màu chữ đỏ */
+  background-color: #fff;
+  border: 1px solid red;
+  color: red;
   padding: 6px 10px;
   border-radius: 4px;
-  font-size: 0.85em; /* Kích thước chữ nhỏ hơn một chút */
-  z-index: 10; /* Đảm bảo nó hiển thị trên các phần tử khác */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Đổ bóng nhẹ cho hiệu ứng nổi */
-  white-space: nowrap; /* Ngăn không cho chữ xuống dòng nếu không muốn */
-  /* min-width: 180px; */ /* Đặt độ rộng tối thiểu nếu cần */
+  font-size: 0.85em;
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
 }
 
-/* Tùy chọn: Tạo mũi tên nhỏ cho bong bóng (ví dụ: chỉ xuống nếu bong bóng ở trên) */
 .file-error-message-bubble::after {
   content: "";
   position: absolute;
-  /* Nếu bong bóng ở trên, mũi tên sẽ ở dưới cùng của bong bóng và chỉ xuống */
-  top: 100%; /* Đặt ở dưới cùng của bong bóng */
-  left: 20px; /* Điều chỉnh vị trí ngang của mũi tên (ví dụ: gần đầu bên trái) */
-  /* Hoặc căn giữa mũi tên:
-  left: 50%;
-  transform: translateX(-50%);
-  */
-  border-width: 5px;
-  border-style: solid;
-  /* Mũi tên chỉ xuống: viền trên có màu, các viền khác trong suốt */
-  border-color: red transparent transparent transparent; /* Màu của viền bong bóng */
-}
-
-/* Nếu bạn muốn bong bóng lỗi xuất hiện bên dưới và mũi tên chỉ lên: */
-/*
-.file-error-message-bubble::after {
-  content: "";
-  position: absolute;
-  bottom: 100%; // Đặt ở trên cùng của bong bóng
+  top: 100%;
   left: 20px;
   border-width: 5px;
   border-style: solid;
-  border-color: transparent transparent red transparent; // Mũi tên chỉ lên
+  border-color: red transparent transparent transparent;
 }
-*/
 
-/* Điều chỉnh style cho nút upload và thông tin file nếu cần để không bị che khuất */
 .file-upload-button {
-  /* ... style hiện tại của bạn ... */
-  margin-bottom: 5px; /* Tạo khoảng trống nếu lỗi xuất hiện ngay dưới nút */
+  margin-bottom: 5px;
 }
 
 .file-upload-info {
-  /* ... style hiện tại của bạn ... */
-  display: block; /* Đảm bảo nó chiếm một dòng nếu lỗi xuất hiện dưới nó */
+  display: block;
   margin-bottom: 5px;
 }
-/* ... các style khác ... */
-/* Khi màn hình nhỏ hơn 1200px */
+
 @media (max-width: 1024px) {
   .react-select__control {
     width: 100%;
@@ -224,15 +214,14 @@
   .input-group {
     display: flex;
     gap: 10px;
-    flex-wrap: nowrap; /* Không xuống dòng */
+    flex-wrap: nowrap;
   }
 
-  /* width tổng ~ 100%, tính toán luôn phần gap */
   .input-group input,
   .input-group .priority-select,
   .input-group .status-select {
-    flex: 1; /* Mỗi field chiếm 1 phần bằng nhau */
-    min-width: 0; /* Giúp flex chia đều */
+    flex: 1;
+    min-width: 0;
   }
   .input-row {
     flex-direction: column;
@@ -267,7 +256,6 @@
     min-height: 64px;
   }
 
-  /* Cho priority và status nằm cùng hàng */
   .input-group .priority-select,
   .input-group .status-select {
     width: 100%;

@@ -95,27 +95,29 @@
   margin-top: auto;
 }
 
-.task-actions button:hover {
+/* .task-actions button:hover {
   background: #35b97f;
-}
+} */
 .edit-btn {
   background-color: #f0ad4e;
   color: white;
 }
-
+.edit-btn:hover {
+  background-color: #eba139;
+}
 .delete-btn {
   background-color: #d9534f;
   color: white;
 }
-
+.delete-btn:hover {
+  background-color: #ec3932;
+}
 .save-btn {
   background-color: #5cb85c;
   color: white;
 }
-
-.cancel-btn {
-  background-color: #6c757d;
-  color: white;
+.save-btn:hover {
+  background-color: #2d912d;
 }
 .cancel-btn {
   background-color: #3fcf8e;
@@ -147,10 +149,9 @@
   }
 }
 
-/* --- Responsive Styles*/
 @media (max-width: 1669px) {
   .task-list {
-    gap: 1.2rem; /* Giảm khoảng cách */
+    gap: 1.2rem;
   }
   .task-item span {
     font-size: 0.75rem;
@@ -180,7 +181,7 @@
 }
 @media (max-width: 1440px) {
   .task-list {
-    gap: 1.2rem; /* Giảm khoảng cách */
+    gap: 1.2rem;
   }
   .task-item span {
     font-size: 0.6rem;
@@ -210,8 +211,8 @@
 }
 @media (max-width: 1280px) {
   .task-list {
-    grid-template-columns: repeat(3, 1fr); /* 3 cột */
-    gap: 1.2rem; /* Giảm khoảng cách */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
   }
   .task-item span {
     color: var(--text-color);
@@ -221,11 +222,11 @@
     text-align: left;
   }
   .task-item {
-    min-height: 380px; /* Điều chỉnh chiều cao tối thiểu nếu cần */
+    min-height: 380px;
   }
 
   .task-item img {
-    height: 250px; /* Điều chỉnh chiều cao ảnh */
+    height: 250px;
   }
   .meta-row {
     display: flex;
@@ -242,76 +243,74 @@
   }
 }
 
-/* For screens smaller than 992px (e.g., most tablets in landscape) */
 @media (max-width: 991px) {
   .task-list {
-    grid-template-columns: repeat(3, 1fr); /* 2 cột */
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
-    padding: 0 1rem; /* Thêm padding ngang để không bị sát lề */
+    padding: 0 1rem;
   }
 
   .task-item {
-    min-height: 380px; /* Điều chỉnh chiều cao tối thiểu nếu cần */
+    min-height: 380px;
   }
 
   .task-item img {
-    height: 250px; /* Điều chỉnh chiều cao ảnh */
+    height: 250px;
   }
 
   .task-item h3 {
-    font-size: 1rem; /* Giảm kích thước tiêu đề */
+    font-size: 1rem;
   }
 
   .task-item p {
-    font-size: 0.9rem; /* Giảm kích thước mô tả */
+    font-size: 0.9rem;
     height: auto;
   }
 
   .task-actions {
-    flex-direction: column; /* Nút hành động xếp chồng trên màn hình nhỏ */
+    flex-direction: column;
     gap: 0.8rem;
   }
 }
 
-/* For screens smaller than 768px (e.g., tablets in portrait, large phones) */
 @media (max-width: 768px) {
   .task-list {
-    grid-template-columns: repeat(2, 1fr); /* 2 cột */
+    grid-template-columns: repeat(2, 1fr);
 
     gap: 1.2rem;
-    padding: 0; /* Tăng padding ngang một chút */
+    padding: 0;
   }
 
   .task-item {
-    min-height: auto; /* Cho phép chiều cao tự động, hoặc đặt giá trị phù hợp */
-    max-height: 500px; /* Giới hạn chiều cao để tránh quá dài trên mobile */
-    overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
+    min-height: auto;
+    max-height: 500px;
+    overflow-y: auto;
     padding: 0.8rem;
   }
 
   .task-item img {
-    height: 200px; /* Có thể giữ nguyên hoặc điều chỉnh */
+    height: 200px;
     margin: 0.8rem 0;
   }
 
   .task-item h3 {
-    font-size: 1.1rem; /* Có thể tăng lại một chút cho dễ đọc */
-    -webkit-line-clamp: 2; /* Đặt lại giới hạn 2 dòng nếu muốn */
+    font-size: 1.1rem;
+    -webkit-line-clamp: 2;
     line-clamp: 2;
   }
 
   .task-item p {
     font-size: 0.95rem;
-    -webkit-line-clamp: 3; /* Tăng giới hạn dòng cho mô tả */
+    -webkit-line-clamp: 3;
     line-clamp: 3;
   }
   .task-item span {
     font-size: 0.8rem;
   }
   .task-actions {
-    flex-direction: row; /* Có thể giữ hàng ngang nếu nút không quá nhiều */
+    flex-direction: row;
     gap: 0.5rem;
-    justify-content: center; /* Căn giữa các nút nếu ít */
+    justify-content: center;
   }
 
   .task-list button {
@@ -320,10 +319,9 @@
   }
 }
 
-/* For very small screens (e.g., iPhone 5/SE, older Androids) or specific iPhone 12 Pro portrait */
 @media (max-width: 480px) {
   .task-list {
-    grid-template-columns: 1fr; /* 2 cột */
+    grid-template-columns: 1fr;
 
     gap: 1.2rem;
   }
@@ -361,12 +359,12 @@
     align-items: center;
   }
   .task-actions {
-    flex-direction: column; /* Chắc chắn xếp chồng trên màn hình rất nhỏ */
+    flex-direction: column;
     gap: 0.5rem;
   }
 
   .task-list button {
-    width: 100%; /* Đảm bảo nút chiếm toàn bộ chiều rộng */
+    width: 100%;
     padding: 0.6rem 1rem;
   }
 }

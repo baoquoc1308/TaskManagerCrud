@@ -46,7 +46,7 @@ function App() {
     } catch (e) {
       console.error("Unexpected error during logout:", e);
     } finally {
-      setSession(null); // Luôn clear session local dù lỗi gì xảy ra
+      setSession(null);
     }
   };
 
@@ -55,13 +55,13 @@ function App() {
   return (
     <>
       <Routes>
-        {/* Trang đăng nhập */}
+        {}
         <Route
           path="/login"
           element={session ? <Navigate to="/" replace /> : <AuthPage />}
         />
 
-        {/* Trang chính */}
+        {}
         <Route
           path="/"
           element={
@@ -77,9 +77,9 @@ function App() {
           }
         />
 
-        {/* Bỏ route chi tiết task /task/:id */}
+        {}
 
-        {/* Route fallback */}
+        {}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 

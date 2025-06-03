@@ -18,8 +18,7 @@ interface TaskDetailProps {
   newDescription: string;
   setNewDescription: React.Dispatch<React.SetStateAction<string>>;
   updateTask: (taskId: number) => Promise<void>;
-  // Thêm prop mới để mở modal xác nhận xóa
-  onDeleteSuccess: (deletedId: number) => void; // thêm mới
+  onDeleteSuccess: (deletedId: number) => void;
 }
 
 function TaskDetail({
@@ -31,7 +30,7 @@ function TaskDetail({
   newDescription,
   setNewDescription,
   updateTask,
-  onDeleteSuccess, // Nhận prop mới
+  onDeleteSuccess,
 }: TaskDetailProps) {
   if (!taskId) return null;
   const [task, setTask] = useState<Task | null>(null);
@@ -49,13 +48,11 @@ function TaskDetail({
 
   const isEditingThisTask = editingId === Number(taskId);
 
-  // --- THAY ĐỔI Ở ĐÂY ---
   useEffect(() => {
     if (!taskId) return;
 
     const fetchTask = async () => {
       setLoading(true);
-      // Không setTask(null) ở đây nữa để tránh nháy
       const { data, error } = await supabase
         .from("tasks")
         .select("*")
@@ -65,22 +62,18 @@ function TaskDetail({
       if (!error && data) {
         setTask(data);
         fetchRelatedTasks(data.priority, data.id);
-        // setNewDescription chỉ được gọi khi task thực sự thay đổi hoặc khi bắt đầu chỉnh sửa
-        // Chúng ta sẽ handle việc setNewDescription trong handleEditClick
       }
       setLoading(false);
     };
 
-    // Chỉ fetch task khi taskId thay đổi
     fetchTask();
-  }, [taskId]); // Chỉ phụ thuộc vào taskId
+  }, [taskId]);
 
-  // Effect để cập nhật newDescription khi chuyển sang chế độ edit
   useEffect(() => {
     if (isEditingThisTask && task) {
       setNewDescription(task.description);
     }
-  }, [isEditingThisTask, task, setNewDescription]); // Phụ thuộc vào isEditingThisTask và task
+  }, [isEditingThisTask, task, setNewDescription]);
 
   useEffect(() => {
     if (!task) return;
@@ -176,8 +169,8 @@ function TaskDetail({
     } else {
       toast.success("🗑️ Task deleted successfully!");
       setShowDeleteModal(false);
-      onClose(); // đóng TaskDetail modal
-      onDeleteSuccess(task.id); // callback cho cha xoá trong UI
+      onClose();
+      onDeleteSuccess(task.id);
     }
   };
 
@@ -219,7 +212,10 @@ function TaskDetail({
                   <button className="edit-button" onClick={handleEditClick}>
                     Edit
                   </button>
-                  <button onClick={() => setShowDeleteModal(true)}>
+                  <button
+                    className="delete-button"
+                    onClick={() => setShowDeleteModal(true)}
+                  >
                     Delete
                   </button>
                 </>

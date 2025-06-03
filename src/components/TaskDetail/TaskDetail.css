@@ -58,6 +58,35 @@
   position: relative;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
+.edit-button {
+  background-color: #f0ad4e;
+  color: white;
+}
+.edit-button:hover {
+  background-color: #eba139;
+}
+.delete-button {
+  background-color: #d9534f;
+  color: white;
+}
+.delete-button:hover {
+  background-color: #ec3932;
+}
+.save-button {
+  background-color: #5cb85c;
+  color: white;
+}
+.save-button:hover {
+  background-color: #2d912d;
+}
+.cancel-button {
+  background-color: #3fcf8e;
+  border: 1px solid #cbd5e1;
+}
+
+.cancel-button:hover {
+  background-color: #35b97f;
+}
 
 .close-button {
   color: #080808;
@@ -90,6 +119,27 @@
   max-height: 500px;
   object-fit: cover;
   border-radius: 8px;
+}
+
+.task-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px 0;
+}
+
+.task-buttons button {
+  width: 100px;
+  margin: 0 10px;
+}
+
+.task-buttons button:first-child {
+  margin-left: 0;
+}
+
+.task-buttons button:last-child {
+  margin-right: 0;
 }
 
 .task-buttons button {
@@ -189,6 +239,7 @@
   font-size: 1rem;
   line-height: 1.5;
   white-space: pre-wrap;
+  line-clamp: 6;
 }
 
 .read-more {
@@ -235,8 +286,10 @@
 .clamped-title {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+
   -webkit-box-orient: vertical;
   overflow: hidden;
+  line-clamp: 2;
 }
 
 .clamped-desc {
@@ -244,6 +297,7 @@
   -webkit-line-clamp: 6;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  line-clamp: 6;
 }
 
 .expanded {
@@ -289,6 +343,7 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  line-clamp: 2;
 }
 
 .clamped-desc {
@@ -296,6 +351,7 @@
   -webkit-line-clamp: 6;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  line-clamp: 6;
 }
 
 .expanded {
@@ -432,6 +488,12 @@
   .modal-content {
     width: 400px;
     padding: 10px;
+  }
+  .task-buttons button {
+    width: 80px;
+    margin: 0 5px;
+    font-size: 0.9em;
+    padding: 8px 12px;
   }
   .task-image {
     width: 200px;

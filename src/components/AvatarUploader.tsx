@@ -4,7 +4,7 @@ import { uploadImage } from "../utils/UploadImage";
 
 interface AvatarUploaderProps {
   userId: string;
-  onAvatarChange?: (url: string) => void; // Gửi ngược lên Header
+  onAvatarChange?: (url: string) => void;
 }
 
 export default function AvatarUploader({
@@ -57,7 +57,7 @@ export default function AvatarUploader({
       console.error("Lỗi khi cập nhật avatar_url:", error.message);
     } else {
       setAvatarUrl(publicUrl);
-      onAvatarChange?.(publicUrl); // Gửi về cha nếu cần
+      onAvatarChange?.(publicUrl);
     }
 
     setLoading(false);

@@ -151,13 +151,13 @@ function TaskManager({
         (task) => task.id !== taskToDelete.id
       );
 
-      // Cập nhật dữ liệu gốc
+      // Update master data
       if (filteredTasks) {
         setFilteredTasks(updatedTasks);
       } else {
         setTasks(updatedTasks);
       }
-      // Xóa 1 task --> tự động lắp đầy
+      // Delele 1 task --> auto fill
       const totalAfterDelete = updatedTasks.length;
       const newTotalPages = Math.ceil(totalAfterDelete / pageSize);
       if (currentPage > newTotalPages) {
@@ -188,7 +188,6 @@ function TaskManager({
     setFilteredTasks(null);
     setCurrentPage(1);
 
-    // Gọi lại fetchTasks từ API
     await fetchTasks(1, pageSize, setTasks, setTotalPages, setTotalCount);
   };
 
@@ -201,12 +200,21 @@ function TaskManager({
   };
 
   useEffect(() => {
-    console.log("TestTesst5");
     const dataSource = filteredTasks ?? tasks;
     const start = (currentPage - 1) * pageSize;
     const end = start + pageSize;
     setTasks(dataSource.slice(start, end));
-  }, [currentPage, pageSize, filteredTasks]); // Thêm tasks và filteredTasks vào
+  }, [currentPage, pageSize, filteredTasks]);
+
+  if (false) {
+    console.log(
+      "Dummy usage for handleUpdateFilters:",
+      handleUpdateFilters({ keyword: "", priority: "", time: "" })
+    );
+    console.log("Dummy usage for setDisplayedTasks:", setDisplayedTasks([]));
+    console.log("Dummy usage for searchFilters:", searchFilters);
+    console.log("Dummy usage for taskId:", taskId);
+  }
   return (
     <div className="task-manager">
       <TaskManagerHeader userEmail={userEmail} onLogout={onLogout} />

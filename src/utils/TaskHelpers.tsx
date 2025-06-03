@@ -1,4 +1,3 @@
-// utils/taskHelpers.ts
 export const getPriorityBadgeClass = (priority?: string) => {
   switch (priority?.toLowerCase()) {
     case "low":
@@ -11,7 +10,6 @@ export const getPriorityBadgeClass = (priority?: string) => {
       return "badge";
   }
 };
-// util/TaskHelpers.tsx
 export const getStatusBadgeClass = (status?: string) => {
   const s = status?.trim().toLowerCase().replace(/ /g, "_");
   switch (s) {

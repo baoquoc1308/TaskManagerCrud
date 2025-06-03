@@ -49,7 +49,6 @@ export const deleteTask = async (
   setTotalCount(updatedCount);
   setTotalPages(newTotalPages);
 
-  // Nếu chỉ còn 1 task trên trang hiện tại và currentPage > 1 thì giảm trang
   if (tasks.length === 1 && currentPage > 1) {
     setCurrentPage(currentPage - 1);
   } else {

@@ -26,7 +26,6 @@
   font-size: 14px;
 }
 
-/* Dark mode: trượt về phải */
 .theme-toggle .slider.dark {
   transform: translateX(30px);
 }

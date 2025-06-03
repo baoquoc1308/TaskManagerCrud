@@ -1,5 +1,3 @@
-// utils/clearSearch.ts
-
 interface ClearSearchParams {
   setKeyword?: React.Dispatch<React.SetStateAction<string>>;
   setPriority?: React.Dispatch<React.SetStateAction<string>>;
@@ -17,10 +15,10 @@ export const clearSearch = ({
   setShowDatePicker,
   onClear,
 }: ClearSearchParams) => {
-  setKeyword?.(""); // gọi nếu có
+  setKeyword?.("");
   setPriority?.("");
   setDate?.("");
   setShowPriority?.(false);
   setShowDatePicker?.(false);
-  onClear?.(); // gọi nếu có
+  onClear?.();
 };

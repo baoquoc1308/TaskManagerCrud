@@ -56,9 +56,7 @@ export function SearchTasks({
   const priorityIconRef = useRef<HTMLSpanElement>(null);
   const dateIconRef = useRef<HTMLSpanElement>(null);
 
-  // Sử dụng useCallback để memoize hàm handleClickOutside
   const handleClickOutside = useCallback((event: MouseEvent) => {
-    // Logic cho Priority Dropdown
     if (
       priorityDropdownRef.current &&
       !priorityDropdownRef.current.contains(event.target as Node) &&
@@ -81,7 +79,7 @@ export function SearchTasks({
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [handleClickOutside]); // Thêm handleClickOutside vào dependency array
+  }, [handleClickOutside]);
 
   const fetchFilteredTasks = async () => {
     let query = supabase.from("tasks").select("*");
@@ -119,7 +117,7 @@ export function SearchTasks({
 
   const handleDateChange = (selectedDate: Date | null) => {
     setDate(selectedDate);
-    // Vẫn đóng lịch sau khi chọn
+    // Close calendar
     setShowDatePicker(false);
   };
   const handleClearSearch = (e: React.MouseEvent<HTMLSpanElement>) => {
@@ -131,10 +129,10 @@ export function SearchTasks({
     setShowPriority(false);
     setShowDatePicker(false);
 
-    // Hiển thị toast notification
+    //Toast notification
     toast.info("Search filters cleared!", {
       position: "top-right",
-      autoClose: 2000, // Tự động đóng sau 2 giây
+      autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -156,8 +154,7 @@ export function SearchTasks({
         <span
           ref={priorityIconRef}
           onClick={(e) => {
-            // Thêm e vào đây
-            e.stopPropagation(); // Ngăn sự kiện click lan truyền lên document
+            e.stopPropagation();
             setShowPriority(!showPriority);
             setShowDatePicker(false);
           }}
@@ -175,8 +172,7 @@ export function SearchTasks({
         <span
           ref={dateIconRef}
           onClick={(e) => {
-            // Thêm e vào đây
-            e.stopPropagation(); // Ngăn sự kiện click lan truyền lên document
+            e.stopPropagation();
             setShowDatePicker(!showDatePicker);
             setShowPriority(false);
           }}
@@ -218,8 +214,7 @@ export function SearchTasks({
                 opt.value === priority ? "selected" : ""
               }`}
               onClick={(e) => {
-                // Thêm e vào đây
-                e.stopPropagation(); // Ngăn sự kiện click lan truyền từ option
+                e.stopPropagation();
                 setPriority(opt.value);
                 setShowPriority(false);
               }}

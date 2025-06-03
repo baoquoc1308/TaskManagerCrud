@@ -13,11 +13,8 @@
 .login-page {
   background-image: url("https://img.lovepik.com/background/20211022/large/lovepik-scientific-and-technological-line-background-image_500870307.jpg");
   background-size: cover;
-  /* Giúp ảnh phủ kín phần tử nhưng không méo */
   background-repeat: no-repeat;
-  /* Không lặp lại ảnh */
   background-position: center;
-  /* Căn giữa ảnh */
   width: 100%;
   min-height: 100vh;
   margin: 0 auto;

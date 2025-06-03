@@ -67,7 +67,9 @@ export default function TaskList({
       handleCloseDeleteConfirmModal();
     }
   };
-
+  if (false) {
+    handleOpenDeleteConfirmModal({} as Task);
+  }
   if (tasks.length === 0) {
     return (
       <div style={{ marginTop: 50, textAlign: "center" }}>

@@ -2,17 +2,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px; /* Khoảng cách 20px giữa các phần tử con */
+  gap: 20px;
 }
 
-/* Dark mode */
 .dark .custom-pagination .ant-pagination-item-link,
 .dark .custom-pagination .ant-pagination-item-ellipsis {
   color: #ddd !important;
   border-color: #555 !important;
 }
 
-/* Hover dark mode */
 .dark .custom-pagination .ant-pagination-item-link:hover {
   color: #fff !important;
   border-color: #999 !important;

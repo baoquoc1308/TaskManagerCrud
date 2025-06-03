@@ -5,9 +5,7 @@
   gap: 1rem;
   margin-bottom: 1rem;
 }
-/* .task-header span {
-  color: #333;
-} */
+
 .dark .task-header span {
   color: #fff;
 }

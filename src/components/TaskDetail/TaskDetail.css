@@ -123,12 +123,12 @@
 .edit-title-input {
   width: 100%;
   padding: 8px 12px;
-  margin-bottom: 10px; /* Khoảng cách với description hoặc các element khác */
-  font-size: 1.5em; /* Tương đương với h2 hoặc điều chỉnh cho phù hợp */
+  margin-bottom: 10px;
+  font-size: 1.5em;
   font-weight: bold;
   border: 1px solid #ccc;
   border-radius: 4px;
-  box-sizing: border-box; /* Để padding không làm tăng kích thước tổng */
+  box-sizing: border-box;
 }
 .task-buttons {
   display: flex;

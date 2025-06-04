@@ -7,7 +7,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./components/SearchTasks/SearchTasks.css";
-import ManagerDashboard from "./components/ManagerDashboard"; // hoặc đúng path bạn đặt
+import ManagerDashboard from "./components/ManagerDashboard";
 
 function App() {
   const [session, setSession] = useState<any>(null);
@@ -37,7 +37,6 @@ function App() {
       (_event, session) => {
         setSession(session);
 
-        // Gọi lại role khi auth thay đổi
         if (session?.user?.id) {
           supabase
             .from("users")

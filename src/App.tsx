@@ -7,15 +7,27 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./components/SearchTasks/SearchTasks.css";
+import ManagerDashboard from "./components/ManagerDashboard"; // hoặc đúng path bạn đặt
 
 function App() {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchSession = async () => {
       const { data } = await supabase.auth.getSession();
       setSession(data.session);
+
+      if (data.session?.user?.id) {
+        const { data: userData } = await supabase
+          .from("users")
+          .select("role")
+          .eq("id", data.session.user.id)
+          .single();
+        setUserRole(userData?.role || "user");
+      }
+
       setLoading(false);
     };
 
@@ -24,6 +36,18 @@ function App() {
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);
+
+        // Gọi lại role khi auth thay đổi
+        if (session?.user?.id) {
+          supabase
+            .from("users")
+            .select("role")
+            .eq("id", session.user.id)
+            .single()
+            .then(({ data: userData }) => {
+              setUserRole(userData?.role || "user");
+            });
+        }
       }
     );
 
@@ -70,6 +94,7 @@ function App() {
                 session={session}
                 onLogout={logout}
                 userEmail={session.user.email}
+                userRole={userRole || "user"}
               />
             ) : (
               <Navigate to="/login" replace />
@@ -81,6 +106,16 @@ function App() {
 
         {}
         <Route path="*" element={<Navigate to="/" replace />} />
+        <Route
+          path="/manager-dashboard"
+          element={
+            session && userRole === "manager" ? (
+              <ManagerDashboard />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
       </Routes>
 
       <ToastContainer

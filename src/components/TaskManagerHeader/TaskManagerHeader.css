@@ -9,6 +9,22 @@
 .dark .task-header span {
   color: #fff;
 }
+.btn-manager-dashboard {
+  background-color: #3fcf8e;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  margin-right: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.btn-manager-dashboard:hover {
+  background-color: #35b97f;
+}
+
 @media (max-width: 320px) {
   .task-header {
     flex-wrap: wrap;

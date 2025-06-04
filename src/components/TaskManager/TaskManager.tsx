@@ -17,10 +17,12 @@ function TaskManager({
   session,
   onLogout,
   userEmail,
+  userRole,
 }: {
   session: Session;
   onLogout: () => void;
   userEmail: string;
+  userRole: string;
 }) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskId, setTaskId] = useState<string | null>(null);
@@ -224,7 +226,11 @@ function TaskManager({
   }
   return (
     <div className="task-manager">
-      <TaskManagerHeader userEmail={userEmail} onLogout={onLogout} />
+      <TaskManagerHeader
+        userEmail={userEmail}
+        onLogout={onLogout}
+        userRole={userRole}
+      />
       <h2>TASK MANAGER</h2>
 
       <SubmitTaskForm

@@ -13,6 +13,7 @@ import {
   Cell,
 } from "recharts";
 import "./ManagerDashboard.css";
+
 type TaskCountPerUser = {
   name: string;
   taskCount: number;
@@ -51,6 +52,14 @@ const ManagerDashboard = () => {
 
   const formatDate = (date: Date) => {
     return date.toISOString().split("T")[0];
+  };
+
+  const truncateTick = (tick: string): string => {
+    const limit = 6;
+    if (tick && typeof tick === "string" && tick.length > limit) {
+      return `${tick.substring(0, limit - 3)}...`;
+    }
+    return tick;
   };
 
   const calculateTopPerformers = useCallback(
@@ -305,7 +314,7 @@ const ManagerDashboard = () => {
                   <ResponsiveContainer>
                     <BarChart data={data}>
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
+                      <XAxis dataKey="name" tickFormatter={truncateTick} />
                       <YAxis />
                       <Tooltip />
                       <Bar dataKey="taskCount" fill="#8884d8" />

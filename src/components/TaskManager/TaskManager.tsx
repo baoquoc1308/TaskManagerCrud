@@ -158,19 +158,14 @@ function TaskManager({
           const newTask = payload.new as Task;
 
           setTasks((prevTasks) => {
-            // Kiểm tra task đã tồn tại chưa để tránh duplicate
             if (prevTasks.some((task) => task.id === newTask.id)) {
               return prevTasks;
             }
             return [...prevTasks, newTask];
           });
 
-          // Chỉ thêm vào filteredTasks nếu thỏa mãn filter hiện tại
           setFilteredTasks((prevFilteredTasks) => {
             if (!prevFilteredTasks) return [newTask];
-
-            // Thêm logic kiểm tra filter ở đây
-            // Ví dụ: if (newTask.status === currentFilter)
 
             if (prevFilteredTasks.some((task) => task.id === newTask.id)) {
               return prevFilteredTasks;

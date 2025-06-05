@@ -1,11 +1,10 @@
-import React, { useState } from "react";
-import { supabase } from "../../supabase-client";
+import React, { useState, useRef, useEffect } from "react";
 import Select from "react-select";
-import { uploadImage } from "../../utils/UploadImage";
 import "./SubmitTask.css";
+import { toast } from "react-toastify";
+import { supabase } from "../../supabase-client";
 import { fetchTasks } from "../FetchTasks";
 import type { Dispatch, SetStateAction } from "react";
-import { toast } from "react-toastify";
 
 interface SubmitTaskProps {
   session: any;
@@ -25,23 +24,20 @@ interface SubmitTaskProps {
       status?: string;
     }>
   >;
-  taskImage: File | null;
   currentPage: number;
   setTasks: React.Dispatch<React.SetStateAction<any[]>>;
   setTotalPages: React.Dispatch<React.SetStateAction<number>>;
-  setTaskImage: React.Dispatch<React.SetStateAction<File | null>>;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   setTotalCount: React.Dispatch<React.SetStateAction<number>>;
   setNewTaskAdded: React.Dispatch<React.SetStateAction<number | null>>;
-  fileInputRef: React.RefObject<HTMLInputElement>;
   pageSize: number;
-  setFilteredTasks?: React.Dispatch<React.SetStateAction<any[] | null>>;
   setKeyword?: Dispatch<SetStateAction<string>>;
   setPriority?: Dispatch<SetStateAction<string>>;
   setDate?: Dispatch<SetStateAction<Date | null>>;
   setShowPriority?: Dispatch<SetStateAction<boolean>>;
   setShowDatePicker?: Dispatch<SetStateAction<boolean>>;
 }
+
 const priorityOptions = [
   { value: "low", label: "Low" },
   { value: "medium", label: "Medium" },
@@ -54,54 +50,39 @@ const statusOptions = [
   { value: "done", label: "Done" },
 ];
 
-export const SubmitTaskForm = ({
+export const SubmitTaskDropdown = ({
   session,
   setTasks,
   newTask,
   setNewTask,
-  taskImage,
-  setTaskImage,
   setCurrentPage,
   setTotalPages,
   setTotalCount,
   setNewTaskAdded,
-  fileInputRef,
   pageSize,
-  //setFilteredTasks,
   setKeyword,
   setPriority,
   setDate,
   setShowPriority,
   setShowDatePicker,
 }: SubmitTaskProps) => {
-  const [fileError, setFileError] = useState<string>("");
+  const [open, setOpen] = useState(false);
+  const formRef = useRef<HTMLDivElement>(null);
 
-  const handleFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0];
-    if (file) {
-      const allowedTypes = ["image/jpeg", "image/png"];
-      const maxSizeInBytes = 2 * 1024 * 1024; // 2MB
-
-      if (!allowedTypes.includes(file.type)) {
-        setFileError("File format must be .jpg or .png.");
-        setTaskImage(null);
-        if (fileInputRef.current) fileInputRef.current.value = "";
-        return;
+  // Đóng dropdown khi click ngoài
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (formRef.current && !formRef.current.contains(event.target as Node)) {
+        setOpen(false);
       }
-
-      if (file.size > maxSizeInBytes) {
-        setFileError("Maximum file size is 2MB.");
-        setTaskImage(null);
-        if (fileInputRef.current) fileInputRef.current.value = "";
-        return;
-      }
-
-      setTaskImage(file);
-      setFileError("");
-    } else {
-      setTaskImage(null);
     }
-  };
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,40 +94,27 @@ export const SubmitTaskForm = ({
     if (setShowPriority) setShowPriority(false);
     if (setShowDatePicker) setShowDatePicker(false);
 
-    //  Validation choose file
-    if (!taskImage) {
-      setFileError("Please select an image before submitting the task.");
-      // fileInputRef.current?.focus();
+    // Validation
+    if (!newTask.title || !newTask.description || !newTask.time) {
+      toast.error("Please fill all fields.");
       return;
     }
 
-    setFileError("");
-
-    let imageUrl: string | null = null;
-    // if (taskImage) {
-    try {
-      imageUrl = await uploadImage(taskImage);
-    } catch (uploadError) {
-      console.error("Error uploading image:", uploadError);
-      setFileError("Image upload failed. Please try again.");
-      return;
-    }
-
-    const taskToInsert = {
-      ...newTask,
-      email: session.user.email,
-      image_url: imageUrl,
-      time: newTask.time || null,
-      priority: newTask.priority || "low",
-      status: newTask.status || "todo",
-      user_id: session.user.id,
-    };
     const user = session?.user;
     if (!user) {
       toast.error("Không tìm thấy thông tin người dùng.");
       return;
     }
-    taskToInsert.user_id = user.id;
+
+    const taskToInsert = {
+      ...newTask,
+      email: user.email,
+      time: newTask.time || null,
+      priority: newTask.priority || "low",
+      status: newTask.status || "todo",
+      user_id: user.id,
+    };
+
     const { data, error } = await supabase
       .from("tasks")
       .insert(taskToInsert)
@@ -154,8 +122,7 @@ export const SubmitTaskForm = ({
       .single();
 
     if (error) {
-      console.error("Error adding task: ", error.message);
-      setFileError(`Lỗi thêm tác vụ: ${error.message}`);
+      toast.error(`Lỗi thêm tác vụ: ${error.message}`);
       return;
     }
 
@@ -164,12 +131,13 @@ export const SubmitTaskForm = ({
       .select("*", { count: "exact", head: true });
 
     if (countError) {
-      console.error("Error fetching count:", countError.message);
+      toast.error("Error fetching count");
     }
 
     const newTotalCount = count ?? 0;
     setTotalCount(newTotalCount);
     setNewTaskAdded(data?.id ?? null);
+
     // Reset form
     setNewTask({
       title: "",
@@ -178,119 +146,105 @@ export const SubmitTaskForm = ({
       priority: "",
       status: "",
     });
-    setTaskImage(null);
-
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ""; // Reset input file
-    }
 
     const pages = Math.ceil(newTotalCount / pageSize);
     const targetPage = pages > 0 ? pages : 1;
     setCurrentPage(targetPage);
     fetchTasks(targetPage, pageSize, setTasks, setTotalPages, setTotalCount);
-  };
 
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
+    setOpen(false);
+    toast.success("Task added successfully!");
   };
 
   return (
-    <form onSubmit={handleSubmit} className="task-form">
-      <div className="input-row">
-        <input
-          type="text"
-          placeholder="Task Title"
-          value={newTask.title}
-          onChange={(e) =>
-            setNewTask((prev) => ({ ...prev, title: e.target.value }))
-          }
-          required
-          style={{ flex: 2 }}
-        />
-        <div className="input-group">
-          <input
-            type="datetime-local"
-            value={newTask.time || ""}
-            onChange={(e) =>
-              setNewTask((prev) => ({ ...prev, time: e.target.value }))
-            }
-            required
-            className={newTask.time ? "input-filled" : "input-placeholder"}
-          />
-          <Select
-            options={priorityOptions}
-            placeholder="Priority"
-            isSearchable={false}
-            value={
-              priorityOptions.find((opt) => opt.value === newTask.priority) ||
-              null
-            }
-            onChange={(option) =>
-              setNewTask((prev) => ({
-                ...prev,
-                priority: option?.value || "",
-              }))
-            }
-            className="priority-select"
-            classNamePrefix="react-select"
-            // required
-          />
-          <Select
-            options={statusOptions}
-            placeholder="Status"
-            isSearchable={false}
-            value={
-              statusOptions.find((opt) => opt.value === newTask.status) || null
-            }
-            onChange={(option) =>
-              setNewTask((prev) => ({ ...prev, status: option?.value || "" }))
-            }
-            className="status-select"
-            classNamePrefix="react-select"
-            // required
-          />
+    <div className="dropdown-task-form-container" ref={formRef}>
+      <button
+        type="button"
+        className="create-task-btn"
+        onClick={() => setOpen((prev) => !prev)}
+      >
+        + Create Task
+      </button>
+      {open && (
+        <div className="dropdown-form">
+          <form onSubmit={handleSubmit} className="task-form">
+            <input
+              type="text"
+              placeholder="Task Title"
+              value={newTask.title}
+              onChange={(e) =>
+                setNewTask((prev) => ({ ...prev, title: e.target.value }))
+              }
+              required
+            />
+            <input
+              type="datetime-local"
+              value={newTask.time || ""}
+              onChange={(e) =>
+                setNewTask((prev) => ({ ...prev, time: e.target.value }))
+              }
+              required
+            />
+            <Select
+              options={priorityOptions}
+              placeholder="Priority"
+              isSearchable={false}
+              value={
+                priorityOptions.find((opt) => opt.value === newTask.priority) ||
+                null
+              }
+              onChange={(option) =>
+                setNewTask((prev) => ({
+                  ...prev,
+                  priority: option?.value || "",
+                }))
+              }
+              className="priority-select"
+              classNamePrefix="react-select"
+            />
+            <Select
+              options={statusOptions}
+              placeholder="Status"
+              isSearchable={false}
+              value={
+                statusOptions.find((opt) => opt.value === newTask.status) ||
+                null
+              }
+              onChange={(option) =>
+                setNewTask((prev) => ({
+                  ...prev,
+                  status: option?.value || "",
+                }))
+              }
+              className="status-select"
+              classNamePrefix="react-select"
+            />
+            <textarea
+              placeholder="Task Description"
+              value={newTask.description}
+              onChange={(e) =>
+                setNewTask((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }))
+              }
+              required
+            />
+            <div className="dropdown-actions">
+              <button type="submit" className="submit-button">
+                Add Task
+              </button>
+              <button
+                type="button"
+                className="cancel-btn"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
         </div>
-      </div>
-
-      <textarea
-        placeholder="Task Description"
-        value={newTask.description}
-        onChange={(e) =>
-          setNewTask((prev) => ({ ...prev, description: e.target.value }))
-        }
-        required
-      />
-
-      <div className="form-bottom-row">
-        <div className="file-upload-container">
-          {" "}
-          <button
-            type="button"
-            className="file-upload-button"
-            onClick={triggerFileInput}
-          >
-            Choose File
-          </button>
-          <span className="file-upload-info">
-            {taskImage?.name || "Max size 2MB, file format .jpg/.png"}
-          </span>
-          <input
-            id="file-upload"
-            type="file"
-            accept="image/jpeg, image/png"
-            onChange={handleFileSelected}
-            ref={fileInputRef}
-            className="file-upload-input"
-          />
-          {fileError && (
-            <span className="file-error-message-bubble">{fileError}</span>
-          )}
-        </div>
-
-        <button type="submit" className="submit-button">
-          Add Task
-        </button>
-      </div>
-    </form>
+      )}
+    </div>
   );
 };

@@ -11,11 +11,13 @@
     "start": "webpack-dev-server --mode development"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.4",
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.49.4",
     "antd": "^5.25.1",
     "date-fns": "^4.1.0",
+    "lucide-react": "^0.513.0",
     "react": "^19.1.0",
     "react-datepicker": "^8.4.0",
     "react-dom": "^19.1.0",
@@ -23,7 +25,8 @@
     "react-router-dom": "^7.6.0",
     "react-select": "^5.10.1",
     "react-toastify": "^11.0.5",
-    "recharts": "^2.15.3"
+    "recharts": "^2.15.3",
+    "tailwindcss": "^4.1.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

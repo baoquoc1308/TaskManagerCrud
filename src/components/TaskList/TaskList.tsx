@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Task } from "../../types/Task";
-import {
-  getPriorityBadgeClass,
-  getStatusBadgeClass,
-} from "../../utils/TaskHelpers";
+// import {
+//   getPriorityBadgeClass,
+//   getStatusBadgeClass,
+// } from "../../utils/TaskHelpers";
 import "./TaskList.css";
 import TaskDetail from "../TaskDetail";
 import { Empty, Modal } from "antd";
@@ -45,11 +45,39 @@ export default function TaskList({
     useState(false);
   const [taskToDeleteFromDetail, setTaskToDeleteFromDetail] =
     useState<Task | null>(null);
+  const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // Đóng bất kỳ dropdown nào đang mở nếu click không nằm trong một dropdown
+      if (openDropdownId !== null) {
+        let isClickInsideDropdown = false;
+        // Kiểm tra xem click có nằm trong bất kỳ .dots-menu nào không
+        const dotsMenus = document.querySelectorAll(".dots-menu");
+        dotsMenus.forEach((menu) => {
+          if (menu.contains(event.target as Node)) {
+            isClickInsideDropdown = true;
+          }
+        });
 
+        if (!isClickInsideDropdown) {
+          setOpenDropdownId(null);
+        }
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openDropdownId]); // Dependency a
   const handleClickTask = (taskId: string) => {
     if (editingId === null) setSelectedTaskId(taskId);
   };
-
+  const toggleDropdown = (taskId: number) => {
+    // Hoặc string nếu task.id là string
+    setOpenDropdownId((prevId) => (prevId === taskId ? null : taskId));
+  };
   const handleCloseModal = () => {
     setSelectedTaskId(null);
     setEditingId(null);
@@ -82,88 +110,282 @@ export default function TaskList({
       </div>
     );
   }
+
   return (
     <>
-      <ul className="task-list">
-        {tasks.map((task) => (
-          <li
-            key={task.id}
-            className={`task-item ${
-              newTaskAdded === task.id ? "new-task" : ""
-            }`}
-            ref={task.id === newTaskAdded ? lastTaskRef : null}
-          >
-            <div
-              className="task-link"
-              onClick={() => handleClickTask(String(task.id))}
-              style={{ cursor: editingId === null ? "pointer" : "default" }}
-            >
-              <h3>{task.title}</h3>
-              <p>{task.description}</p>
-              <span className="time-meta">
-                <strong>Time:</strong> <FormattedTime isoString={task.time} />
-              </span>
-              <div className="meta-row">
-                <span className="task-meta">
-                  <strong>Priority:</strong>
-                  <span className={getPriorityBadgeClass(task.priority!)}>
-                    {task.priority}
-                  </span>
-                </span>
-                <span className="task-meta">
-                  <strong>Status:</strong>
-                  <span className={getStatusBadgeClass(task.status!)}>
-                    {task.status}
-                  </span>
-                </span>
+      <div className="main-container">
+        {/* Dashboard */}
+        <div className="dashboard">
+          <div className="dashboard-header">
+            <h2>
+              <span className="logo">T</span>
+              TaskBoard
+            </h2>
+          </div>
+
+          <button className="add-new-btn">+ Add New</button>
+
+          <ul className="dashboard-menu">
+            <li>
+              <a href="#" className="active">
+                <span className="icon">📋</span>Dashboard
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span className="icon">📥</span>Inbox
+                <span className="badge">3</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span className="icon">👥</span>Teams
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span className="icon">📊</span>Analytics
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span className="icon">⚙️</span>Settings
+              </a>
+            </li>
+          </ul>
+
+          <div className="projects-section">
+            <h3>Projects</h3>
+            <div className="project-item">
+              <div
+                className="project-icon"
+                style={{ backgroundColor: "#667eea" }}
+              ></div>
+              Main Project
+            </div>
+            <div className="project-item">
+              <div
+                className="project-icon"
+                style={{ backgroundColor: "#28a745" }}
+              ></div>
+              Design Project
+            </div>
+            <div className="project-item">
+              <div
+                className="project-icon"
+                style={{ backgroundColor: "#ffc107" }}
+              ></div>
+              Landing Page
+            </div>
+          </div>
+        </div>
+
+        {/* Content Area */}
+        <div className="content-area">
+          <div className="content-header">
+            <h1>Design Project</h1>
+          </div>
+
+          <div className="task-sections">
+            {/* Pending Tasks */}
+            <div className="task-section">
+              <div className="section-header pending">
+                <span className="status-indicator"></span>
+                Pending
               </div>
-              {task.image_url && <img src={task.image_url} alt="task" />}
+              <div className="task-table-header">
+                <div>Name</div>
+                <div>Assignee</div>
+                <div>Due Date</div>
+                <div>Priority</div>
+                <div>Status</div>
+                <div></div>
+              </div>
+              <ul className="task-list">
+                {tasks
+                  .filter((task) => (task.status as string) === "todo")
+                  .map((task) => (
+                    <li key={task.id} className="task-item">
+                      {/* <div className="task-link"> */}
+                      <h3 className="task-title">{task.title}</h3>
+                      <div className="task-assignee">
+                        <div className="assignee-avatar">JD</div>
+                      </div>
+                      <div className="task-due-date">
+                        <FormattedTime isoString={task.time} />
+                      </div>
+                      <span
+                        className={`priority-badge priority-${task.priority?.toLowerCase()}`}
+                      >
+                        {task.priority}
+                      </span>
+                      <span
+                        className={`status-badge status-${task.status?.toLowerCase()}`}
+                      >
+                        {task.status}
+                      </span>
+                      <div className="dots-menu">
+                        <button
+                          className="dots-button"
+                          onClick={(e) => {
+                            e.stopPropagation(); // Ngăn chặn sự kiện click lan ra li.task-item (nếu li.task-item có click handler riêng)
+                            toggleDropdown(task.id);
+                          }}
+                          aria-expanded={
+                            openDropdownId === task.id ? "true" : "false"
+                          }
+                        >
+                          ⋮
+                        </button>
+                        {/* Thêm class 'active' dựa trên openDropdownId */}
+                        <div
+                          className={`dots-dropdown ${
+                            openDropdownId === task.id ? "active" : ""
+                          }`}
+                        >
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEditingId(task.id);
+                              handleCloseModal();
+                              setOpenDropdownId(null);
+                            }}
+                          >
+                            {" "}
+                            Edit
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              confirmDeleteTask(task);
+                              handleCloseModal();
+                              setOpenDropdownId(null);
+                            }}
+                          >
+                            {" "}
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                      {/* </div> */}
+                    </li>
+                  ))}
+              </ul>
+              <button className="add-task-btn">+ Add Task</button>
             </div>
 
-            {editingId === task.id ? (
-              <>
-                <textarea
-                  value={newDescription}
-                  onChange={(e) => setNewDescription(e.target.value)}
-                  placeholder="Updated description..."
-                />
-                <div className="task-actions">
-                  <button
-                    className="save-btn"
-                    onClick={() => updateTask(task.id)}
-                  >
-                    Save
-                  </button>
-                  <button
-                    className="cancel-btn"
-                    onClick={() => setEditingId(null)}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </>
-            ) : (
-              <div className="task-actions">
-                <button
-                  className="edit-btn"
-                  onClick={() => {
-                    setEditingId(task.id);
-                    setNewDescription(task.description);
-                  }}
-                >
-                  Edit
-                </button>
-                <button
-                  className="delete-btn"
-                  onClick={() => confirmDeleteTask(task)}
-                >
-                  Delete
-                </button>
+            {/* In Progress Tasks */}
+            <div className="task-section">
+              <div className="section-header in-progress">
+                <span className="status-indicator"></span>
+                In Progress
               </div>
-            )}
-          </li>
-        ))}
-      </ul>
+              <div className="task-table-header">
+                <div>Name</div>
+                <div>Assignee</div>
+                <div>Due Date</div>
+                <div>Priority</div>
+                <div>Status</div>
+                <div></div>
+              </div>
+              <ul className="task-list">
+                {tasks
+                  .filter((task) => (task.status as string) === "in-progress")
+                  .map((task) => (
+                    <li key={task.id} className="task-item">
+                      {/* <div className="task-link"> */}
+                      <h3 className="task-title">{task.title}</h3>
+                      <div className="task-assignee">
+                        <div className="assignee-avatar">JD</div>
+                      </div>
+                      <div className="task-due-date">
+                        <FormattedTime isoString={task.time} />
+                      </div>
+                      <span
+                        className={`priority-badge priority-${task.priority?.toLowerCase()}`}
+                      >
+                        {task.priority}
+                      </span>
+                      <span
+                        className={`status-badge status-${task.status?.toLowerCase()}`}
+                      >
+                        {task.status}
+                      </span>
+                      <div className="dots-menu">
+                        <button className="dots-button">⋮</button>
+                        <div className="dots-dropdown">
+                          <button onClick={() => setEditingId(task.id)}>
+                            Edit
+                          </button>
+                          <button onClick={() => confirmDeleteTask(task)}>
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                      {/* </div> */}
+                    </li>
+                  ))}
+              </ul>
+              <button className="add-task-btn">+ Add Task</button>
+            </div>
+
+            {/* Completed Tasks */}
+            <div className="task-section">
+              <div className="section-header completed">
+                <span className="status-indicator"></span>
+                Completed
+              </div>
+              <div className="task-table-header">
+                <div>Name</div>
+                <div>Assignee</div>
+                <div>Due Date</div>
+                <div>Priority</div>
+                <div>Status</div>
+                <div></div>
+              </div>
+              <ul className="task-list">
+                {tasks
+                  .filter((task) => (task.status as string) === "done")
+                  .map((task) => (
+                    <li key={task.id} className="task-item">
+                      {/* <div className="task-link"> */}
+                      <h3 className="task-title">{task.title}</h3>
+                      <div className="task-assignee">
+                        <div className="assignee-avatar">JD</div>
+                      </div>
+                      <div className="task-due-date">
+                        <FormattedTime isoString={task.time} />
+                      </div>
+                      <span
+                        className={`priority-badge priority-${task.priority?.toLowerCase()}`}
+                      >
+                        {task.priority}
+                      </span>
+                      <span
+                        className={`status-badge status-${task.status?.toLowerCase()}`}
+                      >
+                        {task.status}
+                      </span>
+                      <div className="dots-menu">
+                        <button className="dots-button">⋮</button>
+                        <div className="dots-dropdown">
+                          <button onClick={() => setEditingId(task.id)}>
+                            Edit
+                          </button>
+                          <button onClick={() => confirmDeleteTask(task)}>
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                      {/* </div> */}
+                    </li>
+                  ))}
+              </ul>
+              <button className="add-task-btn">+ Add Task</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {selectedTaskId && (
         <TaskDetail

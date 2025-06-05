@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import type { Task } from "../../types/Task";
 import type { Session } from "@supabase/supabase-js";
 import { fetchTasks } from "../FetchTasks";
-import { SubmitTaskForm } from "../SubmitTask/SubmitTask";
+import { SubmitTaskDropdown } from "../SubmitTask/SubmitTask";
 import { supabase } from "../../supabase-client";
 import ScrollButtons from "../ScrollButton";
 import PaginationControl from "../PaginationControl";
@@ -339,16 +339,13 @@ function TaskManager({
       />
       <h2>TASK MANAGER</h2>
 
-      <SubmitTaskForm
+      <SubmitTaskDropdown
         session={session}
         newTask={newTask}
         setNewTask={setNewTask}
-        taskImage={taskImage}
-        setTaskImage={setTaskImage}
         setCurrentPage={setCurrentPage}
         setTotalCount={setTotalCount}
         setNewTaskAdded={setNewTaskAdded}
-        fileInputRef={fileInputRef as React.RefObject<HTMLInputElement>}
         pageSize={pageSize}
         currentPage={currentPage}
         setTasks={setTasks}
@@ -358,7 +355,6 @@ function TaskManager({
         setDate={setDate}
         setShowPriority={setShowPriority}
         setShowDatePicker={setShowDatePicker}
-        setFilteredTasks={setFilteredTasks}
       />
       <SearchTasks
         keyword={keyword}

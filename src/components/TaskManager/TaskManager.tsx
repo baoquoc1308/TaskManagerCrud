@@ -86,33 +86,139 @@ function TaskManager({
   }, [displayedTasks, tasks, newTaskAdded]);
 
   // Realtime subscription
+  // useEffect(() => {
+  //   const channel = supabase.channel("tasks-channel");
+  //   channel
+  //     .on(
+  //       "postgres_changes",
+  //       { event: "INSERT", schema: "public", table: "tasks" },
+  //       (payload) => {
+  //         const newTask = payload.new as Task;
+  //         setTasks((prev) => {
+  //           const updatedTasks = [...prev, newTask];
+  //           const lastPage = Math.ceil(updatedTasks.length / pageSize);
+  //           setCurrentPage(lastPage);
+  //           return updatedTasks;
+  //         });
+
+  //         if (filteredTasks !== null) {
+  //           setFilteredTasks((prev) => [...(prev ?? []), newTask]);
+  //         }
+  //       }
+  //     )
+  //     .subscribe();
+
+  //   return () => {
+  //     channel.unsubscribe();
+  //   };
+  // }, [filteredTasks, pageSize]);
+  // Realtime subscription
+  // useEffect(() => {
+  //   const channel = supabase.channel("tasks-channel");
+  //   channel
+  //     .on(
+  //       "postgres_changes",
+  //       { event: "INSERT", schema: "public", table: "tasks" },
+  //       (payload) => {
+  //         const newTask = payload.new as Task;
+
+  //         setTasks((prevTasks) => {
+  //           const updatedTasks = [...prevTasks, newTask];
+  //           const lastPage = Math.ceil(updatedTasks.length / pageSize);
+  //           setCurrentPage(lastPage);
+  //           return updatedTasks;
+  //         });
+
+  //         setFilteredTasks((prevFilteredTasks) => {
+  //           return [...(prevFilteredTasks ?? []), newTask];
+  //         });
+  //       }
+  //     )
+  //     .subscribe((status) => {
+  //       if (status === "SUBSCRIBED") {
+  //       }
+  //       if (status === "CHANNEL_ERROR") {
+  //       }
+  //       if (status === "TIMED_OUT") {
+  //       }
+  //     });
+
+  //   return () => {
+  //     supabase.removeChannel(channel);
+  //   };
+  // }, [supabase, pageSize, setTasks, setCurrentPage, setFilteredTasks]);
   useEffect(() => {
     const channel = supabase.channel("tasks-channel");
+
     channel
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "tasks" },
         (payload) => {
           const newTask = payload.new as Task;
-          setTasks((prev) => {
-            const updatedTasks = [...prev, newTask];
-            const lastPage = Math.ceil(updatedTasks.length / pageSize);
-            setCurrentPage(lastPage);
-            return updatedTasks;
+
+          setTasks((prevTasks) => {
+            if (prevTasks.some((task) => task.id === newTask.id)) {
+              return prevTasks;
+            }
+            return [...prevTasks, newTask];
           });
 
-          if (filteredTasks !== null) {
-            setFilteredTasks((prev) => [...(prev ?? []), newTask]);
-          }
+          setFilteredTasks((prevFilteredTasks) => {
+            if (!prevFilteredTasks) return [newTask];
+
+            if (prevFilteredTasks.some((task) => task.id === newTask.id)) {
+              return prevFilteredTasks;
+            }
+            return [...prevFilteredTasks, newTask];
+          });
         }
       )
-      .subscribe();
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "tasks" },
+        (payload) => {
+          const updatedTask = payload.new as Task;
+
+          setTasks((prevTasks) =>
+            prevTasks.map((task) =>
+              task.id === updatedTask.id ? updatedTask : task
+            )
+          );
+
+          setFilteredTasks(
+            (prevFilteredTasks) =>
+              prevFilteredTasks?.map((task) =>
+                task.id === updatedTask.id ? updatedTask : task
+              ) ?? []
+          );
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "tasks" },
+        (payload) => {
+          const deletedTaskId = payload.old.id;
+
+          setTasks((prevTasks) =>
+            prevTasks.filter((task) => task.id !== deletedTaskId)
+          );
+
+          setFilteredTasks(
+            (prevFilteredTasks) =>
+              prevFilteredTasks?.filter((task) => task.id !== deletedTaskId) ??
+              []
+          );
+        }
+      )
+      .subscribe((status) => {
+        console.log("Realtime status:", status);
+      });
 
     return () => {
-      channel.unsubscribe();
+      supabase.removeChannel(channel);
     };
-  }, [filteredTasks, pageSize]);
-
+  }, [supabase, setTasks, setFilteredTasks]);
   const updateTask = async (taskId: number) => {
     if (newDescription === originalDescription) {
       setEditingId(null);

@@ -12,6 +12,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import { useNavigate } from "react-router-dom";
 import "./ManagerDashboard.css";
 
 type TaskCountPerUser = {
@@ -262,7 +263,11 @@ const ManagerDashboard = () => {
   const handleViewModeChange = (newMode: "day" | "week" | "month") => {
     setViewMode(newMode);
   };
+  const navigate = useNavigate();
 
+  const handleBackClick = () => {
+    navigate("/");
+  };
   if (loading)
     return (
       <div className="loading-container">
@@ -274,6 +279,9 @@ const ManagerDashboard = () => {
     <div className="dashboard-container">
       <div className="dashboard-content">
         <div className="dashboard-header">
+          <button className="back-button" onClick={handleBackClick}>
+            ⬅ Back to Home
+          </button>
           <div className="header-title">
             <h1>
               <img

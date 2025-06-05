@@ -7,6 +7,10 @@ interface FormattedTimeProps {
 const FormattedTime: React.FC<FormattedTimeProps> = ({ isoString }) => {
   if (!isoString) return <span>Invalid date</span>;
 
+  const date = new Date(isoString);
+
+  const vietnamDate = new Date(date.getTime() - 7 * 60 * 60 * 1000);
+
   const formattedTime = new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
     month: "short",
@@ -14,7 +18,7 @@ const FormattedTime: React.FC<FormattedTimeProps> = ({ isoString }) => {
     hour: "numeric",
     minute: "2-digit",
     hour12: true,
-  }).format(new Date(isoString));
+  }).format(vietnamDate);
 
   return <span>{formattedTime}</span>;
 };

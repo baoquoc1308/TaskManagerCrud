@@ -9,15 +9,15 @@
   overflow-x: hidden;
 }
 
-.task-list button {
+/* .task-list button {
   padding: 0.5rem 1.2rem;
   border-radius: 8px;
   border: none;
 
   cursor: pointer;
-  transition: background 0.3s ease, color 0.3s ease;
+  transition: all 0.3s ease, color 0.3s ease;
   flex: 1;
-}
+} */
 
 .task-item {
   border: 1px solid #eaeaea;
@@ -33,8 +33,6 @@
 
 .task-item h3 {
   color: var(--text-color);
-  margin-bottom: 0.5rem;
-
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -388,32 +386,13 @@
   transition: transform 0.2s;
 }
 
-.task-item:hover {
+/* .task-item:hover {
   transform: translateY(-4px);
-}
+} */
 .dots-menu {
   position: absolute;
   top: 8px;
   right: 8px;
-}
-
-.dots-button {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.dots-dropdown {
-  display: none;
-  position: absolute;
-  top: 24px;
-  right: 0;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
 }
 
 .dots-menu:hover .dots-dropdown {
@@ -421,18 +400,6 @@
   flex-direction: column;
 }
 
-.dots-dropdown button {
-  background: none;
-  border: none;
-  padding: 8px 12px;
-  text-align: left;
-  width: 100%;
-  cursor: pointer;
-}
-
-.dots-dropdown button:hover {
-  background-color: #f5f5f5;
-}
 .task-list {
   list-style-type: none;
   padding: 0;
@@ -462,20 +429,6 @@
 
 .dots-menu {
   position: relative;
-}
-
-.dots-dropdown {
-  display: none;
-  position: absolute;
-  right: 0;
-  background-color: white;
-  border: 1px solid #ccc;
-  z-index: 1;
-}
-
-.dots-button:hover + .dots-dropdown,
-.dots-dropdown:hover {
-  display: block;
 }
 
 .task-list {
@@ -578,50 +531,8 @@
   flex-shrink: 0;
 }
 
-.dots-button {
-  background: transparent;
-  border: none;
-  color: #555;
-  font-size: 1.25rem;
-  padding: 4px;
-  cursor: pointer;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.dots-dropdown {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: calc(100% + 4px);
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 100;
-  min-width: 120px;
-}
-
 .dots-menu:hover .dots-dropdown {
   display: block;
-}
-
-.dots-dropdown button {
-  display: block;
-  width: 100%;
-  padding: 8px 12px;
-  text-align: left;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.875rem;
-  color: #333;
-}
-
-.dots-dropdown button:hover {
-  background-color: #f5f5f5;
 }
 
 @media (max-width: 768px) {
@@ -836,73 +747,12 @@
   font-weight: 500;
 }
 
-.status-done {
-  background-color: #00b894;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.status-todo {
-  background-color: #e17055;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 500;
-}
-
 .dots-menu {
   position: relative;
 }
 
-.dots-button {
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
-  color: #6c757d;
-  transition: background-color 0.2s;
-}
-
-.dots-button:hover {
-  background-color: #e9ecef;
-}
-
-.dots-dropdown {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: white;
-  border: 1px solid #dee2e6;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  min-width: 100px;
-  display: none;
-}
-
 .dots-menu:hover .dots-dropdown {
   display: block;
-}
-
-.dots-dropdown button {
-  display: block;
-  width: 100%;
-  padding: 8px 12px;
-  border: none;
-  background: none;
-  text-align: left;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.dots-dropdown button:hover {
-  background-color: #f8f9fa;
 }
 
 @keyframes slideIn {
@@ -1119,17 +969,6 @@
   overflow: hidden;
 }
 
-.section-header {
-  display: flex;
-  align-items: center;
-  padding: 16px 20px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e1e5e9;
-  font-weight: 600;
-  font-size: 14px;
-  color: #495057;
-}
-
 .section-header .status-indicator {
   width: 8px;
   height: 8px;
@@ -1143,20 +982,6 @@
 
 .section-header.completed .status-indicator {
   background-color: #28a745;
-}
-
-.task-table-header {
-  display: grid;
-  grid-template-columns: 2fr 120px 120px 100px 80px 40px;
-  gap: 16px;
-  padding: 12px 20px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e1e5e9;
-  font-size: 12px;
-  font-weight: 600;
-  color: #6c757d;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .task-list {
@@ -1198,35 +1023,10 @@
   background-color: #f8f9fa;
 }
 
-.task-title {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 500;
-  color: #1a1a1a;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-}
-
 .task-assignee {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.assignee-avatar {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 10px;
-  font-weight: 600;
 }
 
 .assign-button {
@@ -1237,12 +1037,6 @@
   font-size: 12px;
   color: #6c757d;
   cursor: pointer;
-}
-
-.task-due-date {
-  font-size: 12px;
-  color: #6c757d;
-  white-space: nowrap;
 }
 
 .priority-badge {
@@ -1269,15 +1063,6 @@
   color: #721c24;
 }
 
-.status-badge {
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 500;
-  text-align: center;
-  white-space: nowrap;
-}
-
 .status-pending {
   background-color: #fff3cd;
   color: #856404;
@@ -1293,52 +1078,23 @@
   color: #155724;
 }
 
-.status-done {
-  background-color: #00b894;
-  color: white;
-}
-
-.status-todo {
-  background-color: #e17055;
-  color: white;
-}
-
 .dots-menu {
+  margin-left: auto; /* Đẩy sang phải */
   position: relative;
-  justify-self: center;
+  display: flex;
+  align-items: center; /* Căn giữa dọc */
 }
 
 .dots-button {
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  color: #6c757d;
-  transition: all 0.2s;
   width: 24px;
   height: 24px;
+  justify-content: center;
+  color: #555;
   display: flex;
   align-items: center;
-  justify-content: center;
-}
-
-.dots-button:hover {
-  background-color: #e9ecef;
-  color: #495057;
 }
 
 .dots-dropdown {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: white;
-  border: 1px solid #dee2e6;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  min-width: 120px;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-4px);
@@ -1352,42 +1108,23 @@
 }
 
 .dots-dropdown button {
-  display: block;
-  width: 100%;
-  padding: 8px 12px;
-  border: none;
-  background: none;
-  text-align: left;
-  cursor: pointer;
-  font-size: 13px;
-  color: #495057;
   transition: background-color 0.2s;
-}
-
-.dots-dropdown button:hover {
-  background-color: #f8f9fa;
 }
 
 .dots-dropdown button:first-child {
   border-radius: 6px 6px 0 0;
+  z-index: 9999;
 }
 
 .dots-dropdown button:last-child {
   border-radius: 0 0 6px 6px;
+  z-index: 9999;
 }
 
 .add-task-btn {
-  display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 20px;
   background: none;
-  border: none;
-  color: #667eea;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s;
-  width: 100%;
   text-align: left;
 }
 
@@ -1450,16 +1187,6 @@ body {
   overflow: hidden;
 }
 
-.section-header {
-  display: flex;
-  align-items: center;
-  padding: 15px 20px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-bottom: 1px solid #e9ecef;
-  color: #343a40;
-}
-
 .section-header.completed .status-indicator {
   background-color: #28a745;
 }
@@ -1477,7 +1204,6 @@ body {
   margin-right: 10px;
 }
 
-.task-table-header,
 .task-item .task-link {
   display: grid;
   grid-template-columns: 3fr 1fr 1.5fr 1fr 1fr 0.5fr;
@@ -1488,9 +1214,7 @@ body {
 }
 
 .task-table-header {
-  background-color: #f1f3f5;
   color: #6c757d;
-  font-weight: 600;
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -1520,44 +1244,13 @@ body {
 }
 
 .task-title {
-  font-size: 0.95rem;
   font-weight: 500;
-  margin: 0;
-  color: #007bff;
+  align-items: center;
 }
 
 .task-assignee {
   display: flex;
   justify-content: flex-start;
-}
-
-.assignee-avatar {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background-color: #8c52ff;
-  color: white;
-  font-size: 0.8rem;
-  font-weight: bold;
-}
-
-.task-due-date {
-  font-size: 0.9rem;
-  color: #495057;
-}
-
-.priority-badge,
-.status-badge {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-transform: capitalize;
-  text-align: center;
 }
 
 .priority-badge.priority-high {
@@ -1567,10 +1260,6 @@ body {
 .priority-badge.priority-medium {
   background-color: #fff3cd;
   color: #856404;
-}
-.priority-badge.priority-low {
-  background-color: #d4edda;
-  color: #155724;
 }
 
 .status-badge.status-complete {
@@ -1588,62 +1277,19 @@ body {
   text-align: center;
 }
 
-.dots-button {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  color: #6c757d;
-  cursor: pointer;
-  padding: 5px;
-  line-height: 1;
-}
-
-.dots-dropdown {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 100%;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  z-index: 10;
-  min-width: 100px;
-}
-
 .dots-menu:hover .dots-dropdown,
 .dots-menu .dots-button:focus + .dots-dropdown,
 .dots-menu.active .dots-dropdown {
   display: block;
+  outline: none;
 }
-
-.dots-dropdown button {
-  display: block;
-  width: 100%;
-  padding: 8px 12px;
-  text-align: left;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-.dots-dropdown button:hover {
-  background-color: #f1f3f5;
+.dots-button:focus {
+  outline: none;
 }
 
 .add-task-btn {
   display: block;
-  margin: 20px;
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
   font-weight: 500;
-  transition: background-color 0.2s ease;
 }
 
 .add-task-btn:hover {
@@ -1729,7 +1375,6 @@ body {
   }
 }
 
-.task-table-header,
 .task-item .task-link {
   display: grid;
 
@@ -1740,8 +1385,6 @@ body {
 }
 
 .task-table-header {
-  font-weight: bold;
-  background-color: #f8f8f8;
   border-top: 1px solid #eee;
 }
 
@@ -1760,28 +1403,19 @@ body {
 
 .task-title {
   font-size: 1rem;
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .assignee-avatar {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: #8c7ae6;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 0.8rem;
   font-weight: bold;
-}
-
-.task-due-date {
-  font-size: 0.9rem;
-  color: #666;
 }
 
 .priority-badge,
@@ -1795,22 +1429,21 @@ body {
 
 .priority-badge.priority-medium {
   background-color: #ffc107;
-  color: #333;
+  color: var(--text-color);
 }
-
 .status-badge.status-in-progress {
   background-color: #4896e9;
-  color: white;
+  color: var(--text-color);
 }
 
 .priority-badge.priority-high {
   background-color: #dc3545;
-  color: white;
+  color: var(--text-color);
 }
 
 .priority-badge.priority-low {
   background-color: #28a745;
-  color: white;
+  color: var(--text-color);
 }
 
 .status-badge.status-pending {
@@ -1827,41 +1460,6 @@ body {
   position: relative;
   display: inline-block;
   justify-self: end;
-}
-
-.dots-button {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0 5px;
-}
-
-.dots-dropdown {
-  display: none;
-  position: absolute;
-  right: 0;
-  background-color: #f9f9f9;
-  min-width: 100px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-  border-radius: 5px;
-}
-
-.dots-dropdown button {
-  color: black;
-  padding: 8px 12px;
-  text-decoration: none;
-  display: block;
-  background: none;
-  border: none;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-}
-
-.dots-dropdown button:hover {
-  background-color: #f1f1f1;
 }
 
 .main-container {
@@ -1949,7 +1547,6 @@ body {
 
 .badge {
   margin-left: auto;
-  background-color: #eee;
   padding: 2px 8px;
   border-radius: 10px;
   font-size: 0.8rem;
@@ -2010,6 +1607,10 @@ body {
   margin-bottom: 15px;
   display: flex;
   align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e9ecef;
+  color: #343a40;
+  background-color: #f8f9fa;
 }
 
 .section-header .status-indicator {
@@ -2049,14 +1650,7 @@ body {
 .task-table-header {
   display: grid;
   grid-template-columns: 3fr 1fr 1.5fr 1fr 1fr 0.5fr;
-  /* Giải thích:
-     - 3fr: Cột Tên (Name) sẽ rộng gấp 3 lần đơn vị fr
-     - 1fr: Cột Assignee
-     - 1.5fr: Cột Due Date (có thể cần rộng hơn một chút)
-     - 1fr: Cột Priority
-     - 1fr: Cột Status
-     - 0.5fr: Cột cho nút menu (dấu ba chấm)
-  */
+
   gap: 10px;
   padding: 10px 15px;
   background-color: #f0f2f5;
@@ -2092,9 +1686,6 @@ body {
 
 .task-title {
   margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .task-assignee {
@@ -2103,21 +1694,7 @@ body {
   align-items: center;
 }
 
-.assignee-avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background-color: #667eea;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.8em;
-  font-weight: bold;
-}
-
 .task-due-date {
-  text-align: center;
   white-space: nowrap;
 }
 
@@ -2157,7 +1734,6 @@ body {
   color: #2e86c1;
 }
 
-.status-done,
 .status-complete {
   background-color: #d4edda;
   color: #239b56;
@@ -2169,60 +1745,9 @@ body {
   justify-content: flex-end;
 }
 
-.dots-button {
-  background: none;
-  border: none;
-  font-size: 1.5em;
-  cursor: pointer;
-  padding: 0 5px;
-}
-
-.dots-dropdown {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 100%;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-  min-width: 80px;
-}
-
 .dots-menu:hover .dots-dropdown,
 .dots-dropdown.active {
   display: block;
-}
-
-.dots-dropdown button {
-  display: block;
-  width: 100%;
-  padding: 8px 10px;
-  border: none;
-  background: none;
-  text-align: left;
-  cursor: pointer;
-}
-
-.dots-dropdown button:hover {
-  background-color: #f0f0f0;
-}
-
-.task-due-date {
-  text-align: center;
-  white-space: nowrap;
-}
-
-.priority-badge,
-.status-badge {
-  padding: 5px 10px;
-  border-radius: 15px;
-  font-size: 0.8em;
-  font-weight: bold;
-  text-align: center;
-  white-space: nowrap;
-  display: inline-block;
 }
 
 .priority-low {
@@ -2242,7 +1767,6 @@ body {
 
 .status-todo {
   background-color: #cfda6b;
-  color: #c2185b;
 }
 
 .status-pending {
@@ -2258,72 +1782,21 @@ body {
 .status-done,
 .status-complete {
   background-color: #45ca64;
-  color: #239b56;
 }
 
 .dots-menu {
   position: relative;
   display: flex;
   justify-content: flex-end;
-
   overflow: visible;
-}
-
-.dots-button {
-  background: none;
-  border: none;
-  font-size: 1.5em;
-  cursor: pointer;
-  padding: 0 5px;
-  color: #555;
-}
-
-.dots-button:hover {
-  color: #007bff;
-}
-
-.dots-dropdown {
-  display: none;
-  position: absolute;
-  right: 0;
-
-  bottom: 100%;
-  transform: translateY(-5px);
-
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  min-width: 120px;
-  padding: 5px 0;
 }
 
 .dots-dropdown.active {
   display: block;
 }
 
-.dots-dropdown button {
-  display: block;
-  width: 100%;
-  padding: 8px 15px;
-  border: none;
-  background: none;
-  text-align: left;
-  cursor: pointer;
-  font-size: 0.9em;
-  color: #333;
-}
-
-.dots-dropdown button:hover {
-  background-color: #f0f0f0;
-  color: #007bff;
-}
-
 .task-item {
   overflow: visible;
-
-  padding-bottom: 25px;
 }
 
 .task-table-header > div:last-child,
@@ -2337,14 +1810,6 @@ body {
   justify-content: flex-end;
 }
 
-.dots-button {
-  background: none;
-  border: none;
-  font-size: 1.5em;
-  cursor: pointer;
-  padding: 0 5px;
-}
-
 .dots-dropdown {
   display: none;
   position: absolute;
@@ -2354,9 +1819,8 @@ body {
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  z-index: 10;
+  z-index: 9999;
   min-width: 100px;
-  padding: 5px 0;
 }
 
 .dots-dropdown.active {
@@ -2374,7 +1838,52 @@ body {
   font-size: 0.9em;
   color: #333;
 }
-
 .dots-dropdown button:hover {
-  background-color: #f0f0f0;
+  background-color: #e6deeb;
+  color: #a782d8;
+}
+.task-title {
+  cursor: pointer;
+}
+.dots-button {
+  position: relative;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+  transition: all 0.3s ease;
+  z-index: 9999;
+  line-height: 1;
+  transform: translateY(-8px);
+}
+
+.dots-button:hover {
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+.tooltip {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #555;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.dots-wrapper {
+  position: relative;
+}
+
+.dots-wrapper:hover .tooltip-visible {
+  opacity: 1;
 }

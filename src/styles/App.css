@@ -110,7 +110,7 @@ input[type="file"] {
   padding-bottom: 10px;
 }
 
-button {
+.app-button {
   border-radius: 10px;
   border: none;
   cursor: pointer;
@@ -120,13 +120,13 @@ button {
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
 }
 
-button:hover {
-  transform: translateY(-2px);
+.app-button:hover {
+  /* transform: translateY(-2px); */
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
   background: #35b97f;
   color: white;
 }
-button:focus {
+.app-button:focus {
   outline: none;
 }
 .dark input[type="text"],

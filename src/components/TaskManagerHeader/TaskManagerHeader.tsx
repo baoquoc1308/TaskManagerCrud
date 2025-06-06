@@ -23,7 +23,9 @@ export default function TaskManagerHeader({
       )}
       <ThemeToggle />
       <span>{userEmail}</span>
-      <button onClick={onLogout}>Log Out</button>
+      <button className="app-button" onClick={onLogout}>
+        Log Out
+      </button>
     </div>
   );
 }

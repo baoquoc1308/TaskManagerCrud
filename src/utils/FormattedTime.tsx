@@ -20,7 +20,11 @@ const FormattedTime: React.FC<FormattedTimeProps> = ({ isoString }) => {
     hour12: true,
   }).format(vietnamDate);
 
-  return <span>{formattedTime}</span>;
+  const finalTime = formattedTime.replace(/\b(am|pm)\b/, (match) =>
+    match.toUpperCase()
+  );
+
+  return <span>{finalTime}</span>;
 };
 
 export default FormattedTime;

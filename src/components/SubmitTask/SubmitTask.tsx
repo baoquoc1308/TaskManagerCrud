@@ -102,7 +102,7 @@ export const SubmitTaskDropdown = ({
 
     const user = session?.user;
     if (!user) {
-      toast.error("Không tìm thấy thông tin người dùng.");
+      toast.error("User information not found.");
       return;
     }
 
@@ -122,7 +122,7 @@ export const SubmitTaskDropdown = ({
       .single();
 
     if (error) {
-      toast.error(`Lỗi thêm tác vụ: ${error.message}`);
+      toast.error(`Error while adding task: ${error.message}`);
       return;
     }
 
@@ -160,7 +160,7 @@ export const SubmitTaskDropdown = ({
     <div className="dropdown-task-form-container" ref={formRef}>
       <button
         type="button"
-        className="create-task-btn"
+        className="create-task-btn app-button"
         onClick={() => setOpen((prev) => !prev)}
       >
         + Create Task
@@ -231,12 +231,12 @@ export const SubmitTaskDropdown = ({
               required
             />
             <div className="dropdown-actions">
-              <button type="submit" className="submit-button">
+              <button type="submit" className="submit-button app-button">
                 Add Task
               </button>
               <button
                 type="button"
-                className="cancel-btn"
+                className="cancel-btn app-button"
                 onClick={() => setOpen(false)}
               >
                 Cancel

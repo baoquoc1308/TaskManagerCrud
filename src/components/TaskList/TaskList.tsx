@@ -5,16 +5,16 @@ import type { Task } from "../../types/Task";
 //   getStatusBadgeClass,
 // } from "../../utils/TaskHelpers";
 import "./TaskList.css";
+import { supabase } from "../../supabase-client";
 import TaskDetail from "../TaskDetail";
-import { Empty, Modal } from "antd";
+import { Empty, Modal, Input } from "antd";
 import FormattedTime from "../../utils/FormattedTime";
+import { toast } from "react-toastify";
 
 interface TaskListProps {
   tasks: Task[];
   editingId: number | null;
   setEditingId: React.Dispatch<React.SetStateAction<number | null>>;
-  // newTitle: string;
-  // setNewTitle: React.Dispatch<React.SetStateAction<string>>;
   newDescription: string;
   setNewDescription: React.Dispatch<React.SetStateAction<string>>;
   confirmDeleteTask: (task: Task) => void;
@@ -29,14 +29,12 @@ export default function TaskList({
   tasks,
   editingId,
   setEditingId,
-  // newTitle,
-  // setNewTitle,
   newDescription,
   setNewDescription,
   confirmDeleteTask,
   updateTask,
-  newTaskAdded,
-  lastTaskRef,
+  // newTaskAdded,
+  // lastTaskRef,
   setTasks,
   setTaskId,
 }: TaskListProps) {
@@ -46,12 +44,14 @@ export default function TaskList({
   const [taskToDeleteFromDetail, setTaskToDeleteFromDetail] =
     useState<Task | null>(null);
   const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
+  const [isRenameModalVisible, setIsRenameModalVisible] = useState(false);
+  const [taskToRename, setTaskToRename] = useState<Task | null>(null);
+  const [newTitle, setNewTitle] = useState<string>("");
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      // Đóng bất kỳ dropdown nào đang mở nếu click không nằm trong một dropdown
       if (openDropdownId !== null) {
         let isClickInsideDropdown = false;
-        // Kiểm tra xem click có nằm trong bất kỳ .dots-menu nào không
         const dotsMenus = document.querySelectorAll(".dots-menu");
         dotsMenus.forEach((menu) => {
           if (menu.contains(event.target as Node)) {
@@ -70,14 +70,16 @@ export default function TaskList({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [openDropdownId]); // Dependency a
+  }, [openDropdownId]);
+
   const handleClickTask = (taskId: string) => {
     if (editingId === null) setSelectedTaskId(taskId);
   };
+
   const toggleDropdown = (taskId: number) => {
-    // Hoặc string nếu task.id là string
     setOpenDropdownId((prevId) => (prevId === taskId ? null : taskId));
   };
+
   const handleCloseModal = () => {
     setSelectedTaskId(null);
     setEditingId(null);
@@ -100,9 +102,58 @@ export default function TaskList({
       handleCloseDeleteConfirmModal();
     }
   };
+
+  const handleOpenRenameModal = (task: Task) => {
+    setTaskToRename(task);
+    setNewTitle(task.title);
+    setIsRenameModalVisible(true);
+    setOpenDropdownId(null);
+  };
+
+  const handleCloseRenameModal = () => {
+    setIsRenameModalVisible(false);
+    setTaskToRename(null);
+    setNewTitle("");
+  };
+
+  const handleConfirmRename = async () => {
+    if (taskToRename && newTitle.trim() !== "") {
+      try {
+        const { error } = await supabase
+          .from("tasks")
+          .update({ title: newTitle.trim() })
+          .eq("id", taskToRename.id);
+
+        if (error) {
+          throw new Error(error.message);
+        }
+
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task.id === taskToRename.id
+              ? { ...task, title: newTitle.trim() }
+              : task
+          )
+        );
+
+        toast.success("✏️ Task renamed successfully!");
+        handleCloseRenameModal();
+      } catch (error) {
+        console.error("Failed to update task:", error);
+        toast.error("Failed to rename task");
+
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task.id === taskToRename.id ? taskToRename : task
+          )
+        );
+      }
+    }
+  };
   if (false) {
     handleOpenDeleteConfirmModal({} as Task);
   }
+
   if (tasks.length === 0) {
     return (
       <div style={{ marginTop: 50, textAlign: "center" }}>
@@ -119,7 +170,6 @@ export default function TaskList({
           <div className="dashboard-header">
             <h2>
               <span className="logo">T</span>
-              TaskBoard
             </h2>
           </div>
 
@@ -180,14 +230,12 @@ export default function TaskList({
           </div>
         </div>
 
-        {/* Content Area */}
         <div className="content-area">
           <div className="content-header">
-            <h1>Design Project</h1>
+            <h1></h1>
           </div>
 
           <div className="task-sections">
-            {/* Pending Tasks */}
             <div className="task-section">
               <div className="section-header pending">
                 <span className="status-indicator"></span>
@@ -206,8 +254,12 @@ export default function TaskList({
                   .filter((task) => (task.status as string) === "todo")
                   .map((task) => (
                     <li key={task.id} className="task-item">
-                      {/* <div className="task-link"> */}
-                      <h3 className="task-title">{task.title}</h3>
+                      <h3
+                        className="task-title"
+                        onClick={() => handleClickTask(task.id.toString())}
+                      >
+                        {task.title}
+                      </h3>
                       <div className="task-assignee">
                         <div className="assignee-avatar">JD</div>
                       </div>
@@ -228,53 +280,29 @@ export default function TaskList({
                         <button
                           className="dots-button"
                           onClick={(e) => {
-                            e.stopPropagation(); // Ngăn chặn sự kiện click lan ra li.task-item (nếu li.task-item có click handler riêng)
+                            e.stopPropagation();
                             toggleDropdown(task.id);
                           }}
-                          aria-expanded={
-                            openDropdownId === task.id ? "true" : "false"
-                          }
                         >
                           ⋮
                         </button>
-                        {/* Thêm class 'active' dựa trên openDropdownId */}
-                        <div
-                          className={`dots-dropdown ${
-                            openDropdownId === task.id ? "active" : ""
-                          }`}
-                        >
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setEditingId(task.id);
-                              handleCloseModal();
-                              setOpenDropdownId(null);
-                            }}
-                          >
-                            {" "}
-                            Edit
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              confirmDeleteTask(task);
-                              handleCloseModal();
-                              setOpenDropdownId(null);
-                            }}
-                          >
-                            {" "}
-                            Delete
-                          </button>
-                        </div>
+                        {openDropdownId === task.id && (
+                          <div className="dots-dropdown">
+                            <button onClick={() => handleOpenRenameModal(task)}>
+                              Rename
+                            </button>
+                            <button onClick={() => confirmDeleteTask(task)}>
+                              Delete
+                            </button>
+                          </div>
+                        )}
                       </div>
-                      {/* </div> */}
                     </li>
                   ))}
               </ul>
               <button className="add-task-btn">+ Add Task</button>
             </div>
 
-            {/* In Progress Tasks */}
             <div className="task-section">
               <div className="section-header in-progress">
                 <span className="status-indicator"></span>
@@ -293,8 +321,12 @@ export default function TaskList({
                   .filter((task) => (task.status as string) === "in-progress")
                   .map((task) => (
                     <li key={task.id} className="task-item">
-                      {/* <div className="task-link"> */}
-                      <h3 className="task-title">{task.title}</h3>
+                      <h3
+                        className="task-title clickable"
+                        onClick={() => handleClickTask(task.id.toString())}
+                      >
+                        {task.title}
+                      </h3>
                       <div className="task-assignee">
                         <div className="assignee-avatar">JD</div>
                       </div>
@@ -312,24 +344,58 @@ export default function TaskList({
                         {task.status}
                       </span>
                       <div className="dots-menu">
-                        <button className="dots-button">⋮</button>
-                        <div className="dots-dropdown">
-                          <button onClick={() => setEditingId(task.id)}>
-                            Edit
+                        <div
+                          className="dots-wrapper"
+                          onMouseEnter={() => {
+                            setTimeout(() => {
+                              const tooltip = document.getElementById(
+                                `tooltip-${task.id}`
+                              );
+                              if (tooltip)
+                                tooltip.classList.add("tooltip-visible");
+                            }, 1000);
+                          }}
+                          onMouseLeave={() => {
+                            const tooltip = document.getElementById(
+                              `tooltip-${task.id}`
+                            );
+                            if (tooltip)
+                              tooltip.classList.remove("tooltip-visible");
+                          }}
+                        >
+                          <button
+                            className="dots-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleDropdown(task.id);
+                            }}
+                          >
+                            ⋮
                           </button>
-                          <button onClick={() => confirmDeleteTask(task)}>
-                            Delete
-                          </button>
+                          <div id={`tooltip-${task.id}`} className="tooltip">
+                            Other operations
+                          </div>
                         </div>
+                        {openDropdownId === task.id && (
+                          <div
+                            className="dots-dropdown"
+                            style={{ position: "absolute", zIndex: 9999 }}
+                          >
+                            <button onClick={() => handleOpenRenameModal(task)}>
+                              Rename
+                            </button>
+                            <button onClick={() => confirmDeleteTask(task)}>
+                              Delete
+                            </button>
+                          </div>
+                        )}
                       </div>
-                      {/* </div> */}
                     </li>
                   ))}
               </ul>
               <button className="add-task-btn">+ Add Task</button>
             </div>
 
-            {/* Completed Tasks */}
             <div className="task-section">
               <div className="section-header completed">
                 <span className="status-indicator"></span>
@@ -348,8 +414,12 @@ export default function TaskList({
                   .filter((task) => (task.status as string) === "done")
                   .map((task) => (
                     <li key={task.id} className="task-item">
-                      {/* <div className="task-link"> */}
-                      <h3 className="task-title">{task.title}</h3>
+                      <h3
+                        className="task-title clickable"
+                        onClick={() => handleClickTask(task.id.toString())}
+                      >
+                        {task.title}
+                      </h3>
                       <div className="task-assignee">
                         <div className="assignee-avatar">JD</div>
                       </div>
@@ -367,17 +437,26 @@ export default function TaskList({
                         {task.status}
                       </span>
                       <div className="dots-menu">
-                        <button className="dots-button">⋮</button>
-                        <div className="dots-dropdown">
-                          <button onClick={() => setEditingId(task.id)}>
-                            Edit
-                          </button>
-                          <button onClick={() => confirmDeleteTask(task)}>
-                            Delete
-                          </button>
-                        </div>
+                        <button
+                          className="dots-button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleDropdown(task.id);
+                          }}
+                        >
+                          ⋮
+                        </button>
+                        {openDropdownId === task.id && (
+                          <div className="dots-dropdown">
+                            <button onClick={() => handleOpenRenameModal(task)}>
+                              Rename
+                            </button>
+                            <button onClick={() => confirmDeleteTask(task)}>
+                              Delete
+                            </button>
+                          </div>
+                        )}
                       </div>
-                      {/* </div> */}
                     </li>
                   ))}
               </ul>
@@ -394,8 +473,6 @@ export default function TaskList({
           setTaskId={setSelectedTaskId}
           editingId={editingId}
           setEditingId={setEditingId}
-          // newTitle={newTitle}
-          // setNewTitle={setNewTitle}
           newDescription={newDescription}
           setNewDescription={setNewDescription}
           updateTask={updateTask}
@@ -422,6 +499,27 @@ export default function TaskList({
           <strong>{taskToDeleteFromDetail?.title}</strong>"?
         </p>
         <p>This action cannot be undone.</p>
+      </Modal>
+
+      <Modal
+        title="Rename Task"
+        open={isRenameModalVisible}
+        onOk={handleConfirmRename}
+        onCancel={handleCloseRenameModal}
+        okText="Rename"
+        cancelText="Cancel"
+        okButtonProps={{ disabled: !newTitle.trim() }}
+      >
+        <div>
+          <Input
+            id="taskTitle"
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+            placeholder="Enter task title"
+            autoFocus
+            onPressEnter={handleConfirmRename}
+          />
+        </div>
       </Modal>
     </>
   );

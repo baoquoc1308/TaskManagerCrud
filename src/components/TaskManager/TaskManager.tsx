@@ -33,9 +33,9 @@ function TaskManager({
   const [newTaskAdded, setNewTaskAdded] = useState<number | null>(null);
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  // const fileInputRef = useRef<HTMLInputElement>(null);
   const [newTask, setNewTask] = useState({ title: "", description: "" });
-  const [taskImage, setTaskImage] = useState<File | null>(null);
+  // const [taskImage, setTaskImage] = useState<File | null>(null);
   const [editingId, setEditingId] = useState<number | null>(null);
   // const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
@@ -86,67 +86,6 @@ function TaskManager({
   }, [displayedTasks, tasks, newTaskAdded]);
 
   // Realtime subscription
-  // useEffect(() => {
-  //   const channel = supabase.channel("tasks-channel");
-  //   channel
-  //     .on(
-  //       "postgres_changes",
-  //       { event: "INSERT", schema: "public", table: "tasks" },
-  //       (payload) => {
-  //         const newTask = payload.new as Task;
-  //         setTasks((prev) => {
-  //           const updatedTasks = [...prev, newTask];
-  //           const lastPage = Math.ceil(updatedTasks.length / pageSize);
-  //           setCurrentPage(lastPage);
-  //           return updatedTasks;
-  //         });
-
-  //         if (filteredTasks !== null) {
-  //           setFilteredTasks((prev) => [...(prev ?? []), newTask]);
-  //         }
-  //       }
-  //     )
-  //     .subscribe();
-
-  //   return () => {
-  //     channel.unsubscribe();
-  //   };
-  // }, [filteredTasks, pageSize]);
-  // Realtime subscription
-  // useEffect(() => {
-  //   const channel = supabase.channel("tasks-channel");
-  //   channel
-  //     .on(
-  //       "postgres_changes",
-  //       { event: "INSERT", schema: "public", table: "tasks" },
-  //       (payload) => {
-  //         const newTask = payload.new as Task;
-
-  //         setTasks((prevTasks) => {
-  //           const updatedTasks = [...prevTasks, newTask];
-  //           const lastPage = Math.ceil(updatedTasks.length / pageSize);
-  //           setCurrentPage(lastPage);
-  //           return updatedTasks;
-  //         });
-
-  //         setFilteredTasks((prevFilteredTasks) => {
-  //           return [...(prevFilteredTasks ?? []), newTask];
-  //         });
-  //       }
-  //     )
-  //     .subscribe((status) => {
-  //       if (status === "SUBSCRIBED") {
-  //       }
-  //       if (status === "CHANNEL_ERROR") {
-  //       }
-  //       if (status === "TIMED_OUT") {
-  //       }
-  //     });
-
-  //   return () => {
-  //     supabase.removeChannel(channel);
-  //   };
-  // }, [supabase, pageSize, setTasks, setCurrentPage, setFilteredTasks]);
   useEffect(() => {
     const channel = supabase.channel("tasks-channel");
 
@@ -337,7 +276,6 @@ function TaskManager({
         onLogout={onLogout}
         userRole={userRole}
       />
-      <h2>TASK MANAGER</h2>
 
       <SubmitTaskDropdown
         session={session}

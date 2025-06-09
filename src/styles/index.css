@@ -3,6 +3,7 @@
   --text-color: #000000;
   --button-bg: #f9f9f9;
   --button-hover-border: #646cff;
+  --input-height: 50px;
 
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -60,7 +61,7 @@ button {
 
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: auto;
 }
 
 @media (prefers-color-scheme: dark) {

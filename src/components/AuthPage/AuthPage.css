@@ -51,4 +51,9 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   cursor: pointer;
+  background-color: #3fcf8e;
+  color: #fff;
+}
+.social-login-btn:hover {
+  background-color: #35b97f;
 }

@@ -8,7 +8,9 @@ export interface Task {
   created_at: string;
   image_url: string;
   time?: string;
+  email: string;
   priority?: Priority;
   status?: Status;
   avatar_url?: string;
+  user_id?: string;
 }

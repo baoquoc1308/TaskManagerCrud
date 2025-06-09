@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { Task } from "../../types/Task";
 // import {
 //   getPriorityBadgeClass,
@@ -10,6 +10,7 @@ import TaskDetail from "../TaskDetail";
 import { Empty, Modal, Input } from "antd";
 import FormattedTime from "../../utils/FormattedTime";
 import { toast } from "react-toastify";
+import ThemeToggle from "../ThemeToggle";
 
 interface TaskListProps {
   tasks: Task[];
@@ -23,6 +24,7 @@ interface TaskListProps {
   lastTaskRef: React.RefObject<HTMLLIElement | null>;
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
   setTaskId: React.Dispatch<React.SetStateAction<string | null>>;
+  submitComponent?: React.ReactNode;
 }
 
 export default function TaskList({
@@ -37,6 +39,7 @@ export default function TaskList({
   // lastTaskRef,
   setTasks,
   setTaskId,
+  submitComponent,
 }: TaskListProps) {
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [isDeleteConfirmModalVisible, setIsDeleteConfirmModalVisible] =
@@ -48,29 +51,29 @@ export default function TaskList({
   const [taskToRename, setTaskToRename] = useState<Task | null>(null);
   const [newTitle, setNewTitle] = useState<string>("");
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (openDropdownId !== null) {
-        let isClickInsideDropdown = false;
-        const dotsMenus = document.querySelectorAll(".dots-menu");
-        dotsMenus.forEach((menu) => {
-          if (menu.contains(event.target as Node)) {
-            isClickInsideDropdown = true;
-          }
-        });
+  // useEffect(() => {
+  //   const handleClickOutside = (event: MouseEvent) => {
+  //     if (openDropdownId !== null) {
+  //       let isClickInsideDropdown = false;
+  //       const dotsMenus = document.querySelectorAll(".dots-menu");
+  //       dotsMenus.forEach((menu) => {
+  //         if (menu.contains(event.target as Node)) {
+  //           isClickInsideDropdown = true;
+  //         }
+  //       });
 
-        if (!isClickInsideDropdown) {
-          setOpenDropdownId(null);
-        }
-      }
-    };
+  //       if (!isClickInsideDropdown) {
+  //         setOpenDropdownId(null);
+  //       }
+  //     }
+  //   };
 
-    document.addEventListener("mousedown", handleClickOutside);
+  //   document.addEventListener("mousedown", handleClickOutside);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [openDropdownId]);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [openDropdownId]);
 
   const handleClickTask = (taskId: string) => {
     if (editingId === null) setSelectedTaskId(taskId);
@@ -150,6 +153,13 @@ export default function TaskList({
       }
     }
   };
+  const getInitialsFromEmail = (email: string) => {
+    if (!email) return "NA";
+    const username = email.split("@")[0]; // lấy phần trước dấu @
+    if (username.length === 1) return username[0].toUpperCase();
+    return (username[0] + username[username.length - 1]).toUpperCase();
+  };
+
   if (false) {
     handleOpenDeleteConfirmModal({} as Task);
   }
@@ -173,9 +183,8 @@ export default function TaskList({
             </h2>
           </div>
 
-          <button className="add-new-btn">+ Add New</button>
-
           <ul className="dashboard-menu">
+            <li> {submitComponent}</li>
             <li>
               <a href="#" className="active">
                 <span className="icon">📋</span>Dashboard
@@ -190,11 +199,19 @@ export default function TaskList({
             <li>
               <a href="#">
                 <span className="icon">👥</span>Teams
+                <span className="badge">2</span>
               </a>
             </li>
             <li>
               <a href="#">
                 <span className="icon">📊</span>Analytics
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span className="icon">🌙</span>
+                <span style={{ marginRight: "17px" }}>Dark Mode</span>
+                <ThemeToggle />
               </a>
             </li>
             <li>
@@ -232,7 +249,7 @@ export default function TaskList({
 
         <div className="content-area">
           <div className="content-header">
-            <h1></h1>
+            <h1>ALL TASKS</h1>
           </div>
 
           <div className="task-sections">
@@ -244,7 +261,7 @@ export default function TaskList({
               <div className="task-table-header">
                 <div>Name</div>
                 <div>Assignee</div>
-                <div>Due Date</div>
+                <div>Date</div>
                 <div>Priority</div>
                 <div>Status</div>
                 <div></div>
@@ -261,8 +278,20 @@ export default function TaskList({
                         {task.title}
                       </h3>
                       <div className="task-assignee">
-                        <div className="assignee-avatar">JD</div>
+                        {task.avatar_url ? (
+                          <img
+                            src={task.avatar_url}
+                            alt="avatar"
+                            className="assignee-avatar-img"
+                            referrerPolicy="no-referrer"
+                          />
+                        ) : (
+                          <div className="assignee-avatar">
+                            {getInitialsFromEmail(task.email)}
+                          </div>
+                        )}
                       </div>
+
                       <div className="task-due-date">
                         <FormattedTime isoString={task.time} />
                       </div>
@@ -277,15 +306,38 @@ export default function TaskList({
                         {task.status}
                       </span>
                       <div className="dots-menu">
-                        <button
-                          className="dots-button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleDropdown(task.id);
+                        <div
+                          className="dots-wrapper"
+                          onMouseEnter={() => {
+                            setTimeout(() => {
+                              const tooltip = document.getElementById(
+                                `tooltip-${task.id}`
+                              );
+                              if (tooltip)
+                                tooltip.classList.add("tooltip-visible");
+                            }, 1000);
+                          }}
+                          onMouseLeave={() => {
+                            const tooltip = document.getElementById(
+                              `tooltip-${task.id}`
+                            );
+                            if (tooltip)
+                              tooltip.classList.remove("tooltip-visible");
                           }}
                         >
-                          ⋮
-                        </button>
+                          <button
+                            className="dots-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleDropdown(task.id);
+                            }}
+                          >
+                            ⋮
+                          </button>
+                          <div id={`tooltip-${task.id}`} className="tooltip">
+                            Other operations
+                          </div>
+                        </div>
                         {openDropdownId === task.id && (
                           <div className="dots-dropdown">
                             <button onClick={() => handleOpenRenameModal(task)}>
@@ -311,7 +363,7 @@ export default function TaskList({
               <div className="task-table-header">
                 <div>Name</div>
                 <div>Assignee</div>
-                <div>Due Date</div>
+                <div>Date</div>
                 <div>Priority</div>
                 <div>Status</div>
                 <div></div>
@@ -328,7 +380,17 @@ export default function TaskList({
                         {task.title}
                       </h3>
                       <div className="task-assignee">
-                        <div className="assignee-avatar">JD</div>
+                        {task.avatar_url ? (
+                          <img
+                            src={task.avatar_url}
+                            alt="avatar"
+                            className="assignee-avatar-img"
+                          />
+                        ) : (
+                          <div className="assignee-avatar">
+                            {getInitialsFromEmail(task.email)}
+                          </div>
+                        )}
                       </div>
                       <div className="task-due-date">
                         <FormattedTime isoString={task.time} />
@@ -404,7 +466,7 @@ export default function TaskList({
               <div className="task-table-header">
                 <div>Name</div>
                 <div>Assignee</div>
-                <div>Due Date</div>
+                <div>Date</div>
                 <div>Priority</div>
                 <div>Status</div>
                 <div></div>
@@ -421,7 +483,17 @@ export default function TaskList({
                         {task.title}
                       </h3>
                       <div className="task-assignee">
-                        <div className="assignee-avatar">JD</div>
+                        {task.avatar_url ? (
+                          <img
+                            src={task.avatar_url}
+                            alt="avatar"
+                            className="assignee-avatar-img"
+                          />
+                        ) : (
+                          <div className="assignee-avatar">
+                            {getInitialsFromEmail(task.email)}
+                          </div>
+                        )}
                       </div>
                       <div className="task-due-date">
                         <FormattedTime isoString={task.time} />
@@ -437,15 +509,38 @@ export default function TaskList({
                         {task.status}
                       </span>
                       <div className="dots-menu">
-                        <button
-                          className="dots-button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleDropdown(task.id);
+                        <div
+                          className="dots-wrapper"
+                          onMouseEnter={() => {
+                            setTimeout(() => {
+                              const tooltip = document.getElementById(
+                                `tooltip-${task.id}`
+                              );
+                              if (tooltip)
+                                tooltip.classList.add("tooltip-visible");
+                            }, 1000);
+                          }}
+                          onMouseLeave={() => {
+                            const tooltip = document.getElementById(
+                              `tooltip-${task.id}`
+                            );
+                            if (tooltip)
+                              tooltip.classList.remove("tooltip-visible");
                           }}
                         >
-                          ⋮
-                        </button>
+                          <button
+                            className="dots-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleDropdown(task.id);
+                            }}
+                          >
+                            ⋮
+                          </button>
+                          <div id={`tooltip-${task.id}`} className="tooltip">
+                            Other operations
+                          </div>
+                        </div>
                         {openDropdownId === task.id && (
                           <div className="dots-dropdown">
                             <button onClick={() => handleOpenRenameModal(task)}>
@@ -502,7 +597,7 @@ export default function TaskList({
       </Modal>
 
       <Modal
-        title="Rename Task"
+        title="Rename"
         open={isRenameModalVisible}
         onOk={handleConfirmRename}
         onCancel={handleCloseRenameModal}

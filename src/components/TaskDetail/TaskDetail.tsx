@@ -163,7 +163,6 @@ function TaskDetail({
       setNewDescription(task.description);
     }
   };
-
   const handleDeleteTask = async () => {
     if (!task) return;
 
@@ -174,6 +173,7 @@ function TaskDetail({
       toast.error("❌ Failed to delete task");
     } else {
       toast.success("🗑️ Task deleted successfully!");
+
       setShowDeleteModal(false);
       onDeleteSuccess(task.id);
       onClose();

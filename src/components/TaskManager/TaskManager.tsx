@@ -58,11 +58,10 @@ function TaskManager({
     priority: "",
     time: "",
   });
-
   // useEffect(() => {
   //   fetchTasks(currentPage, pageSize, setTasks, setTotalPages, setTotalCount);
   // }, [currentPage]);
-
+  const avatarUrl = session?.user?.user_metadata?.avatar_url ?? "";
   useEffect(() => {
     if (newTaskAdded !== null) {
       const dataSource = filteredTasks ?? tasks;
@@ -273,27 +272,11 @@ function TaskManager({
     <div className="task-manager">
       <TaskManagerHeader
         userEmail={userEmail}
+        avatarUrl={avatarUrl}
         onLogout={onLogout}
         userRole={userRole}
       />
 
-      <SubmitTaskDropdown
-        session={session}
-        newTask={newTask}
-        setNewTask={setNewTask}
-        setCurrentPage={setCurrentPage}
-        setTotalCount={setTotalCount}
-        setNewTaskAdded={setNewTaskAdded}
-        pageSize={pageSize}
-        currentPage={currentPage}
-        setTasks={setTasks}
-        setTotalPages={setTotalPages}
-        setKeyword={setKeyword}
-        setPriority={setPriority}
-        setDate={setDate}
-        setShowPriority={setShowPriority}
-        setShowDatePicker={setShowDatePicker}
-      />
       <SearchTasks
         keyword={keyword}
         setKeyword={setKeyword}
@@ -334,6 +317,25 @@ function TaskManager({
         lastTaskRef={lastTaskRef}
         setTaskId={setTaskId}
         setTasks={setTasks}
+        submitComponent={
+          <SubmitTaskDropdown
+            session={session}
+            newTask={newTask}
+            setNewTask={setNewTask}
+            setCurrentPage={setCurrentPage}
+            setTotalCount={setTotalCount}
+            setNewTaskAdded={setNewTaskAdded}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            setTasks={setTasks}
+            setTotalPages={setTotalPages}
+            setKeyword={setKeyword}
+            setPriority={setPriority}
+            setDate={setDate}
+            setShowPriority={setShowPriority}
+            setShowDatePicker={setShowDatePicker}
+          />
+        }
       />
 
       <DeleteModal

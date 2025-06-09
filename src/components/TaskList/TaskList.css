@@ -36,7 +36,7 @@
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
-  overflow: hidden;
+  /* overflow: hidden; */
   text-overflow: ellipsis;
   line-clamp: 1;
 }
@@ -50,7 +50,7 @@
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  overflow: hidden;
+  /* overflow: hidden; */
   text-overflow: ellipsis;
   line-clamp: 2;
 }
@@ -112,12 +112,28 @@
   background-color: #2d912d;
 }
 .cancel-btn {
-  background-color: #3fcf8e;
-  border: 1px solid #cbd5e1;
+  width: 110px;
+  font-family: sans-serif;
+  font-size: 16px;
+  color: #302670;
+  font-weight: normal;
+  padding: 8px 12px;
+  align-items: center;
+  background-color: transparent;
+  border: 1px solid #302670;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .cancel-btn:hover {
-  background-color: #35b97f;
+  background-color: #d6d0f1;
+  transition: all 0.3s ease;
+}
+.cancel-icon {
+  font-size: 12px;
+}
+.cancel-btn:focus {
+  outline: 4px auto;
 }
 .task-item span.time-meta {
   display: flex;
@@ -575,14 +591,6 @@
   background-color: #f5f5f5;
 }
 
-.dashboard {
-  width: 250px;
-  background-color: #ffffff;
-  border-right: 1px solid #e1e5e9;
-  padding: 20px;
-  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
-}
-
 .dashboard h2 {
   font-size: 18px;
   font-weight: 600;
@@ -795,15 +803,6 @@
     sans-serif;
 }
 
-.dashboard {
-  width: 260px;
-  background-color: #ffffff;
-  border-right: 1px solid #e1e5e9;
-  padding: 0;
-  box-shadow: 1px 0 3px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-}
-
 .dashboard-header {
   padding: 20px;
   border-bottom: 1px solid #e1e5e9;
@@ -903,7 +902,9 @@
   margin-top: 20px;
   padding: 0 20px;
 }
-
+.dark .project-item {
+  color: #fff;
+}
 .projects-section h3 {
   font-size: 12px;
   text-transform: uppercase;
@@ -912,7 +913,12 @@
   margin-bottom: 12px;
   letter-spacing: 0.5px;
 }
-
+.dark .projects-section {
+  border-top: 2px solid #fff;
+}
+.dark .projects-section h3 {
+  color: #fff;
+}
 .project-item {
   display: flex;
   align-items: center;
@@ -949,14 +955,18 @@
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
-
+.dark .content-header {
+  background-color: #333;
+}
 .content-header h1 {
   margin: 0;
   font-size: 24px;
   font-weight: 600;
   color: #1a1a1a;
 }
-
+.dark .content-header h1 {
+  color: #fff;
+}
 .task-sections {
   flex-direction: column;
   gap: 24px;
@@ -966,7 +976,7 @@
   background: white;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .section-header .status-indicator {
@@ -1113,12 +1123,10 @@
 
 .dots-dropdown button:first-child {
   border-radius: 6px 6px 0 0;
-  z-index: 9999;
 }
 
 .dots-dropdown button:last-child {
   border-radius: 0 0 6px 6px;
-  z-index: 9999;
 }
 
 .add-task-btn {
@@ -1131,7 +1139,9 @@
 .add-task-btn:hover {
   background-color: #f8f9fa;
 }
-
+.add-task-btn:focus {
+  outline: 4px auto;
+}
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -1470,13 +1480,20 @@ body {
 
 .dashboard {
   width: 250px;
-  background-color: #ffffff;
+  background-color: #ece2e2;
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
+  border-right: 1px solid #e1e5e9;
+  overflow-y: auto;
 }
-
+.dark .dashboard {
+  background-color: #333;
+}
+.dark .dashboard-menu a {
+  color: #fff;
+}
 .dashboard-header {
   margin-bottom: 20px;
 }
@@ -1554,7 +1571,7 @@ body {
 
 .projects-section {
   margin-top: 20px;
-  border-top: 1px solid #eee;
+  border-top: 2px solid #333;
   padding-top: 20px;
 }
 
@@ -1582,7 +1599,9 @@ body {
   padding: 20px;
   overflow-y: auto;
 }
-
+.dark .content-area {
+  background-color: var(--bg-color);
+}
 .content-header h1 {
   font-size: 2rem;
   color: #333;
@@ -1600,7 +1619,9 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
 }
-
+.dark .task-section {
+  background-color: #333;
+}
 .section-header {
   font-size: 1.2rem;
   font-weight: bold;
@@ -1612,7 +1633,10 @@ body {
   color: #343a40;
   background-color: #f8f9fa;
 }
-
+.dark .section-header {
+  background-color: #333;
+  color: #fff;
+}
 .section-header .status-indicator {
   width: 10px;
   height: 10px;
@@ -1658,7 +1682,10 @@ body {
   border-bottom: 1px solid #e0e0e0;
   align-items: center;
 }
-
+.dark .task-table-header {
+  background-color: #626263;
+  color: #fff;
+}
 .task-list {
   list-style: none;
   padding: 0;
@@ -1745,7 +1772,9 @@ body {
   justify-content: flex-end;
 }
 
-.dots-menu:hover .dots-dropdown,
+.dots-dropdown {
+  display: none;
+}
 .dots-dropdown.active {
   display: block;
 }
@@ -1819,8 +1848,10 @@ body {
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  z-index: 9999;
   min-width: 100px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  z-index: 999999;
 }
 
 .dots-dropdown.active {
@@ -1845,6 +1876,13 @@ body {
 .task-title {
   cursor: pointer;
 }
+.dark .task-list {
+  background-color: #333;
+}
+.dark .task-item {
+  background-color: #333;
+  color: #fff;
+}
 .dots-button {
   position: relative;
   background: none;
@@ -1853,15 +1891,16 @@ body {
   cursor: pointer;
   padding: 8px;
   transition: all 0.3s ease;
-  z-index: 9999;
   line-height: 1;
   transform: translateY(-8px);
+  z-index: auto;
 }
-
+.dark .dots-button {
+  color: #fff;
+}
 .dots-button:hover {
   border-radius: 50%;
   background-color: rgba(0, 0, 0, 0.1);
-  z-index: 9999;
 }
 
 .tooltip {
@@ -1886,4 +1925,40 @@ body {
 
 .dots-wrapper:hover .tooltip-visible {
   opacity: 1;
+}
+.dots-menu {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  overflow: visible;
+}
+
+.dots-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  min-width: 120px;
+  padding: 5px 0;
+  z-index: 999999; /* Đảm bảo nổi trên mọi thứ */
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.2s;
+}
+
+.dots-dropdown.active {
+  display: block;
+}
+
+.task-item {
+  overflow: visible;
+}
+
+.task-list {
+  overflow: visible;
 }

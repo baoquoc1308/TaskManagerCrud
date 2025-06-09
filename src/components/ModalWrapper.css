@@ -150,14 +150,14 @@
   width: 110px;
   font-family: sans-serif;
   font-size: 16px;
-  color: #302670;
+  color: #6a5acd;
   font-weight: normal;
   padding: 8px 12px;
   display: inline-flex;
   align-items: center;
   gap: 5px;
   background-color: transparent;
-  border: 1px solid #302670;
+  border: 1px solid #6a5acd;
   cursor: pointer;
   text-decoration: none;
 }
@@ -367,12 +367,9 @@
   justify-content: center;
   margin-top: 1rem;
 }
-.modal-content h3 {
-  margin-bottom: 15px;
-  color: #463f4d;
-}
+
 .task-form {
-  width: 100%;
+  width: 50%; /* Tổng chiều rộng mong muốn */
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -508,6 +505,7 @@ textarea::placeholder {
 input[type="datetime-local"]::placeholder {
   color: #333;
 }
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -516,36 +514,76 @@ input[type="datetime-local"]::placeholder {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
   display: flex;
-  justify-content: center;
   align-items: center;
-  animation: fadeIn 0.3s ease forwards;
+  justify-content: center;
   z-index: 999;
 }
 
 .modal-content {
-  background-color: white;
+  background: white;
+  padding: 24px;
   border-radius: 10px;
-  padding: 20px;
-  width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-  transform: scale(0.95);
-  opacity: 0;
-  animation: scaleIn 0.3s ease forwards;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
 }
 
-@keyframes fadeIn {
-  from {
-    background-color: rgba(0, 0, 0, 0);
-  }
-  to {
-    background-color: rgba(0, 0, 0, 0.4);
-  }
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
-@keyframes scaleIn {
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+.modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.modal-form input,
+.modal-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.modal-form .select-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.modal-form .actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-form .actions button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.modal-form .submit-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.modal-form .cancel-button {
+  background-color: #ccc;
+  color: #333;
 }

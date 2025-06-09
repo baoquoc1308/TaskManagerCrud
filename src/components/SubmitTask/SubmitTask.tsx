@@ -160,89 +160,101 @@ export const SubmitTaskDropdown = ({
     <div className="dropdown-task-form-container" ref={formRef}>
       <button
         type="button"
-        className="create-task-btn app-button"
+        className="create-task-btn"
         onClick={() => setOpen((prev) => !prev)}
       >
-        + Create Task
+        Create Task
       </button>
       {open && (
-        <div className="dropdown-form">
-          <form onSubmit={handleSubmit} className="task-form">
-            <input
-              type="text"
-              placeholder="Task Title"
-              value={newTask.title}
-              onChange={(e) =>
-                setNewTask((prev) => ({ ...prev, title: e.target.value }))
-              }
-              required
-            />
-            <input
-              type="datetime-local"
-              value={newTask.time || ""}
-              onChange={(e) =>
-                setNewTask((prev) => ({ ...prev, time: e.target.value }))
-              }
-              required
-            />
-            <Select
-              options={priorityOptions}
-              placeholder="Priority"
-              isSearchable={false}
-              value={
-                priorityOptions.find((opt) => opt.value === newTask.priority) ||
-                null
-              }
-              onChange={(option) =>
-                setNewTask((prev) => ({
-                  ...prev,
-                  priority: option?.value || "",
-                }))
-              }
-              className="priority-select"
-              classNamePrefix="react-select"
-            />
-            <Select
-              options={statusOptions}
-              placeholder="Status"
-              isSearchable={false}
-              value={
-                statusOptions.find((opt) => opt.value === newTask.status) ||
-                null
-              }
-              onChange={(option) =>
-                setNewTask((prev) => ({
-                  ...prev,
-                  status: option?.value || "",
-                }))
-              }
-              className="status-select"
-              classNamePrefix="react-select"
-            />
-            <textarea
-              placeholder="Task Description"
-              value={newTask.description}
-              onChange={(e) =>
-                setNewTask((prev) => ({
-                  ...prev,
-                  description: e.target.value,
-                }))
-              }
-              required
-            />
-            <div className="dropdown-actions">
-              <button type="submit" className="submit-button app-button">
-                Add Task
-              </button>
-              <button
-                type="button"
-                className="cancel-btn app-button"
-                onClick={() => setOpen(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
+        <div className="modal-overlay">
+          <div className="modal-content">
+            {" "}
+            <h3>CREATE TASK</h3>
+            <form onSubmit={handleSubmit} className="task-form">
+              <div className="row row-1">
+                <input
+                  type="text"
+                  placeholder="Task Title"
+                  value={newTask.title}
+                  onChange={(e) =>
+                    setNewTask((prev) => ({ ...prev, title: e.target.value }))
+                  }
+                  required
+                />
+                <textarea
+                  placeholder="Task Description"
+                  value={newTask.description}
+                  onChange={(e) =>
+                    setNewTask((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
+                  required
+                />
+              </div>
+
+              <div className="row row-2">
+                <input
+                  type="datetime-local"
+                  value={newTask.time || ""}
+                  onChange={(e) =>
+                    setNewTask((prev) => ({ ...prev, time: e.target.value }))
+                  }
+                  required
+                />
+                <Select
+                  options={priorityOptions}
+                  placeholder="Priority"
+                  isSearchable={false}
+                  menuPlacement="top"
+                  value={
+                    priorityOptions.find(
+                      (opt) => opt.value === newTask.priority
+                    ) || null
+                  }
+                  onChange={(option) =>
+                    setNewTask((prev) => ({
+                      ...prev,
+                      priority: option?.value || "",
+                    }))
+                  }
+                  className="priority-select"
+                  classNamePrefix="react-select"
+                />
+                <Select
+                  options={statusOptions}
+                  placeholder="Status"
+                  isSearchable={false}
+                  menuPlacement="top"
+                  value={
+                    statusOptions.find((opt) => opt.value === newTask.status) ||
+                    null
+                  }
+                  onChange={(option) =>
+                    setNewTask((prev) => ({
+                      ...prev,
+                      status: option?.value || "",
+                    }))
+                  }
+                  className="status-select"
+                  classNamePrefix="react-select"
+                />
+              </div>
+              <div className="dropdown-actions">
+                <button type="submit" className="submit-button">
+                  Add Task
+                </button>
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  onClick={() => setOpen(false)}
+                >
+                  <i className="fas fa-rotate-left cancel-icon"></i> Cancel
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

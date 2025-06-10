@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Bell } from "lucide-react";
 import "./TaskManagerHeader.css";
 
@@ -14,24 +13,20 @@ export default function TaskManagerHeader({
   userEmail,
   avatarUrl,
   onLogout,
-  userRole,
 }: {
   userEmail: string;
   avatarUrl: string | null;
   onLogout: () => void;
   userRole: string | null;
 }) {
-  const navigate = useNavigate();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
 
-  // Avatar dropdown & modal states
   const [showAvatarDropdown, setShowAvatarDropdown] = useState(false);
   const [showEditAvatarModal, setShowEditAvatarModal] = useState(false);
   const [tempAvatar, setTempAvatar] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Giả lập cập nhật avatar, thực tế bạn sẽ cần gọi API
   const [currentAvatar, setCurrentAvatar] = useState<string | null>(
     avatarUrl || null
   );
@@ -46,7 +41,6 @@ export default function TaskManagerHeader({
     setNotifications(notifications.filter((n) => n.id !== id));
   };
 
-  // Xử lý chọn file ảnh mới
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -58,7 +52,6 @@ export default function TaskManagerHeader({
     }
   };
 
-  // Xác nhận đổi avatar
   const handleSaveAvatar = () => {
     setCurrentAvatar(tempAvatar);
     setShowEditAvatarModal(false);
@@ -66,7 +59,6 @@ export default function TaskManagerHeader({
     setTempAvatar(null);
   };
 
-  // Đóng modal khi click nền tối
   const handleModalBackdropClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
@@ -76,7 +68,6 @@ export default function TaskManagerHeader({
     }
   };
 
-  // Đóng dropdown khi click ngoài
   useEffect(() => {
     const handleDocumentClick = (e: any) => {
       if (
@@ -96,16 +87,6 @@ export default function TaskManagerHeader({
         <i className="fas fa-clipboard-list list-icon"></i> TaskManager
       </div>
       <div className="header-right">
-        {userRole === "manager" && (
-          <button
-            onClick={() => navigate("/manager-dashboard")}
-            className="btn-manager-dashboard"
-          >
-            <i className="fas fa-tachometer-alt dashboard-icon"></i>
-            Manager Dashboard
-          </button>
-        )}
-
         {/* Notifications Bell */}
         <div className="notifications-wrapper">
           <button

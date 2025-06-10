@@ -216,7 +216,9 @@
   align-items: center;
   gap: 0.75rem;
 }
-
+.dark .performer-info span {
+  color: #fff;
+}
 .color-indicator {
   width: 12px;
   height: 12px;
@@ -518,7 +520,7 @@
 }
 
 .dark .total-count {
-  color: #9ca3af;
+  color: #fff;
 }
 
 .total-count span {
@@ -560,7 +562,7 @@
 }
 
 .dark .percentage {
-  color: #9ca3af;
+  color: #fff;
 }
 
 /* Responsive Design */

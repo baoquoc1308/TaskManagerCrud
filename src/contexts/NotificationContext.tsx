@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext } from "react";
 
 export interface AppNotification {
   id: string;
-  userId: string; // Thêm userId để xác định notification thuộc về user nào
+  userId: string;
   message: string;
   timestamp: string;
   isRead: boolean;

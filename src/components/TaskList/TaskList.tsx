@@ -11,7 +11,6 @@ import { Empty, Modal, Input } from "antd";
 import FormattedTime from "../../utils/FormattedTime";
 import { toast } from "react-toastify";
 import ThemeToggle from "../ThemeToggle";
-import { useNavigate } from "react-router-dom";
 import { NavLink, Link } from "react-router-dom";
 
 interface TaskListProps {
@@ -78,7 +77,6 @@ export default function TaskList({
   //     document.removeEventListener("mousedown", handleClickOutside);
   //   };
   // }, [openDropdownId]);
-  const navigate = useNavigate();
   const handleClickTask = (taskId: string) => {
     if (editingId === null) setSelectedTaskId(taskId);
   };

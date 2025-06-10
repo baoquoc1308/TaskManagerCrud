@@ -11,6 +11,7 @@ import { Empty, Modal, Input } from "antd";
 import FormattedTime from "../../utils/FormattedTime";
 import { toast } from "react-toastify";
 import ThemeToggle from "../ThemeToggle";
+import { NavLink, Link } from "react-router-dom";
 
 interface TaskListProps {
   tasks: Task[];
@@ -25,6 +26,7 @@ interface TaskListProps {
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
   setTaskId: React.Dispatch<React.SetStateAction<string | null>>;
   submitComponent?: React.ReactNode;
+  userRole?: string;
 }
 
 export default function TaskList({
@@ -40,6 +42,7 @@ export default function TaskList({
   setTasks,
   setTaskId,
   submitComponent,
+  userRole,
 }: TaskListProps) {
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [isDeleteConfirmModalVisible, setIsDeleteConfirmModalVisible] =
@@ -74,7 +77,6 @@ export default function TaskList({
   //     document.removeEventListener("mousedown", handleClickOutside);
   //   };
   // }, [openDropdownId]);
-
   const handleClickTask = (taskId: string) => {
     if (editingId === null) setSelectedTaskId(taskId);
   };
@@ -177,19 +179,36 @@ export default function TaskList({
       <div className="main-container">
         {/* Dashboard */}
         <div className="dashboard">
-          <div className="dashboard-header">
+          {/* <div className="dashboard-header">
             <h2>
-              <span className="logo">T</span>
+              <span className="logo">BQ</span>
             </h2>
-          </div>
+          </div> */}
 
           <ul className="dashboard-menu">
             <li> {submitComponent}</li>
+            {userRole === "manager" && (
+              <li>
+                <Link to="/manager-dashboard">
+                  <span className="icon">🏢</span> Manager
+                </Link>
+              </li>
+            )}
             <li>
-              <a href="#" className="active">
+              <NavLink
+                to="/"
+                className={({ isActive }) => (isActive ? "active" : "")}
+              >
                 <span className="icon">📋</span>Dashboard
-              </a>
+              </NavLink>
             </li>
+            {userRole === "user" && (
+              <li>
+                <Link to="/user-dashboard">
+                  <span className="icon">🏢</span> User Activity Chart
+                </Link>
+              </li>
+            )}
             <li>
               <a href="#">
                 <span className="icon">📥</span>Inbox
@@ -202,11 +221,7 @@ export default function TaskList({
                 <span className="badge">2</span>
               </a>
             </li>
-            <li>
-              <a href="#">
-                <span className="icon">📊</span>Analytics
-              </a>
-            </li>
+
             <li>
               <a href="#">
                 <span className="icon">🌙</span>
@@ -248,9 +263,9 @@ export default function TaskList({
         </div>
 
         <div className="content-area">
-          <div className="content-header">
+          {/* <div className="content-header">
             <h1>ALL TASKS</h1>
-          </div>
+          </div> */}
 
           <div className="task-sections">
             <div className="task-section">

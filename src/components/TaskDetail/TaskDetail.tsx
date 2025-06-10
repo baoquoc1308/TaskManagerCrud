@@ -80,40 +80,6 @@ function TaskDetail({
     }
   }, [isEditingThisTask, task, setNewDescription]);
 
-  // useEffect(() => {
-  //   if (!task) return;
-
-  //   setTitleFontSize(24);
-  //   setDescFontSize(18);
-
-  //   const adjustFontSize = (
-  //     element: HTMLElement | null,
-  //     maxHeight: number,
-  //     minFontSize: number,
-  //     currentFontSize: number
-  //   ): number => {
-  //     if (!element) return currentFontSize;
-
-  //     let fontSize = currentFontSize;
-  //     element.style.fontSize = `${fontSize}px`;
-
-  //     while (element.scrollHeight > maxHeight && fontSize > minFontSize) {
-  //       fontSize -= 1;
-  //       element.style.fontSize = `${fontSize}px`;
-  //     }
-
-  //     return fontSize;
-  //   };
-
-  //   setTimeout(() => {
-  //     const newTitleFontSize = adjustFontSize(titleRef.current, 60, 14, 24);
-  //     setTitleFontSize(newTitleFontSize);
-
-  //     const newDescFontSize = adjustFontSize(descRef.current, 120, 12, 18);
-  //     setDescFontSize(newDescFontSize);
-  //   }, 50);
-  // }, [task]);
-
   const fetchRelatedTasks = async (priority: string, excludeId: string) => {
     const { data, error } = await supabase
       .from("tasks")
@@ -199,92 +165,44 @@ function TaskDetail({
         </button>
 
         <div className="task-detail-content">
-          <div className="task-image-section">
-            {task.image_url && (
-              <img src={task.image_url} alt="task" className="task-image" />
-            )}
-            <div className="task-buttons">
-              {isEditingThisTask ? (
-                <>
-                  <button className="save-button" onClick={handleSaveClick}>
-                    Save
-                  </button>
-                  <button className="cancel-button" onClick={handleCancelClick}>
-                    Cancel
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button className="edit-button" onClick={handleEditClick}>
-                    Edit
-                  </button>
-                  <button
-                    className="delete-button"
-                    onClick={() => setShowDeleteModal(true)}
-                  >
-                    Delete
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-
+          <h3>TASK DETAIL</h3>
           <div className="task-info-section">
             <div className="text-wrapper">
-              <h2>
-                <ExpandableText text={task.title} maxLines={2} />
-              </h2>
-
-              {/* <h2
-                ref={titleRef}
-                style={{ fontSize: `${titleFontSize}px` }}
-                className={`text-content ${
-                  showFullTitle ? "expanded-title" : "clamped-title"
-                }`}
+              <h5
+                style={{
+                  textAlign: "left",
+                  gap: "8px",
+                }}
               >
-                {task.title}
-              </h2> */}
-              {/* {task.title.length > 100 && (
-                <span
-                  className="read-toggle"
-                  onClick={() => setShowFullTitle(!showFullTitle)}
-                >
-                  {showFullTitle ? "Thu gọn" : "Xem thêm"}
-                </span>
-              )} */}
+                <span>Title:</span>
+                <ExpandableText text={task.title} maxLines={1} />
+              </h5>
             </div>
-
             <div className="text-wrapper description-wrapper">
               {isEditingThisTask ? (
-                <textarea
-                  value={newDescription}
-                  onChange={(e) => setNewDescription(e.target.value)}
-                  placeholder="Updated description..."
-                  className="edit-description-textarea"
-                  rows={5}
-                />
+                <>
+                  <p style={{ textAlign: "left" }}>
+                    <strong>Description:</strong>{" "}
+                  </p>
+                  <textarea
+                    value={newDescription}
+                    onChange={(e) => setNewDescription(e.target.value)}
+                    placeholder="Updated description..."
+                    className="edit-description-textarea"
+                    rows={5}
+                  />
+                </>
               ) : (
-                <ExpandableText text={task.description} maxLines={3} />
-                // <p
-                //   ref={descRef}
-                //   style={{ fontSize: `${descFontSize}px` }}
-                //   className={`text-content ${
-                //     showFullDesc ? "expanded-desc" : "clamped-desc"
-                //   }`}
-                // >
-                //   {task.description}
-                // </p>
+                <p style={{ textAlign: "left" }}>
+                  <strong>Description:</strong>{" "}
+                  <ExpandableText text={task.description} maxLines={3} />
+                </p>
               )}
-              {/* {!isEditingThisTask && task.description.length > 200 && (
-                <span
-                  className="read-toggle"
-                  onClick={() => setShowFullDesc(!showFullDesc)}
-                >
-                  {showFullDesc ? "Thu gọn" : "Xem thêm"}
-                </span>
-              )} */}
             </div>
 
+            <p>
+              <strong>Author:</strong> {task.email}
+            </p>
             <p>
               <strong>Time:</strong> <FormattedTime isoString={task.time} />
             </p>
@@ -303,6 +221,30 @@ function TaskDetail({
                 </span>
               </span>
             </div>
+          </div>
+          <div className="task-buttons">
+            {isEditingThisTask ? (
+              <>
+                <button className="save-button" onClick={handleSaveClick}>
+                  Save
+                </button>
+                <button className="cancel-button" onClick={handleCancelClick}>
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <>
+                <button className="edit-button" onClick={handleEditClick}>
+                  Edit
+                </button>
+                <button
+                  className="delete-button"
+                  onClick={() => setShowDeleteModal(true)}
+                >
+                  Delete
+                </button>
+              </>
+            )}
           </div>
         </div>
 

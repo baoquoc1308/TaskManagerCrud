@@ -13,29 +13,28 @@
 .dark .task-header {
   background-color: #333;
 }
-.btn-manager-dashboard {
-  font-family: sans-serif;
-  font-size: 16px;
-  color: #6a5acd;
-  font-weight: normal;
-  padding: 8px 12px;
-  display: inline-flex;
+/* .btn-manager-dashboard {
+  display: flex;
   align-items: center;
-  gap: 5px;
-  background-color: transparent;
-  border: 1px solid #6a5acd;
-  cursor: pointer;
+  padding: 10px 15px;
   text-decoration: none;
-}
+  color: #555;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+} */
 
-.btn-manager-dashboard:hover {
-  background-color: #d6d0f1;
+/* .btn-manager-dashboard:hover {
+  background-color: #e6e6fa;
   transition: all 0.3s ease;
-}
-.dashboard-icon {
+} */
+/* .dashboard-icon {
   font-size: 16px;
   color: #6a5acd;
-}
+} */
 @media (max-width: 320px) {
   .task-header {
     flex-wrap: wrap;

@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./components/SearchTasks/SearchTasks.css";
 import ManagerDashboard from "./components/ManagerDashboard";
+import UserDashboard from "./components/UserDashboard/UserDashboard";
 
 function App() {
   const [session, setSession] = useState<any>(null);
@@ -110,6 +111,16 @@ function App() {
           element={
             session && userRole === "manager" ? (
               <ManagerDashboard />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+        <Route
+          path="/user-dashboard"
+          element={
+            session && userRole === "user" ? (
+              <UserDashboard />
             ) : (
               <Navigate to="/" replace />
             )

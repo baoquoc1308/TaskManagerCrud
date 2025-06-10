@@ -36,7 +36,7 @@
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
-  /* overflow: hidden; */
+  overflow: hidden;
   text-overflow: ellipsis;
   line-clamp: 1;
 }
@@ -66,7 +66,6 @@
   flex-wrap: nowrap;
   gap: 1rem;
   align-items: center;
-  margin-top: 0.5rem;
 }
 
 .task-item span.task-meta {
@@ -124,7 +123,14 @@
   cursor: pointer;
   text-decoration: none;
 }
-
+.dark .cancel-btn {
+  border: 1px solid #dedde7;
+  color: #dedde7;
+}
+.dark .cancel-btn:hover {
+  background-color: #292828;
+  transition: all 0.3s ease;
+}
 .cancel-btn:hover {
   background-color: #d6d0f1;
   transition: all 0.3s ease;
@@ -178,7 +184,6 @@
     flex-wrap: nowrap;
     gap: 5px;
     align-items: center;
-    margin-top: 0.5rem;
   }
 
   .task-item span.task-meta {
@@ -226,9 +231,9 @@
     display: block;
     text-align: left;
   }
-  .task-item {
+  /* .task-item {
     min-height: 380px;
-  }
+  } */
 
   .task-item img {
     height: 250px;
@@ -255,9 +260,9 @@
     padding: 0 1rem;
   }
 
-  .task-item {
+  /* .task-item {
     min-height: 380px;
-  }
+  } */
 
   .task-item img {
     height: 250px;
@@ -608,23 +613,8 @@
   margin-bottom: 8px;
 }
 
-.dashboard-menu a {
-  display: flex;
-  align-items: center;
-  padding: 10px 12px;
-  text-decoration: none;
-  color: #5c6ac4;
-  border-radius: 6px;
-  transition: background-color 0.2s;
-}
-
 .dashboard-menu a:hover {
   background-color: #f0f0f0;
-}
-
-.dashboard-menu a.active {
-  background-color: #5c6ac4;
-  color: white;
 }
 
 .content-area {
@@ -650,10 +640,6 @@
   background-color: #ffffff;
   border-bottom: 1px solid #e1e5e9;
   transition: all 0.3s ease;
-}
-
-.task-item:last-child {
-  border-bottom: none;
 }
 
 .task-item:hover {
@@ -859,26 +845,14 @@
 }
 
 .dashboard-menu a {
-  display: flex;
-  align-items: center;
-  padding: 12px 20px;
-  text-decoration: none;
-  color: #5a6c7d;
   font-size: 14px;
   font-weight: 500;
-  transition: all 0.2s;
   border-left: 3px solid transparent;
 }
 
 .dashboard-menu a:hover {
   background-color: #f8f9fa;
   color: #1a1a1a;
-}
-
-.dashboard-menu a.active {
-  background-color: #f0f3ff;
-  color: #667eea;
-  border-left-color: #667eea;
 }
 
 .dashboard-menu .icon {
@@ -904,6 +878,9 @@
 }
 .dark .project-item {
   color: #fff;
+}
+.dark .project-item:hover {
+  color: #d3cccc;
 }
 .projects-section h3 {
   font-size: 12px;
@@ -948,7 +925,6 @@
 .content-header {
   display: flex;
   align-items: center;
-  justify-content: between;
   margin-bottom: 24px;
   background: white;
   padding: 20px;
@@ -1003,10 +979,6 @@
 .task-item {
   border-bottom: 1px solid #f1f3f4;
   transition: all 0.2s;
-}
-
-.task-item:last-child {
-  border-bottom: none;
 }
 
 .task-item:hover {
@@ -1555,6 +1527,7 @@ body {
 .dashboard-menu a.active {
   background-color: #e6e6fa;
   color: #8c7ae6;
+  border-left-color: #667eea;
 }
 
 .dashboard-menu a.active .badge {
@@ -1600,12 +1573,11 @@ body {
   overflow-y: auto;
 }
 .dark .content-area {
-  background-color: var(--bg-color);
+  background-color: #212020;
 }
 .content-header h1 {
   font-size: 2rem;
   color: #333;
-  margin-bottom: 20px;
 }
 
 .task-sections {
@@ -1653,7 +1625,13 @@ body {
   padding: 0;
   margin: 0;
 }
-
+.dark .ant-modal-content {
+  background-color: #333;
+}
+.dark .ant-modal-title {
+  background-color: #333;
+  color: #fff;
+}
 .add-task-btn {
   width: 100%;
   background-color: #e6e6fa;
@@ -1663,7 +1641,7 @@ body {
   border-radius: 5px;
   cursor: pointer;
   font-size: 1rem;
-  margin-top: 15px;
+  margin-top: 5px;
   transition: background-color 0.3s ease;
 }
 
@@ -1945,7 +1923,7 @@ body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   min-width: 120px;
   padding: 5px 0;
-  z-index: 999999; /* Đảm bảo nổi trên mọi thứ */
+  z-index: 999999;
   opacity: 1;
   visibility: visible;
   transition: opacity 0.2s;

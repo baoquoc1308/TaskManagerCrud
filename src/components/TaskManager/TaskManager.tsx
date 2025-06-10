@@ -295,6 +295,7 @@ function TaskManager({
       />
 
       <TaskList
+        userRole={userRole}
         tasks={tasks}
         editingId={editingId}
         setEditingId={(id) => {

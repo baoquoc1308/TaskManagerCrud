@@ -1,17 +1,14 @@
-import { useState } from "react";
+// components/TaskList/TaskList.jsx
+import { useState, useEffect } from "react";
 import type { Task } from "../../types/Task";
-// import {
-//   getPriorityBadgeClass,
-//   getStatusBadgeClass,
-// } from "../../utils/TaskHelpers";
+import { fetchUserAvatar } from "../../utils/FetchUserAvatar";
 import "./TaskList.css";
 import { supabase } from "../../supabase-client";
 import TaskDetail from "../TaskDetail";
 import { Empty, Modal, Input } from "antd";
-import FormattedTime from "../../utils/FormattedTime";
 import { toast } from "react-toastify";
-import ThemeToggle from "../ThemeToggle";
-import { NavLink, Link } from "react-router-dom";
+import Sidebar from "../Sidebar/Sidebar";
+import TaskSection from "../TaskSection/TaskSection";
 
 interface TaskListProps {
   tasks: Task[];
@@ -37,8 +34,6 @@ export default function TaskList({
   setNewDescription,
   confirmDeleteTask,
   updateTask,
-  // newTaskAdded,
-  // lastTaskRef,
   setTasks,
   setTaskId,
   submitComponent,
@@ -53,30 +48,44 @@ export default function TaskList({
   const [isRenameModalVisible, setIsRenameModalVisible] = useState(false);
   const [taskToRename, setTaskToRename] = useState<Task | null>(null);
   const [newTitle, setNewTitle] = useState<string>("");
+  const [avatars, setAvatars] = useState<Record<string, string>>({});
 
-  // useEffect(() => {
-  //   const handleClickOutside = (event: MouseEvent) => {
-  //     if (openDropdownId !== null) {
-  //       let isClickInsideDropdown = false;
-  //       const dotsMenus = document.querySelectorAll(".dots-menu");
-  //       dotsMenus.forEach((menu) => {
-  //         if (menu.contains(event.target as Node)) {
-  //           isClickInsideDropdown = true;
-  //         }
-  //       });
+  useEffect(() => {
+    const fetchAvatars = async () => {
+      const emailsToFetch = [
+        ...new Set(
+          tasks
+            .map((task) => task.email)
+            .filter((email) => email && !avatars[email])
+        ),
+      ] as string[];
 
-  //       if (!isClickInsideDropdown) {
-  //         setOpenDropdownId(null);
-  //       }
-  //     }
-  //   };
+      if (emailsToFetch.length === 0) {
+        return;
+      }
 
-  //   document.addEventListener("mousedown", handleClickOutside);
+      const avatarPromises = emailsToFetch.map(async (email) => {
+        const avatarUrl = await fetchUserAvatar(email);
+        return [email, avatarUrl];
+      });
 
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [openDropdownId]);
+      const settledAvatars = await Promise.all(avatarPromises);
+
+      const newAvatars: Record<string, string> = {};
+      settledAvatars.forEach(([email, avatarUrl]) => {
+        if (email && avatarUrl) {
+          newAvatars[email as string] = avatarUrl as string;
+        }
+      });
+
+      if (Object.keys(newAvatars).length > 0) {
+        setAvatars((prev) => ({ ...prev, ...newAvatars }));
+      }
+    };
+
+    fetchAvatars();
+  }, [tasks]);
+
   const handleClickTask = (taskId: string) => {
     if (editingId === null) setSelectedTaskId(taskId);
   };
@@ -155,6 +164,7 @@ export default function TaskList({
       }
     }
   };
+
   const getInitialsFromEmail = (email: string) => {
     if (!email) return "NA";
     const username = email.split("@")[0];
@@ -174,423 +184,47 @@ export default function TaskList({
     );
   }
 
+  const taskSections = [
+    {
+      title: "Pending",
+      status: "todo",
+      statusClass: "pending",
+    },
+    {
+      title: "In Progress",
+      status: "in-progress",
+      statusClass: "in-progress",
+    },
+    {
+      title: "Completed",
+      status: "done",
+      statusClass: "completed",
+    },
+  ];
+
   return (
     <>
       <div className="main-container">
-        {/* Dashboard */}
-        <div className="dashboard">
-          {/* <div className="dashboard-header">
-            <h2>
-              <span className="logo">BQ</span>
-            </h2>
-          </div> */}
-
-          <ul className="dashboard-menu">
-            <li> {submitComponent}</li>
-            {userRole === "manager" && (
-              <li>
-                <Link to="/manager-dashboard">
-                  <span className="icon">🏢</span> Manager
-                </Link>
-              </li>
-            )}
-            <li>
-              <NavLink
-                to="/"
-                className={({ isActive }) => (isActive ? "active" : "")}
-              >
-                <span className="icon">📋</span>Dashboard
-              </NavLink>
-            </li>
-            {userRole === "user" && (
-              <li>
-                <Link to="/user-dashboard">
-                  <span className="icon">🏢</span> My Chart
-                </Link>
-              </li>
-            )}
-            <li>
-              <a href="#">
-                <span className="icon">📥</span>Inbox
-                <span className="badge">3</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <span className="icon">👥</span>Teams
-                <span className="badge">2</span>
-              </a>
-            </li>
-
-            <li>
-              <a href="#">
-                <span className="icon">🌙</span>
-                <span style={{ marginRight: "17px" }}>DarkMode</span>
-                <ThemeToggle />
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <span className="icon">🕒</span> Timesheet
-                <span className="badge">2</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <span className="icon">📅</span> Calendar
-                <span className="badge">1</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <span className="icon">🛠️</span> Support
-                <span className="badge">5</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <span className="icon">⚙️</span> Settings
-                <span className="badge">1</span>
-              </a>
-            </li>
-          </ul>
-
-          <div className="projects-section">
-            <h3>Projects</h3>
-            <div className="project-item">
-              <div
-                className="project-icon"
-                style={{ backgroundColor: "#667eea" }}
-              ></div>
-              Main Project
-            </div>
-            <div className="project-item">
-              <div
-                className="project-icon"
-                style={{ backgroundColor: "#28a745" }}
-              ></div>
-              Design Project
-            </div>
-            <div className="project-item">
-              <div
-                className="project-icon"
-                style={{ backgroundColor: "#ffc107" }}
-              ></div>
-              Landing Page
-            </div>
-          </div>
-        </div>
+        <Sidebar submitComponent={submitComponent} userRole={userRole} />
 
         <div className="content-area">
-          {/* <div className="content-header">
-            <h1>All</h1>
-          </div> */}
-
           <div className="task-sections">
-            <div className="task-section">
-              <div className="section-header pending">
-                <span className="status-indicator"></span>
-                Pending
-              </div>
-              <div className="task-table-header">
-                <div>Name</div>
-                <div>Assignee</div>
-                <div>Date</div>
-                <div>Priority</div>
-                <div>Status</div>
-                <div></div>
-              </div>
-              <ul className="task-list">
-                {tasks
-                  .filter((task) => (task.status as string) === "todo")
-                  .map((task) => (
-                    <li key={task.id} className="task-item">
-                      <h3
-                        className="task-title"
-                        onClick={() => handleClickTask(task.id.toString())}
-                      >
-                        {task.title}
-                      </h3>
-                      <div className="task-assignee">
-                        {task.avatar_url ? (
-                          <img
-                            src={task.avatar_url}
-                            alt="avatar"
-                            className="assignee-avatar-img"
-                            referrerPolicy="no-referrer"
-                          />
-                        ) : (
-                          <div className="assignee-avatar">
-                            {getInitialsFromEmail(task.email)}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="task-due-date">
-                        <FormattedTime isoString={task.time} />
-                      </div>
-                      <span
-                        className={`priority-badge priority-${task.priority?.toLowerCase()}`}
-                      >
-                        {task.priority}
-                      </span>
-                      <span
-                        className={`status-badge status-${task.status?.toLowerCase()}`}
-                      >
-                        {task.status}
-                      </span>
-                      <div className="dots-menu">
-                        <div
-                          className="dots-wrapper"
-                          onMouseEnter={() => {
-                            setTimeout(() => {
-                              const tooltip = document.getElementById(
-                                `tooltip-${task.id}`
-                              );
-                              if (tooltip)
-                                tooltip.classList.add("tooltip-visible");
-                            }, 1000);
-                          }}
-                          onMouseLeave={() => {
-                            const tooltip = document.getElementById(
-                              `tooltip-${task.id}`
-                            );
-                            if (tooltip)
-                              tooltip.classList.remove("tooltip-visible");
-                          }}
-                        >
-                          <button
-                            className="dots-button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleDropdown(task.id);
-                            }}
-                          >
-                            ⋮
-                          </button>
-                          <div id={`tooltip-${task.id}`} className="tooltip">
-                            Other operations
-                          </div>
-                        </div>
-                        {openDropdownId === task.id && (
-                          <div className="dots-dropdown">
-                            <button onClick={() => handleOpenRenameModal(task)}>
-                              Rename
-                            </button>
-                            <button onClick={() => confirmDeleteTask(task)}>
-                              Delete
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    </li>
-                  ))}
-              </ul>
-              {/* <button className="add-task-btn">+ Add Task</button> */}
-            </div>
-
-            <div className="task-section">
-              <div className="section-header in-progress">
-                <span className="status-indicator"></span>
-                In Progress
-              </div>
-              <div className="task-table-header">
-                <div>Name</div>
-                <div>Assignee</div>
-                <div>Date</div>
-                <div>Priority</div>
-                <div>Status</div>
-                <div></div>
-              </div>
-              <ul className="task-list">
-                {tasks
-                  .filter((task) => (task.status as string) === "in-progress")
-                  .map((task) => (
-                    <li key={task.id} className="task-item">
-                      <h3
-                        className="task-title clickable"
-                        onClick={() => handleClickTask(task.id.toString())}
-                      >
-                        {task.title}
-                      </h3>
-                      <div className="task-assignee">
-                        {task.avatar_url ? (
-                          <img
-                            src={task.avatar_url}
-                            alt="avatar"
-                            className="assignee-avatar-img"
-                          />
-                        ) : (
-                          <div className="assignee-avatar">
-                            {getInitialsFromEmail(task.email)}
-                          </div>
-                        )}
-                      </div>
-                      <div className="task-due-date">
-                        <FormattedTime isoString={task.time} />
-                      </div>
-                      <span
-                        className={`priority-badge priority-${task.priority?.toLowerCase()}`}
-                      >
-                        {task.priority}
-                      </span>
-                      <span
-                        className={`status-badge status-${task.status?.toLowerCase()}`}
-                      >
-                        {task.status}
-                      </span>
-                      <div className="dots-menu">
-                        <div
-                          className="dots-wrapper"
-                          onMouseEnter={() => {
-                            setTimeout(() => {
-                              const tooltip = document.getElementById(
-                                `tooltip-${task.id}`
-                              );
-                              if (tooltip)
-                                tooltip.classList.add("tooltip-visible");
-                            }, 1000);
-                          }}
-                          onMouseLeave={() => {
-                            const tooltip = document.getElementById(
-                              `tooltip-${task.id}`
-                            );
-                            if (tooltip)
-                              tooltip.classList.remove("tooltip-visible");
-                          }}
-                        >
-                          <button
-                            className="dots-button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleDropdown(task.id);
-                            }}
-                          >
-                            ⋮
-                          </button>
-                          <div id={`tooltip-${task.id}`} className="tooltip">
-                            Other operations
-                          </div>
-                        </div>
-                        {openDropdownId === task.id && (
-                          <div
-                            className="dots-dropdown"
-                            style={{ position: "absolute", zIndex: 9999 }}
-                          >
-                            <button onClick={() => handleOpenRenameModal(task)}>
-                              Rename
-                            </button>
-                            <button onClick={() => confirmDeleteTask(task)}>
-                              Delete
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    </li>
-                  ))}
-              </ul>
-              {/* <button className="add-task-btn">+ Add Task</button> */}
-            </div>
-
-            <div className="task-section">
-              <div className="section-header completed">
-                <span className="status-indicator"></span>
-                Completed
-              </div>
-              <div className="task-table-header">
-                <div>Name</div>
-                <div>Assignee</div>
-                <div>Date</div>
-                <div>Priority</div>
-                <div>Status</div>
-                <div></div>
-              </div>
-              <ul className="task-list">
-                {tasks
-                  .filter((task) => (task.status as string) === "done")
-                  .map((task) => (
-                    <li key={task.id} className="task-item">
-                      <h3
-                        className="task-title clickable"
-                        onClick={() => handleClickTask(task.id.toString())}
-                      >
-                        {task.title}
-                      </h3>
-                      <div className="task-assignee">
-                        {task.avatar_url ? (
-                          <img
-                            src={task.avatar_url}
-                            alt="avatar"
-                            className="assignee-avatar-img"
-                          />
-                        ) : (
-                          <div className="assignee-avatar">
-                            {getInitialsFromEmail(task.email)}
-                          </div>
-                        )}
-                      </div>
-                      <div className="task-due-date">
-                        <FormattedTime isoString={task.time} />
-                      </div>
-                      <span
-                        className={`priority-badge priority-${task.priority?.toLowerCase()}`}
-                      >
-                        {task.priority}
-                      </span>
-                      <span
-                        className={`status-badge status-${task.status?.toLowerCase()}`}
-                      >
-                        {task.status}
-                      </span>
-                      <div className="dots-menu">
-                        <div
-                          className="dots-wrapper"
-                          onMouseEnter={() => {
-                            setTimeout(() => {
-                              const tooltip = document.getElementById(
-                                `tooltip-${task.id}`
-                              );
-                              if (tooltip)
-                                tooltip.classList.add("tooltip-visible");
-                            }, 1000);
-                          }}
-                          onMouseLeave={() => {
-                            const tooltip = document.getElementById(
-                              `tooltip-${task.id}`
-                            );
-                            if (tooltip)
-                              tooltip.classList.remove("tooltip-visible");
-                          }}
-                        >
-                          <button
-                            className="dots-button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleDropdown(task.id);
-                            }}
-                          >
-                            ⋮
-                          </button>
-                          <div id={`tooltip-${task.id}`} className="tooltip">
-                            Other operations
-                          </div>
-                        </div>
-                        {openDropdownId === task.id && (
-                          <div className="dots-dropdown">
-                            <button onClick={() => handleOpenRenameModal(task)}>
-                              Rename
-                            </button>
-                            <button onClick={() => confirmDeleteTask(task)}>
-                              Delete
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    </li>
-                  ))}
-              </ul>
-              {/* <button className="add-task-btn">+ Add Task</button> */}
-            </div>
+            {taskSections.map((section) => (
+              <TaskSection
+                key={section.status}
+                title={section.title}
+                status={section.status}
+                statusClass={section.statusClass}
+                tasks={tasks}
+                avatars={avatars}
+                openDropdownId={openDropdownId}
+                onTaskClick={handleClickTask}
+                onToggleDropdown={toggleDropdown}
+                onRename={handleOpenRenameModal}
+                onDelete={confirmDeleteTask}
+                getInitialsFromEmail={getInitialsFromEmail}
+              />
+            ))}
           </div>
         </div>
       </div>

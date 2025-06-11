@@ -95,6 +95,7 @@ function App() {
                 onLogout={logout}
                 userEmail={session.user.email}
                 userRole={userRole || "user"}
+                userId={session.user.id}
               />
             ) : (
               <Navigate to="/login" replace />

@@ -9,16 +9,6 @@
   overflow-x: hidden;
 }
 
-/* .task-list button {
-  padding: 0.5rem 1.2rem;
-  border-radius: 8px;
-  border: none;
-
-  cursor: pointer;
-  transition: all 0.3s ease, color 0.3s ease;
-  flex: 1;
-} */
-
 .task-item {
   border: 1px solid #eaeaea;
   padding: 1rem;
@@ -27,8 +17,6 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-
-  overflow: hidden;
 }
 
 .task-item h3 {
@@ -72,14 +60,6 @@
   display: flex;
   align-items: center;
   gap: 4px;
-}
-
-.task-item img {
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin: 0.5rem 0;
 }
 
 .task-actions {
@@ -260,10 +240,6 @@
     padding: 0 1rem;
   }
 
-  /* .task-item {
-    min-height: 380px;
-  } */
-
   .task-item img {
     height: 250px;
   }
@@ -407,9 +383,6 @@
   transition: transform 0.2s;
 }
 
-/* .task-item:hover {
-  transform: translateY(-4px);
-} */
 .dots-menu {
   position: absolute;
   top: 8px;
@@ -510,11 +483,6 @@
   margin-right: 6px;
   color: #333;
 }
-
-/* Lưu ý: Tên class cụ thể (ví dụ: .priority-medium-badge, .status-done-badge)
-   phụ thuộc vào giá trị trả về từ hàm getPriorityBadgeClass và getStatusBadgeClass của bạn.
-   CSS dưới đây sử dụng các tên class mẫu. Bạn cần điều chỉnh cho phù hợp.
-*/
 
 .badge {
   padding: 4px 10px;
@@ -687,15 +655,6 @@
   display: inline-block;
 }
 
-.priority-low {
-  background-color: #d1ecf1;
-  color: #0c5460;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 500;
-}
-
 .priority-normal {
   background-color: #cce5ff;
   color: #004085;
@@ -705,27 +664,9 @@
   font-weight: 500;
 }
 
-.priority-high {
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 500;
-}
-
 .status-pending {
   background-color: #fff3cd;
   color: #856404;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.status-in-progress {
-  background-color: #ffeaa7;
-  color: #6c5ce7;
   padding: 4px 8px;
   border-radius: 12px;
   font-size: 11px;
@@ -1005,12 +946,6 @@
   background-color: #f8f9fa;
 }
 
-.task-assignee {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .assign-button {
   background: none;
   border: 1px dashed #dee2e6;
@@ -1021,38 +956,14 @@
   cursor: pointer;
 }
 
-.priority-badge {
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 500;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.priority-low {
-  background-color: #cce5ff;
-  color: #004085;
-}
-
 .priority-normal {
   background-color: #cce5ff;
   color: #004085;
 }
 
-.priority-high {
-  background-color: #f8d7da;
-  color: #721c24;
-}
-
 .status-pending {
   background-color: #fff3cd;
   color: #856404;
-}
-
-.status-in-progress {
-  background-color: #ffeaa7;
-  color: #6c5ce7;
 }
 
 .status-completed {
@@ -1077,10 +988,7 @@
 }
 
 .dots-dropdown {
-  opacity: 0;
-  visibility: hidden;
   transform: translateY(-4px);
-  transition: all 0.2s;
 }
 
 .dots-menu:hover .dots-dropdown {
@@ -1166,7 +1074,7 @@ body {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 30px;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .section-header.completed .status-indicator {
@@ -1228,20 +1136,6 @@ body {
 .task-title {
   font-weight: 500;
   align-items: center;
-}
-
-.task-assignee {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.priority-badge.priority-high {
-  background-color: #fddfdf;
-  color: #c82333;
-}
-.priority-badge.priority-medium {
-  background-color: #fff3cd;
-  color: #856404;
 }
 
 .status-badge.status-complete {
@@ -1387,19 +1281,6 @@ body {
   font-size: 1rem;
 }
 
-.assignee-avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.8rem;
-  font-weight: bold;
-}
-
 .priority-badge,
 .status-badge {
   padding: 5px 10px;
@@ -1452,7 +1333,7 @@ body {
 
 .dashboard {
   width: 250px;
-  background-color: #ece2e2;
+  background-color: #e7f5f3;
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
   display: flex;
@@ -1697,6 +1578,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 8px;
 }
 
 .task-due-date {
@@ -1714,29 +1596,9 @@ body {
   display: inline-block;
 }
 
-.priority-low {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.priority-medium {
-  background-color: #ffeeba;
-  color: #856404;
-}
-
-.priority-high {
-  background-color: #f8d7da;
-  color: #721c24;
-}
-
 .status-pending {
   background-color: #fef9e7;
   color: #d68910;
-}
-
-.status-in-progress {
-  background-color: #ebf5fb;
-  color: #2e86c1;
 }
 
 .status-complete {
@@ -1757,21 +1619,6 @@ body {
   display: block;
 }
 
-.priority-low {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.priority-medium {
-  background-color: #ffeeba;
-  color: #856404;
-}
-
-.priority-high {
-  background-color: #f8d7da;
-  color: #721c24;
-}
-
 .status-todo {
   background-color: #cfda6b;
 }
@@ -1779,11 +1626,6 @@ body {
 .status-pending {
   background-color: #fef9e7;
   color: #d68910;
-}
-
-.status-in-progress {
-  background-color: #ebf5fb;
-  color: #2e86c1;
 }
 
 .status-done,
@@ -1815,21 +1657,6 @@ body {
   position: relative;
   display: flex;
   justify-content: flex-end;
-}
-
-.dots-dropdown {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 100%;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  min-width: 100px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  z-index: 999999;
 }
 
 .dots-dropdown.active {
@@ -1871,7 +1698,7 @@ body {
   transition: all 0.3s ease;
   line-height: 1;
   transform: translateY(-8px);
-  z-index: auto;
+  z-index: 1000;
 }
 .dark .dots-button {
   color: #fff;
@@ -1939,4 +1766,15 @@ body {
 
 .task-list {
   overflow: visible;
+}
+.assignee-avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  object-fit: cover;
 }

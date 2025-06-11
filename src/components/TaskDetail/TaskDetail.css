@@ -287,17 +287,14 @@
 }
 .priority-high {
   background: linear-gradient(135deg, #ef4444, #dc2626);
-  color: white;
 }
 
 .priority-medium {
   background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: white;
 }
 
 .priority-low {
   background: linear-gradient(135deg, #10b981, #059669);
-  color: white;
 }
 
 .status-pending {
@@ -307,7 +304,6 @@
 
 .status-in-progress {
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  color: white;
 }
 
 .status-completed {
@@ -502,7 +498,6 @@
   font-weight: 500;
   font-size: 0.9rem;
 }
-/* Add these styles to your TaskDetail.css file */
 
 .related-tasks-section {
   border-top: 1px solid #eee;
@@ -510,22 +505,20 @@
   margin-right: 20px;
 }
 
-/* This container will hold the cards and allow horizontal scrolling */
 .related-tasks-container {
   display: flex;
-  flex-direction: row; /* Align items horizontally */
-  overflow-x: auto; /* Enable horizontal scrollbar when content overflows */
-  padding-bottom: 16px; /* Add some space for the scrollbar */
-  gap: 16px; /* Space between cards */
+  flex-direction: row;
+  overflow-x: auto;
+  padding-bottom: 16px;
+  gap: 16px;
 }
 
-/* Styling for each individual related task card */
 .related-task-card {
-  flex: 0 0 150px; /* Prevent card from shrinking, set a fixed base width */
+  flex: 0 0 150px;
   width: 150px;
   border: 1px solid #ddd;
   border-radius: 8px;
-  overflow: hidden; /* Ensures image corners are rounded */
+  overflow: hidden;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   background-color: #fff;
@@ -540,7 +533,7 @@
 .related-task-img {
   width: 100%;
   height: 80px;
-  object-fit: cover; /* Cover the area without distorting the image */
+  object-fit: cover;
 }
 
 .related-task-title {
@@ -549,13 +542,12 @@
   font-weight: 500;
   margin: 0;
   text-align: left;
-  /* Prevent long text from breaking the layout */
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* Optional: Custom scrollbar styling for a cleaner look */
 .related-tasks-container::-webkit-scrollbar {
   height: 8px;
 }

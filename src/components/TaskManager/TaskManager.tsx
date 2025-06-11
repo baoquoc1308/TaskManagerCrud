@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import type { Task } from "../../types/Task";
 import type { Session } from "@supabase/supabase-js";
-import { fetchTasks } from "../FetchTasks";
+import { fetchTasks } from "../FetchTasks/FetchTasks";
 import { SubmitTaskDropdown } from "../SubmitTask/SubmitTask";
 import { supabase } from "../../supabase-client";
 import ScrollButtons from "../ScrollButton";
@@ -18,11 +18,13 @@ function TaskManager({
   onLogout,
   userEmail,
   userRole,
+  userId,
 }: {
   session: Session;
   onLogout: () => void;
   userEmail: string;
   userRole: string;
+  userId: string;
 }) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskId, setTaskId] = useState<string | null>(null);
@@ -275,6 +277,7 @@ function TaskManager({
         avatarUrl={avatarUrl}
         onLogout={onLogout}
         userRole={userRole}
+        userId={userId}
         searchComponent={
           <SearchTasks
             keyword={keyword}

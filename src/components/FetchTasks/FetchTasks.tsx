@@ -1,6 +1,6 @@
-import { supabase } from "../supabase-client";
-import type { Task } from "../types/Task";
-import "../styles/App.css";
+import { supabase } from "../../supabase-client";
+import type { Task } from "../../types/Task";
+import "../../styles/App.css";
 
 export const fetchTasks = async (
   page: number,

@@ -43,7 +43,7 @@ function TaskManager({
   const lastTaskRef = useRef<HTMLLIElement | null>(null);
   const scrollBottomRef = useRef<HTMLDivElement | null>(null);
 
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
 
   const [keyword, setKeyword] = useState("");
   const [priority, setPriority] = useState("");
@@ -256,8 +256,8 @@ function TaskManager({
     const dataSource = filteredTasks ?? tasks;
     const start = (currentPage - 1) * pageSize;
     const end = start + pageSize;
-    setTasks(dataSource.slice(start, end));
-  }, [currentPage, pageSize, filteredTasks]);
+    setDisplayedTasks(dataSource.slice(start, end));
+  }, [currentPage, pageSize, tasks, filteredTasks]);
 
   if (false) {
     console.log(
@@ -275,28 +275,29 @@ function TaskManager({
         avatarUrl={avatarUrl}
         onLogout={onLogout}
         userRole={userRole}
-      />
-
-      <SearchTasks
-        keyword={keyword}
-        setKeyword={setKeyword}
-        priority={priority}
-        setPriority={setPriority}
-        date={date}
-        setDate={setDate}
-        showPriority={showPriority}
-        setShowPriority={setShowPriority}
-        showDatePicker={showDatePicker}
-        setShowDatePicker={setShowDatePicker}
-        filteredTasks={filteredTasks}
-        setFilteredTasks={setFilteredTasks}
-        onResults={handleSearchResults}
-        onClear={handleClearSearch}
+        searchComponent={
+          <SearchTasks
+            keyword={keyword}
+            setKeyword={setKeyword}
+            priority={priority}
+            setPriority={setPriority}
+            date={date}
+            setDate={setDate}
+            showPriority={showPriority}
+            setShowPriority={setShowPriority}
+            showDatePicker={showDatePicker}
+            setShowDatePicker={setShowDatePicker}
+            filteredTasks={filteredTasks}
+            setFilteredTasks={setFilteredTasks}
+            onResults={handleSearchResults}
+            onClear={handleClearSearch}
+          />
+        }
       />
 
       <TaskList
         userRole={userRole}
-        tasks={tasks}
+        tasks={displayedTasks}
         editingId={editingId}
         setEditingId={(id) => {
           setEditingId(id);
@@ -338,7 +339,6 @@ function TaskManager({
           />
         }
       />
-
       <DeleteModal
         show={showDeleteModal}
         onConfirm={handleConfirmDelete}

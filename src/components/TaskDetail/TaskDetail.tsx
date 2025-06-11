@@ -10,6 +10,11 @@ import DeleteModal from "../DeleteModal";
 import { toast } from "react-toastify";
 import ExpandableText from "../ExpandableText/ExpandableText";
 import FormattedTime from "../../utils/FormattedTime";
+import { AnimatePresence, motion } from "framer-motion";
+
+// REMOVED: Swiper imports are no longer needed as we use a native scroll container
+// import { Swiper, SwiperSlide } from "swiper/react";
+// import { Navigation } from "swiper/modules";
 
 interface TaskDetailProps {
   taskId: string | null;
@@ -17,8 +22,6 @@ interface TaskDetailProps {
   setTaskId: (id: string) => void;
   editingId: number | null;
   setEditingId: React.Dispatch<React.SetStateAction<number | null>>;
-  // newTitle: string;
-  // setNewTitle: React.Dispatch<React.SetStateAction<string>>;
   newDescription: string;
   setNewDescription: React.Dispatch<React.SetStateAction<string>>;
   updateTask: (taskId: number) => Promise<void>;
@@ -31,8 +34,6 @@ function TaskDetail({
   setTaskId,
   editingId,
   setEditingId,
-  // newTitle,
-  // setNewTitle,
   newDescription,
   setNewDescription,
   updateTask,
@@ -43,12 +44,7 @@ function TaskDetail({
   const [relatedTasks, setRelatedTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-  // const titleRef = useRef<HTMLHeadingElement>(null);
-
-  // const descRef = useRef<HTMLParagraphElement>(null);
-  // const [showFullDesc, setShowFullDesc] = useState(false);
-  // const [showFullTitle, setShowFullTitle] = useState(false);
+  const [isCollapseOpen, setIsCollapseOpen] = useState(false);
 
   const isEditingThisTask = editingId === Number(taskId);
 
@@ -65,6 +61,7 @@ function TaskDetail({
 
       if (!error && data) {
         setTask(data);
+        // Fetch related tasks when the main task is loaded
         fetchRelatedTasks(data.priority, data.id);
       }
       setLoading(false);
@@ -75,38 +72,37 @@ function TaskDetail({
 
   useEffect(() => {
     if (isEditingThisTask && task) {
-      // setNewTitle(task.title);
       setNewDescription(task.description);
     }
   }, [isEditingThisTask, task, setNewDescription]);
 
   const fetchRelatedTasks = async (priority: string, excludeId: string) => {
+    // --- CHANGED ---
+    // Removed the .limit(6) to fetch all related tasks
     const { data, error } = await supabase
       .from("tasks")
       .select("*")
       .eq("priority", priority)
-      .neq("id", excludeId)
-      .limit(6);
+      .neq("id", excludeId);
 
     if (!error) {
       setRelatedTasks(data);
+    } else {
+      console.error("Error fetching related tasks:", error);
     }
   };
 
   const handleEditClick = () => {
     if (task) {
       setEditingId(task.id);
-      // setNewDescription(task.description);
     }
   };
 
   const handleSaveClick = async () => {
     if (task) {
       await updateTask(task.id);
-
       setEditingId(null);
 
-      // Re-fetch task to show updated description
       const { data, error } = await supabase
         .from("tasks")
         .select("*")
@@ -115,7 +111,6 @@ function TaskDetail({
 
       if (!error && data) {
         setTask(data);
-        console.log("Task updated:", data);
       } else {
         console.error("Fetch updated task failed:", error);
       }
@@ -125,21 +120,19 @@ function TaskDetail({
   const handleCancelClick = () => {
     setEditingId(null);
     if (task) {
-      // setNewTitle(task.title);
       setNewDescription(task.description);
     }
   };
+
   const handleDeleteTask = async () => {
     if (!task) return;
 
     const { error } = await supabase.from("tasks").delete().eq("id", task.id);
 
     if (error) {
-      console.error("Delete failed:", error.message);
       toast.error("❌ Failed to delete task");
     } else {
       toast.success("🗑️ Task deleted successfully!");
-
       setShowDeleteModal(false);
       onDeleteSuccess(task.id);
       onClose();
@@ -168,12 +161,7 @@ function TaskDetail({
           <h3>TASK DETAIL</h3>
           <div className="task-info-section">
             <div className="text-wrapper">
-              <h5
-                style={{
-                  textAlign: "left",
-                  gap: "8px",
-                }}
-              >
+              <h5 style={{ textAlign: "left", gap: "8px" }}>
                 <span>Title:</span>
                 <ExpandableText text={task.title} maxLines={1} />
               </h5>
@@ -199,14 +187,12 @@ function TaskDetail({
                 </p>
               )}
             </div>
-
             <p>
               <strong>Author:</strong> {task.email}
             </p>
             <p>
               <strong>Time:</strong> <FormattedTime isoString={task.time} />
             </p>
-
             <div className="meta-row">
               <span className="task-meta">
                 <strong>Priority:</strong>
@@ -250,30 +236,46 @@ function TaskDetail({
 
         {relatedTasks.length > 0 && (
           <div className="related-tasks-section">
-            <h3>Related Tasks</h3>
-            <div className="related-task-list">
-              {relatedTasks.map((t) => (
-                <div
-                  key={t.id}
-                  className="related-task-card"
-                  onClick={() => {
-                    setTask(null);
-                    setRelatedTasks([]);
-                    setTaskId(String(t.id));
-                    setEditingId(null);
-                  }}
+            <h4 onClick={() => setIsCollapseOpen((prev) => !prev)}>
+              Related Tasks ({relatedTasks.length})
+              <span>{isCollapseOpen ? "▲" : "▼"}</span>
+            </h4>
+
+            <AnimatePresence initial={false}>
+              {isCollapseOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  style={{ overflow: "hidden", marginTop: "8px" }}
                 >
-                  {t.image_url && (
-                    <img
-                      src={t.image_url}
-                      alt={t.title}
-                      className="related-task-img"
-                    />
-                  )}
-                  <p className="related-task-title">{t.title}</p>
-                </div>
-              ))}
-            </div>
+                  <div className="related-tasks-container">
+                    {relatedTasks.map((t) => (
+                      <div
+                        key={t.id}
+                        className="related-task-card"
+                        onClick={() => {
+                          setTask(null);
+                          setRelatedTasks([]);
+                          setTaskId(String(t.id));
+                          setEditingId(null);
+                        }}
+                      >
+                        {t.image_url && (
+                          <img
+                            src={t.image_url}
+                            alt={t.title}
+                            className="related-task-img"
+                          />
+                        )}
+                        <p className="related-task-title">{t.title}</p>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         )}
       </div>

@@ -266,6 +266,7 @@
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  margin-right: 10px;
 }
 
 .task-meta span:last-child {
@@ -315,9 +316,9 @@
 }
 
 .related-tasks-section {
-  padding: 30px;
+  padding: 15px;
   border-top: 1px solid #e5e7eb;
-  background: #f8fafc;
+  background: #f9fafb;
   border-radius: 12px;
 }
 .dark .related-tasks-section {
@@ -350,7 +351,6 @@
 }
 
 .related-task-card:hover {
-  transform: translateY(-5px);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
   border-color: #3b82f6;
 }
@@ -359,7 +359,6 @@
   border: 2px solid #fff;
 }
 .dark .related-task-card:hover {
-  transform: translateY(-5px);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
   border-color: #3b82f6;
 }
@@ -477,4 +476,106 @@
 .close-button:focus {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
+}
+.related-tasks-section h3 {
+  font-size: 1.2rem;
+  user-select: none;
+}
+
+.related-task-card {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 8px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.related-task-img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.related-task-title {
+  margin-top: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+/* Add these styles to your TaskDetail.css file */
+
+.related-tasks-section {
+  border-top: 1px solid #eee;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+/* This container will hold the cards and allow horizontal scrolling */
+.related-tasks-container {
+  display: flex;
+  flex-direction: row; /* Align items horizontally */
+  overflow-x: auto; /* Enable horizontal scrollbar when content overflows */
+  padding-bottom: 16px; /* Add some space for the scrollbar */
+  gap: 16px; /* Space between cards */
+}
+
+/* Styling for each individual related task card */
+.related-task-card {
+  flex: 0 0 150px; /* Prevent card from shrinking, set a fixed base width */
+  width: 150px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden; /* Ensures image corners are rounded */
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.related-task-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.related-task-img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover; /* Cover the area without distorting the image */
+}
+
+.related-task-title {
+  padding: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  text-align: left;
+  /* Prevent long text from breaking the layout */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Optional: Custom scrollbar styling for a cleaner look */
+.related-tasks-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.related-tasks-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.related-tasks-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.related-tasks-container::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+.related-tasks-section h4 {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

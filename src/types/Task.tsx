@@ -11,6 +11,6 @@ export interface Task {
   email: string;
   priority?: Priority;
   status?: Status;
-  avatar_url?: string;
+  avatar?: string;
   user_id?: string;
 }

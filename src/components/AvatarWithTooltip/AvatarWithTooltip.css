@@ -1,0 +1,40 @@
+.assignee-avatar-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar-tooltip {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%);
+  background: #4d4646;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  white-space: nowrap;
+  z-index: 1000;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+
+.assignee-avatar-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.assignee-avatar,
+.assignee-avatar-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  object-fit: cover;
+  font-size: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}

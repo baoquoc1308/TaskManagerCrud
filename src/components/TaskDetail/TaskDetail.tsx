@@ -12,10 +12,6 @@ import ExpandableText from "../ExpandableText/ExpandableText";
 import FormattedTime from "../../utils/FormattedTime";
 import { AnimatePresence, motion } from "framer-motion";
 
-// REMOVED: Swiper imports are no longer needed as we use a native scroll container
-// import { Swiper, SwiperSlide } from "swiper/react";
-// import { Navigation } from "swiper/modules";
-
 interface TaskDetailProps {
   taskId: string | null;
   onClose: () => void;
@@ -61,7 +57,6 @@ function TaskDetail({
 
       if (!error && data) {
         setTask(data);
-        // Fetch related tasks when the main task is loaded
         fetchRelatedTasks(data.priority, data.id);
       }
       setLoading(false);

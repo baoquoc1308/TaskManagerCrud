@@ -544,14 +544,6 @@ input[type="datetime-local"]::placeholder {
 }
 
 .modal-content {
-  background-color: white;
-  border-radius: 10px;
-  padding: 20px;
-  width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-  transform: scale(0.95);
-  opacity: 0;
   animation: scaleIn 0.3s ease forwards;
 }
 

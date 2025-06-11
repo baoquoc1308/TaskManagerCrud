@@ -11,7 +11,6 @@
 
 .dashboard-header {
   gap: 1rem;
-  margin-bottom: 2rem;
 }
 
 .header-title {
@@ -38,21 +37,6 @@
   font-weight: 600;
 }
 
-.back-button {
-  padding: 0.5rem 1rem;
-  background-color: #f1f5f9;
-  border: none;
-  border-radius: 0.5rem;
-  color: #475569;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  align-self: flex-start;
-}
-
-.back-button:hover {
-  background-color: #e2e8f0;
-}
-
 .view-mode-selector select {
   padding: 0.5rem 1rem;
   border: 1px solid #e2e8f0;
@@ -60,6 +44,13 @@
   background-color: white;
   color: #475569;
   cursor: pointer;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23777" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  appearance: none;
+  width: 100%;
+  font-size: 14px;
+  transition: all 0.2s ease;
 }
 
 .dashboard-grid {
@@ -68,17 +59,12 @@
   gap: 2rem;
 }
 
-.chart-card {
-  background-color: white;
-  padding: 1.5rem;
-  border-radius: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
 .chart-card h2 {
   font-size: 1.25rem;
   color: #334155;
   margin-bottom: 1rem;
+  font-weight: 600;
+  flex-shrink: 0;
 }
 
 .total-count {
@@ -230,6 +216,10 @@
   font-size: 16px;
   border-radius: 6px;
   transition: background-color 0.2s ease;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #475569;
+  align-self: flex-start;
 }
 
 .back-button:hover {

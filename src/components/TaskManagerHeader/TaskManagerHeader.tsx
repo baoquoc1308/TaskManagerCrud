@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Bell } from "lucide-react";
 import "./TaskManagerHeader.css";
+import { supabase } from "../../supabase-client";
 
 interface Notification {
   id: string;
@@ -14,12 +15,14 @@ export default function TaskManagerHeader({
   avatarUrl,
   onLogout,
   searchComponent,
+  userId,
 }: {
   userEmail: string;
   avatarUrl: string | null;
   onLogout: () => void;
   userRole: string | null;
   searchComponent?: React.ReactNode;
+  userId: string;
 }) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -32,7 +35,6 @@ export default function TaskManagerHeader({
   const [currentAvatar, setCurrentAvatar] = useState<string | null>(
     avatarUrl || null
   );
-
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   const markAllAsRead = () => {
@@ -42,10 +44,16 @@ export default function TaskManagerHeader({
   const deleteNotification = (id: string) => {
     setNotifications(notifications.filter((n) => n.id !== id));
   };
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        alert("File size must be less than 2MB");
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setTempAvatar(reader.result as string);
@@ -53,12 +61,74 @@ export default function TaskManagerHeader({
       reader.readAsDataURL(file);
     }
   };
+  const uploadAvatar = async (file: File): Promise<string | null> => {
+    if (!userId) {
+      console.error("Cannot upload avatar - userId is undefined");
+      return null;
+    }
 
-  const handleSaveAvatar = () => {
-    setCurrentAvatar(tempAvatar);
-    setShowEditAvatarModal(false);
-    setShowAvatarDropdown(false);
-    setTempAvatar(null);
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${userId}-${Date.now()}.${fileExt}`;
+      const filePath = `avatar-users/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("avatar-users")
+        .upload(filePath, file);
+
+      if (uploadError) {
+        console.error("Upload error details:", uploadError);
+        throw new Error(`Upload failed: ${uploadError.message}`);
+      }
+
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("avatar-users").getPublicUrl(filePath);
+
+      const { error: updateError } = await supabase
+        .from("users")
+        .update({ avatar: publicUrl })
+        .eq("id", userId);
+
+      if (updateError) {
+        console.error("Update error details:", updateError);
+        throw new Error(`Profile update failed: ${updateError.message}`);
+      }
+
+      return publicUrl;
+    } catch (error) {
+      console.error("Full error details:", error);
+      return null;
+    }
+  };
+  const handleSaveAvatar = async () => {
+    const file = fileInputRef.current?.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      const publicUrl = await uploadAvatar(file);
+      if (publicUrl) {
+        const { error: authError } = await supabase.auth.updateUser({
+          data: { avatar_url: publicUrl },
+        });
+
+        if (authError) {
+          console.error("Auth update error:", authError);
+        } else {
+          setCurrentAvatar(publicUrl);
+          setShowEditAvatarModal(false);
+          setTempAvatar(null);
+        }
+      } else {
+        alert("Failed to upload avatar");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error uploading avatar");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleModalBackdropClick = (
@@ -172,7 +242,7 @@ export default function TaskManagerHeader({
                 referrerPolicy="no-referrer"
               />
             ) : (
-              <div className="fallback-avatar">👤</div>
+              <div className="fallback-avatar">🧑🏻</div>
             )}
           </div>
 
@@ -247,7 +317,7 @@ export default function TaskManagerHeader({
                 disabled={!tempAvatar}
                 onClick={handleSaveAvatar}
               >
-                Save
+                {isUploading ? "Uploading..." : "Save"}
               </button>
               <button
                 className="app-button"
@@ -255,6 +325,7 @@ export default function TaskManagerHeader({
                   setShowEditAvatarModal(false);
                   setTempAvatar(null);
                 }}
+                disabled={isUploading}
               >
                 Cancel
               </button>

@@ -3,7 +3,7 @@ import Select from "react-select";
 import "./SubmitTask.css";
 import { toast } from "react-toastify";
 import { supabase } from "../../supabase-client";
-import { fetchTasks } from "../FetchTasks";
+import { fetchTasks } from "../FetchTasks/FetchTasks";
 import type { Dispatch, SetStateAction } from "react";
 
 interface SubmitTaskProps {

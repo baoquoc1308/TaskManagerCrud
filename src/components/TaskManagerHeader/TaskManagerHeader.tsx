@@ -13,11 +13,13 @@ export default function TaskManagerHeader({
   userEmail,
   avatarUrl,
   onLogout,
+  searchComponent,
 }: {
   userEmail: string;
   avatarUrl: string | null;
   onLogout: () => void;
   userRole: string | null;
+  searchComponent?: React.ReactNode;
 }) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -84,9 +86,18 @@ export default function TaskManagerHeader({
   return (
     <div className="task-header">
       <div className="app-title">
-        <i className="fas fa-clipboard-list list-icon"></i> TaskManager
+        <i className="list-icon">
+          <img
+            width="80"
+            height="80"
+            src="https://img.icons8.com/clouds/80/reminders.png"
+            alt="reminders"
+          />
+        </i>{" "}
+        Task Manager
       </div>
       <div className="header-right">
+        <div className="search-tasks-wrapper">{searchComponent}</div>
         {/* Notifications Bell */}
         <div className="notifications-wrapper">
           <button

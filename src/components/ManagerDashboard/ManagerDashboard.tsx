@@ -280,7 +280,14 @@ const ManagerDashboard = () => {
       <div className="dashboard-content">
         <div className="dashboard-header">
           <button className="back-button" onClick={handleBackClick}>
-            ⬅ Back to Home
+            <img
+              width="20"
+              height="20"
+              src="https://img.icons8.com/ios/20/reply-arrow--v1.png"
+              alt="reply-arrow--v1"
+              className="back-icon"
+            />
+            Back to Home
           </button>
           <div className="header-title">
             <h1>

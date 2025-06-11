@@ -157,7 +157,7 @@ export default function TaskList({
   };
   const getInitialsFromEmail = (email: string) => {
     if (!email) return "NA";
-    const username = email.split("@")[0]; // lấy phần trước dấu @
+    const username = email.split("@")[0];
     if (username.length === 1) return username[0].toUpperCase();
     return (username[0] + username[username.length - 1]).toUpperCase();
   };
@@ -205,7 +205,7 @@ export default function TaskList({
             {userRole === "user" && (
               <li>
                 <Link to="/user-dashboard">
-                  <span className="icon">🏢</span> User Activity Chart
+                  <span className="icon">🏢</span> My Chart
                 </Link>
               </li>
             )}
@@ -225,13 +225,32 @@ export default function TaskList({
             <li>
               <a href="#">
                 <span className="icon">🌙</span>
-                <span style={{ marginRight: "17px" }}>Dark Mode</span>
+                <span style={{ marginRight: "17px" }}>DarkMode</span>
                 <ThemeToggle />
               </a>
             </li>
             <li>
               <a href="#">
-                <span className="icon">⚙️</span>Settings
+                <span className="icon">🕒</span> Timesheet
+                <span className="badge">2</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span className="icon">📅</span> Calendar
+                <span className="badge">1</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span className="icon">🛠️</span> Support
+                <span className="badge">5</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span className="icon">⚙️</span> Settings
+                <span className="badge">1</span>
               </a>
             </li>
           </ul>
@@ -264,7 +283,7 @@ export default function TaskList({
 
         <div className="content-area">
           {/* <div className="content-header">
-            <h1>ALL TASKS</h1>
+            <h1>All</h1>
           </div> */}
 
           <div className="task-sections">
@@ -367,7 +386,7 @@ export default function TaskList({
                     </li>
                   ))}
               </ul>
-              <button className="add-task-btn">+ Add Task</button>
+              {/* <button className="add-task-btn">+ Add Task</button> */}
             </div>
 
             <div className="task-section">
@@ -470,7 +489,7 @@ export default function TaskList({
                     </li>
                   ))}
               </ul>
-              <button className="add-task-btn">+ Add Task</button>
+              {/* <button className="add-task-btn">+ Add Task</button> */}
             </div>
 
             <div className="task-section">
@@ -570,7 +589,7 @@ export default function TaskList({
                     </li>
                   ))}
               </ul>
-              <button className="add-task-btn">+ Add Task</button>
+              {/* <button className="add-task-btn">+ Add Task</button> */}
             </div>
           </div>
         </div>

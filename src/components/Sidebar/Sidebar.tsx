@@ -37,6 +37,13 @@ export default function Sidebar({ submitComponent, userRole }: SidebarProps) {
         )}
         <li>
           <a href="#">
+            <span className="icon">🌙</span>
+            <span style={{ marginRight: "17px" }}>DarkMode</span>
+            <ThemeToggle />
+          </a>
+        </li>
+        <li>
+          <a href="#">
             <span className="icon">📥</span>Inbox
             <span className="badge">3</span>
           </a>
@@ -47,13 +54,7 @@ export default function Sidebar({ submitComponent, userRole }: SidebarProps) {
             <span className="badge">2</span>
           </a>
         </li>
-        <li>
-          <a href="#">
-            <span className="icon">🌙</span>
-            <span style={{ marginRight: "17px" }}>DarkMode</span>
-            <ThemeToggle />
-          </a>
-        </li>
+
         <li>
           <a href="#">
             <span className="icon">🕒</span> Timesheet

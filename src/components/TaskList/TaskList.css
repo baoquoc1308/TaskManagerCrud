@@ -211,13 +211,7 @@
     display: block;
     text-align: left;
   }
-  /* .task-item {
-    min-height: 380px;
-  } */
 
-  .task-item img {
-    height: 250px;
-  }
   .meta-row {
     display: flex;
     flex-wrap: nowrap;
@@ -238,10 +232,6 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
     padding: 0 1rem;
-  }
-
-  .task-item img {
-    height: 250px;
   }
 
   .task-item h3 {
@@ -272,11 +262,6 @@
     max-height: 500px;
     overflow-y: auto;
     padding: 0.8rem;
-  }
-
-  .task-item img {
-    height: 200px;
-    margin: 0.8rem 0;
   }
 
   .task-item h3 {
@@ -317,10 +302,6 @@
 
   .task-item {
     padding: 0.7rem;
-  }
-
-  .task-item img {
-    height: 180px;
   }
 
   .task-item h3 {
@@ -1295,7 +1276,7 @@ body {
   color: var(--text-color);
 }
 .status-badge.status-in-progress {
-  background-color: #4896e9;
+  background-color: #629edf;
   color: var(--text-color);
 }
 

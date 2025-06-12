@@ -12,5 +12,7 @@ export interface Task {
   priority?: Priority;
   status?: Status;
   avatar?: string;
-  user_id?: string;
+  user_id: string;
+  changes: string;
+  userId: string;
 }

@@ -6,9 +6,18 @@ export interface AppNotification {
   message: string;
   timestamp: string;
   isRead: boolean;
-  type?: "task_deleted" | "task_updated" | "task_renamed" | "general"; // Thêm type
+  type?:
+    | "task_created"
+    | "task_deleted"
+    | "task_updated"
+    | "task_renamed"
+    | "task_status_changed"
+    | "task_assigned"
+    | "task_unassigned"
+    | "task_deadline_changed"
+    | "task_priority_changed"
+    | "general";
 }
-
 interface NotificationContextType {
   notifications: AppNotification[];
   addNotification: (message: string, userId: string, type?: string) => void;

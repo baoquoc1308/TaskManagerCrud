@@ -12,6 +12,7 @@ import TaskList from "../TaskList";
 import "./TaskManager.css";
 import { toast } from "react-toastify";
 import SearchTasks from "../SearchTasks";
+import { useTaskNotifications } from "../../utils/TaskNotifications";
 
 function TaskManager({
   session,
@@ -25,6 +26,8 @@ function TaskManager({
   userEmail: string;
   userRole: string;
   userId: string;
+  title: string;
+  changes: string;
 }) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskId, setTaskId] = useState<string | null>(null);
@@ -60,6 +63,8 @@ function TaskManager({
     priority: "",
     time: "",
   });
+  const { notifyTaskUpdated } = useTaskNotifications();
+  const currentManagerName = "Manager";
   // useEffect(() => {
   //   fetchTasks(currentPage, pageSize, setTasks, setTotalPages, setTotalCount);
   // }, [currentPage]);
@@ -159,7 +164,13 @@ function TaskManager({
       supabase.removeChannel(channel);
     };
   }, [supabase, setTasks, setFilteredTasks]);
-  const updateTask = async (taskId: number) => {
+  const updateTask = async (
+    taskId: number,
+    title: string,
+    userId: string,
+    changes: string
+  ) => {
+    console.log("🚀 ~ title:", title);
     if (newDescription === originalDescription) {
       setEditingId(null);
       return;
@@ -170,6 +181,8 @@ function TaskManager({
       .eq("id", taskId);
 
     if (!error) {
+      notifyTaskUpdated(userId, title, currentManagerName, changes);
+      console.log("🚀 ~ title:", title);
       setTasks((prev) =>
         prev.map((task) =>
           task.id === taskId ? { ...task, description: newDescription } : task

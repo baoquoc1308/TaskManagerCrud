@@ -1,14 +1,16 @@
 import { useState, useRef, useEffect } from "react";
-import { Bell } from "lucide-react";
 import "./TaskManagerHeader.css";
 import { supabase } from "../../supabase-client";
+import { useNotifications } from "../../contexts/NotificationContext";
+import { Bell, User, Calendar, Phone, Mail } from "lucide-react";
+import { toast } from "react-toastify";
 
-interface Notification {
-  id: string;
-  message: string;
-  timestamp: string;
-  isRead: boolean;
-}
+// interface Notification {
+//   id: string;
+//   message: string;
+//   timestamp: string;
+//   isRead: boolean;
+// }
 
 export default function TaskManagerHeader({
   userEmail,
@@ -24,25 +26,29 @@ export default function TaskManagerHeader({
   searchComponent?: React.ReactNode;
   userId: string;
 }) {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const { getUserNotifications, markAllAsRead, deleteNotification } =
+    useNotifications();
+  const notifications = getUserNotifications(userId);
+  // const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
-
   const [showAvatarDropdown, setShowAvatarDropdown] = useState(false);
-  const [showEditAvatarModal, setShowEditAvatarModal] = useState(false);
   const [tempAvatar, setTempAvatar] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  const [unreadCount, setUnreadCount] = useState(0);
   const [currentAvatar, setCurrentAvatar] = useState<string | null>(
     avatarUrl || null
   );
-  const unreadCount = notifications.filter((n) => !n.isRead).length;
 
-  const markAllAsRead = () => {
-    setNotifications(notifications.map((n) => ({ ...n, isRead: true })));
+  useEffect(() => {
+    const count = notifications.filter((n) => !n.isRead).length;
+    setUnreadCount(count);
+  }, [notifications]);
+  const handleMarkAllAsRead = () => {
+    markAllAsRead(userId);
   };
 
-  const deleteNotification = (id: string) => {
-    setNotifications(notifications.filter((n) => n.id !== id));
+  const handleDeleteNotification = (id: string) => {
+    deleteNotification(id);
   };
   const [isUploading, setIsUploading] = useState(false);
 
@@ -117,8 +123,8 @@ export default function TaskManagerHeader({
           console.error("Auth update error:", authError);
         } else {
           setCurrentAvatar(publicUrl);
-          setShowEditAvatarModal(false);
           setTempAvatar(null);
+          setShowAvatarActions(false);
         }
       } else {
         alert("Failed to upload avatar");
@@ -131,15 +137,132 @@ export default function TaskManagerHeader({
     }
   };
 
-  const handleModalBackdropClick = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (e.target === e.currentTarget) {
-      setShowEditAvatarModal(false);
-      setTempAvatar(null);
+  const [showEditProfile, setShowEditProfile] = useState(false);
+  const [showAvatarActions, setShowAvatarActions] = useState(false);
+  const [showExpandedAvatar, setShowExpandedAvatar] = useState(false);
+  const [profile, setProfile] = useState({
+    fullName: "",
+    dateOfBirth: "",
+    gender: "male",
+    phone: "",
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [saveStatus, setSaveStatus] = useState<
+    "idle" | "saving" | "success" | "error"
+  >("idle");
+
+  // Add state for display name
+  const [displayName, setDisplayName] = useState<string>(userEmail);
+
+  useEffect(() => {
+    fetchProfileData();
+  }, [userId]);
+
+  const fetchProfileData = async () => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from("users")
+        .select("full_name, date_of_birth, gender, phone")
+        .eq("id", userId)
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        setProfile({
+          fullName: data.full_name || "",
+          dateOfBirth: data.date_of_birth
+            ? convertToDisplayDate(data.date_of_birth)
+            : "",
+          gender: data.gender || "male",
+          phone: data.phone || "",
+        });
+        // Set display name - use full name if available, otherwise use email
+        setDisplayName(
+          data.full_name && data.full_name.trim() ? data.full_name : userEmail
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  // Function to convert date from yyyy-mm-dd to dd/mm/yyyy for display
+  const convertToDisplayDate = (dateString: string): string => {
+    if (!dateString) return "";
+    const [year, month, day] = dateString.split("-");
+    return `${day}/${month}/${year}`;
+  };
+
+  // Function to convert date from dd/mm/yyyy to yyyy-mm-dd for storage
+  const convertToStorageDate = (dateString: string): string => {
+    if (!dateString) return "";
+    const [day, month, year] = dateString.split("/");
+    return `${year}-${month}-${day}`;
+  };
+
+  const handleProfileChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    setProfile({
+      ...profile,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSaveProfile = async () => {
+    try {
+      setSaveStatus("saving");
+
+      // Validate data before saving
+      if (!profile.fullName.trim()) {
+        throw new Error("Full name is required");
+      }
+
+      // Convert date back to yyyy-mm-dd format for storage
+      const storageDate = profile.dateOfBirth
+        ? convertToStorageDate(profile.dateOfBirth)
+        : "";
+
+      const { error } = await supabase
+        .from("users")
+        .update({
+          full_name: profile.fullName,
+          date_of_birth: storageDate,
+          gender: profile.gender,
+          phone: profile.phone,
+        })
+        .eq("id", userId);
+
+      if (error) throw error;
+
+      setSaveStatus("success");
+      toast.success("Profile saved successfully!");
+
+      // Update display name after successful save
+      setDisplayName(
+        profile.fullName && profile.fullName.trim()
+          ? profile.fullName
+          : userEmail
+      );
+
+      setShowEditProfile(false);
+      setSaveStatus("idle");
+
+      // setTimeout(() => {
+      //   setShowEditProfile(false);
+      //   setSaveStatus("idle");
+      // }, 100);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      setSaveStatus("error");
+      toast.error("Failed to save profile!");
+      setTimeout(() => setSaveStatus("idle"), 2000);
+    }
+  };
   useEffect(() => {
     const handleDocumentClick = (e: any) => {
       if (
@@ -185,7 +308,10 @@ export default function TaskManagerHeader({
               <div className="notifications-header">
                 <h3>Notifications</h3>
                 {unreadCount > 0 && (
-                  <button className="mark-all-read" onClick={markAllAsRead}>
+                  <button
+                    className="mark-all-read"
+                    onClick={handleMarkAllAsRead}
+                  >
                     Mark all as read
                   </button>
                 )}
@@ -210,7 +336,9 @@ export default function TaskManagerHeader({
                       </span>
                       <button
                         className="delete-notification"
-                        onClick={() => deleteNotification(notification.id)}
+                        onClick={() =>
+                          handleDeleteNotification(notification.id)
+                        }
                       >
                         ×
                       </button>
@@ -222,7 +350,8 @@ export default function TaskManagerHeader({
           )}
         </div>
 
-        <span>{userEmail}</span>
+        {/* Display full name if available, otherwise email */}
+        <span>{displayName}</span>
 
         {/* Avatar & Dropdown */}
         <div className="user-avatar-wrapper" style={{ position: "relative" }}>
@@ -236,7 +365,7 @@ export default function TaskManagerHeader({
           >
             {currentAvatar ? (
               <img
-                src={currentAvatar}
+                src={tempAvatar ?? currentAvatar ?? undefined}
                 alt="User Avatar"
                 className="user-avatar-img"
                 referrerPolicy="no-referrer"
@@ -259,12 +388,11 @@ export default function TaskManagerHeader({
               <ul>
                 <li
                   onClick={() => {
-                    setShowEditAvatarModal(true);
+                    setShowEditProfile(true);
                     setShowAvatarDropdown(false);
-                    setTempAvatar(null);
                   }}
                 >
-                  Edit Avatar
+                  Edit Profile
                 </li>
                 <li
                   onClick={() => {
@@ -280,56 +408,246 @@ export default function TaskManagerHeader({
         </div>
       </div>
 
-      {/* Modal Edit Avatar */}
-      {showEditAvatarModal && (
-        <div className="modal-backdrop" onClick={handleModalBackdropClick}>
-          <div className="modal-content">
-            <div className="modal-title">Edit Avatar</div>
-            <div className="modal-body">
-              <input
-                type="file"
-                accept="image/*"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                style={{ marginBottom: 10 }}
-              />
-              {tempAvatar && (
-                <div className="preview-avatar" style={{ marginBottom: 12 }}>
-                  <img
-                    src={tempAvatar}
-                    alt="Preview Avatar"
-                    style={{
-                      width: 80,
-                      height: 80,
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                      border: "1px solid #eee",
-                      background: "#faf9f9",
-                    }}
-                  />
-                </div>
+      {/* Modal Edit Profile với Avatar */}
+      {showEditProfile && (
+        <div className="modal-backdrop">
+          <div className="modal-content profile-modal">
+            {/* Close button */}
+            <button
+              className="modal-close-btn"
+              onClick={() => {
+                setShowEditProfile(false);
+                setShowAvatarActions(false);
+                setShowExpandedAvatar(false);
+                setTempAvatar(null);
+              }}
+              aria-label="Close"
+            >
+              ×
+            </button>
+            <div className="modal-title">
+              EDIT PROFILE
+              {isLoading && (
+                <span className="loading-indicator">Loading...</span>
               )}
             </div>
+
+            <div className="modal-body">
+              {isLoading ? (
+                <div className="loading-spinner">Loading profile data...</div>
+              ) : (
+                <>
+                  {/* Avatar Section at Top */}
+                  <div className="avatar-section">
+                    <div
+                      className="profile-avatar"
+                      onClick={() => setShowAvatarActions(!showAvatarActions)}
+                    >
+                      {tempAvatar ? (
+                        <img
+                          src={tempAvatar}
+                          alt="Profile Avatar"
+                          className="avatar-img"
+                        />
+                      ) : currentAvatar ? (
+                        <img
+                          src={currentAvatar}
+                          alt="Profile Avatar"
+                          className="avatar-img"
+                        />
+                      ) : (
+                        <div className="avatar-placeholder">🧑🏻</div>
+                      )}
+                    </div>
+
+                    {/* Avatar Actions Dropdown */}
+                    {showAvatarActions && (
+                      <div className="avatar-actions-dropdown">
+                        <div
+                          className="avatar-action"
+                          onClick={() => {
+                            setShowExpandedAvatar(true);
+                            setShowAvatarActions(false);
+                          }}
+                        >
+                          View Avatar
+                        </div>
+                        <div
+                          className="avatar-action"
+                          onClick={() => {
+                            fileInputRef.current?.click();
+                            setShowAvatarActions(false);
+                          }}
+                        >
+                          Change Avatar
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Hidden file input */}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      className="avatar-file-input"
+                    />
+
+                    {/* Show preview and save/cancel when file selected */}
+                    {tempAvatar && (
+                      <div className="avatar-actions-buttons">
+                        <button
+                          onClick={handleSaveAvatar}
+                          disabled={isUploading}
+                          className="avatar-save-btn"
+                        >
+                          {isUploading ? "Uploading..." : "Save"}
+                        </button>
+                        <button
+                          onClick={() => {
+                            setTempAvatar(null);
+                            if (fileInputRef.current)
+                              fileInputRef.current.value = "";
+                          }}
+                          disabled={isUploading}
+                          className="avatar-cancel-btn"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* --- Form Fields --- */}
+                  <div className="form-group">
+                    <label>
+                      <User size={16} className="icon" />
+                      Full Name
+                    </label>
+                    <input
+                      type="text"
+                      name="fullName"
+                      value={profile.fullName}
+                      onChange={handleProfileChange}
+                      placeholder="Nguyen Van A"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>
+                      <Calendar size={16} className="icon" />
+                      Date of Birth
+                    </label>
+                    <input
+                      type="text"
+                      name="dateOfBirth"
+                      value={profile.dateOfBirth}
+                      onChange={handleProfileChange}
+                      placeholder="dd/mm/yyyy"
+                      pattern="\d{2}/\d{2}/\d{4}"
+                      title="Please enter date in DD/MM/YYYY format"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>
+                      <User size={16} className="icon" />
+                      Gender
+                    </label>
+                    <select
+                      name="gender"
+                      value={profile.gender}
+                      onChange={handleProfileChange}
+                    >
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>
+                      <Mail size={16} className="icon" />
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      value={userEmail}
+                      disabled
+                      className="disabled-input"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>
+                      <Phone size={16} className="icon" />
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={profile.phone}
+                      onChange={handleProfileChange}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+
             <div className="modal-footer">
+              {saveStatus === "error" && (
+                <span className="error-message">Failed to save changes</span>
+              )}
+              {saveStatus === "success" && (
+                <span className="success-message"></span>
+              )}
               <button
-                className="app-button"
-                style={{ marginRight: 8 }}
-                disabled={!tempAvatar}
-                onClick={handleSaveAvatar}
+                className={`save-button ${
+                  saveStatus === "saving" ? "saving" : ""
+                }`}
+                onClick={handleSaveProfile}
+                disabled={isLoading || saveStatus === "saving"}
               >
-                {isUploading ? "Uploading..." : "Save"}
+                {saveStatus === "saving" ? "Saving..." : "Save Changes"}
               </button>
               <button
-                className="app-button"
+                className="cancel-button"
                 onClick={() => {
-                  setShowEditAvatarModal(false);
+                  setShowEditProfile(false);
+                  setShowAvatarActions(false);
+                  setShowExpandedAvatar(false);
                   setTempAvatar(null);
                 }}
-                disabled={isUploading}
+                disabled={saveStatus === "saving"}
               >
                 Cancel
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      {/* Expanded Avatar Modal */}
+      {showExpandedAvatar && (
+        <div
+          className="modal-backdrop expanded-avatar-backdrop"
+          onClick={() => setShowExpandedAvatar(false)}
+        >
+          <div
+            className="expanded-avatar-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="expanded-avatar-close"
+              onClick={() => setShowExpandedAvatar(false)}
+            >
+              ×
+            </button>
+            {currentAvatar ? (
+              <img
+                src={currentAvatar}
+                alt="Expanded Avatar"
+                className="expanded-avatar-img"
+              />
+            ) : (
+              <div className="avatar-placeholder">🧑🏻</div>
+            )}
           </div>
         </div>
       )}

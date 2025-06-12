@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "../../supabase-client";
 import type { Task } from "../../types/Task";
 import "./TaskDetail.css";
@@ -20,7 +20,12 @@ interface TaskDetailProps {
   setEditingId: React.Dispatch<React.SetStateAction<number | null>>;
   newDescription: string;
   setNewDescription: React.Dispatch<React.SetStateAction<string>>;
-  updateTask: (taskId: number) => Promise<void>;
+  updateTask: (
+    taskId: number,
+    title: string,
+    userId: string,
+    changes: string
+  ) => Promise<void>;
   onDeleteSuccess: (deletedId: number) => void;
 }
 
@@ -41,9 +46,8 @@ function TaskDetail({
   const [loading, setLoading] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isCollapseOpen, setIsCollapseOpen] = useState(false);
-
+  const modalRef = useRef<HTMLDivElement>(null);
   const isEditingThisTask = editingId === Number(taskId);
-
   useEffect(() => {
     if (!taskId) return;
 
@@ -95,7 +99,7 @@ function TaskDetail({
 
   const handleSaveClick = async () => {
     if (task) {
-      await updateTask(task.id);
+      await updateTask(task.id, task.title, task.userId, task.changes);
       setEditingId(null);
 
       const { data, error } = await supabase
@@ -133,13 +137,31 @@ function TaskDetail({
       onClose();
     }
   };
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    }
 
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
   if (!taskId) return null;
 
   if (loading || !task)
     return (
       <div className="modal-overlay" onClick={onClose}>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="modal-content"
+          ref={modalRef}
+          onClick={(e) => e.stopPropagation()}
+        >
           <p>Loading...</p>
         </div>
       </div>
@@ -147,7 +169,11 @@ function TaskDetail({
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="modal-content"
+        ref={modalRef}
+        onClick={(e) => e.stopPropagation()}
+      >
         <button className="close-button" onClick={onClose}>
           &times;
         </button>

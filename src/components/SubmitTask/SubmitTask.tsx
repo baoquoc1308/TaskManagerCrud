@@ -170,6 +170,13 @@ export const SubmitTaskDropdown = ({
           <div className="modal-content">
             {" "}
             <h3>CREATE TASK</h3>
+            <button
+              type="button"
+              className="close-button"
+              onClick={() => setOpen(false)}
+            >
+              ×
+            </button>
             <form onSubmit={handleSubmit} className="task-form">
               <div className="row row-1">
                 <input

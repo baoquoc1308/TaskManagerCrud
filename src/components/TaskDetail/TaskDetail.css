@@ -32,29 +32,31 @@
 }
 .close-button {
   position: absolute;
-  top: 10px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
+  top: 14px;
+  right: 14px;
+  background: transparent;
   border: none;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 50%;
-  font-size: 20px;
-  font-weight: bold;
-  color: #666;
+  font-size: 1.5rem;
+  color: #888;
   cursor: pointer;
+  z-index: 10;
+  transition: color 0.2s, transform 0.2s;
+  padding: 0 8px;
+  line-height: 1;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  outline: none;
 }
 .dark .close-button {
   background-color: #333;
   color: #fff;
 }
 .close-button:hover {
+  outline: none;
   background: #f1f5f9;
   color: #dc2626;
   transform: scale(1.1);
@@ -204,7 +206,6 @@
 .edit-description-textarea {
   width: 100%;
   padding: 16px;
-  border: 2px solid #e5e7eb;
   border-radius: 12px;
   font-size: 16px;
   line-height: 1.6;
@@ -302,9 +303,9 @@
   color: white;
 }
 
-.status-in-progress {
+/* .status-in-progress {
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-}
+} */
 
 .status-completed {
   background: linear-gradient(135deg, #10b981, #059669);
@@ -468,8 +469,7 @@
 }
 
 .task-buttons button:focus,
-.edit-description-textarea:focus,
-.close-button:focus {
+.edit-description-textarea:focus {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }

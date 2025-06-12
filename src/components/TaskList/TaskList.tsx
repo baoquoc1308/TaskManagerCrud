@@ -17,7 +17,12 @@ interface TaskListProps {
   newDescription: string;
   setNewDescription: React.Dispatch<React.SetStateAction<string>>;
   confirmDeleteTask: (task: Task) => void;
-  updateTask: (taskId: number) => Promise<void>;
+  updateTask: (
+    taskId: number,
+    title: string,
+    userId: string,
+    changes: string
+  ) => Promise<void>;
   newTaskAdded: number | null;
   lastTaskRef: React.RefObject<HTMLLIElement | null>;
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;

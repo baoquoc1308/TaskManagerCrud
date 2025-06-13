@@ -1,4 +1,3 @@
-// components/TaskItem/TaskItem.jsx
 import type { Task } from "../../types/Task";
 import FormattedTime from "../../utils/FormattedTime";
 import AvatarWithTooltip from "../AvatarWithTooltip/AvatarWithTooltip";

@@ -263,15 +263,17 @@ export default function TaskManagerHeader({
       setTimeout(() => setSaveStatus("idle"), 2000);
     }
   };
+  // useEffect
   useEffect(() => {
-    const handleDocumentClick = (e: any) => {
+    const handleDocumentClick = (e: MouseEvent) => {
       if (
-        !e.target.closest(".user-avatar-wrapper") &&
-        !e.target.closest(".avatar-dropdown")
+        !(e.target as HTMLElement).closest(".user-avatar-wrapper") &&
+        !(e.target as HTMLElement).closest(".avatar-actions-dropdown")
       ) {
         setShowAvatarDropdown(false);
       }
     };
+
     document.addEventListener("mousedown", handleDocumentClick);
     return () => document.removeEventListener("mousedown", handleDocumentClick);
   }, []);
@@ -581,6 +583,7 @@ export default function TaskManagerHeader({
                       Phone Number
                     </label>
                     <input
+                      placeholder="Your phone number"
                       type="tel"
                       name="phone"
                       value={profile.phone}

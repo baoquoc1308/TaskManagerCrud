@@ -26,12 +26,10 @@ function TaskManager({
   userEmail: string;
   userRole: string;
   userId: string;
-  title: string;
-  changes: string;
 }) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskId, setTaskId] = useState<string | null>(null);
-
+  const { notifyTaskUpdated, notifyTaskDeleted } = useTaskNotifications();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
@@ -63,7 +61,6 @@ function TaskManager({
     priority: "",
     time: "",
   });
-  const { notifyTaskUpdated } = useTaskNotifications();
   const currentManagerName = "Manager";
   // useEffect(() => {
   //   fetchTasks(currentPage, pageSize, setTasks, setTotalPages, setTotalCount);
@@ -175,13 +172,17 @@ function TaskManager({
       setEditingId(null);
       return;
     }
+
     const { error } = await supabase
       .from("tasks")
       .update({ description: newDescription })
       .eq("id", taskId);
 
     if (!error) {
-      notifyTaskUpdated(userId, title, currentManagerName, changes);
+      // Gửi thông báo cho user khi manager cập nhật task
+      if (userRole === "manager") {
+        notifyTaskUpdated(userId, title, currentManagerName, changes);
+      }
       console.log("🚀 ~ title:", title);
       setTasks((prev) =>
         prev.map((task) =>
@@ -194,7 +195,6 @@ function TaskManager({
       toast.error("❌ Error updating task!");
     }
   };
-
   const confirmDeleteTask = (task: Task) => {
     setTaskToDelete(task);
     setShowDeleteModal(true);
@@ -215,6 +215,14 @@ function TaskManager({
         .eq("id", taskToDelete.id);
 
       if (error) throw error;
+
+      // Gửi thông báo cho user khi manager xóa task
+      // Sử dụng user_id hoặc userId tùy thuộc vào trường nào được sử dụng
+      const taskOwnerId = taskToDelete.user_id || taskToDelete.userId;
+      if (taskOwnerId && userRole === "manager") {
+        notifyTaskDeleted(taskOwnerId, taskToDelete.title, currentManagerName);
+      }
+
       const updatedTasks = (filteredTasks ?? tasks).filter(
         (task) => task.id !== taskToDelete.id
       );
@@ -225,7 +233,8 @@ function TaskManager({
       } else {
         setTasks(updatedTasks);
       }
-      // Delele 1 task --> auto fill
+
+      // Delete 1 task --> auto fill
       const totalAfterDelete = updatedTasks.length;
       const newTotalPages = Math.ceil(totalAfterDelete / pageSize);
       if (currentPage > newTotalPages) {

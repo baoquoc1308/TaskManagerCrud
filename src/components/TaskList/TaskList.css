@@ -94,32 +94,28 @@
   width: 110px;
   font-family: sans-serif;
   font-size: 16px;
-  color: #302670;
+  color: #fff;
   font-weight: normal;
   padding: 8px 12px;
   align-items: center;
-  background-color: transparent;
-  border: 1px solid #302670;
+  background: linear-gradient(135deg, #6b7280, #4b5563);
   cursor: pointer;
   text-decoration: none;
+  border-radius: 6px;
 }
-.dark .cancel-btn {
-  border: 1px solid #dedde7;
-  color: #dedde7;
-}
-.dark .cancel-btn:hover {
-  background-color: #292828;
-  transition: all 0.3s ease;
-}
+
 .cancel-btn:hover {
-  background-color: #d6d0f1;
+  background: linear-gradient(135deg, #4d525c, #313741);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
   transition: all 0.3s ease;
 }
+
 .cancel-icon {
   font-size: 12px;
 }
 .cancel-btn:focus {
-  outline: 4px auto;
+  outline: 1px auto;
 }
 .task-item span.time-meta {
   display: flex;
@@ -1001,7 +997,7 @@
   background-color: #f8f9fa;
 }
 .add-task-btn:focus {
-  outline: 4px auto;
+  outline: 1px auto;
 }
 @keyframes slideIn {
   from {
@@ -1234,7 +1230,6 @@ body {
 
 .task-item .task-link {
   display: grid;
-
   grid-template-columns: 3fr 1fr 2fr 1fr 1fr 0.5fr;
   align-items: center;
   padding: 10px 0;
@@ -1387,9 +1382,9 @@ body {
 
 .dashboard-menu a:hover,
 .dashboard-menu a.active {
-  background-color: #e6e6fa;
-  color: #8c7ae6;
-  border-left-color: #667eea;
+  background-color: #d4ecde;
+  color: #388884;
+  border-left-color: #388884;
 }
 
 .dashboard-menu a.active .badge {

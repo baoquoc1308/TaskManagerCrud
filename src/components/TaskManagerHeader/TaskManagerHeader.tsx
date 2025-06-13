@@ -18,30 +18,33 @@ export default function TaskManagerHeader({
   onLogout,
   searchComponent,
   userId,
-}: {
+}: // taskId,
+{
   userEmail: string;
   avatarUrl: string | null;
   onLogout: () => void;
   userRole: string | null;
   searchComponent?: React.ReactNode;
   userId: string;
+  taskId: string;
 }) {
   const { getUserNotifications, markAllAsRead, deleteNotification } =
     useNotifications();
-  const notifications = getUserNotifications(userId);
+  const notifications = getUserNotifications();
+  console.log("🚀 ~ notifications 123:", notifications);
   // const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showAvatarDropdown, setShowAvatarDropdown] = useState(false);
   const [tempAvatar, setTempAvatar] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [unreadCount, setUnreadCount] = useState(0);
+  console.log("🚀 ~ unreadCount:", unreadCount);
   const [currentAvatar, setCurrentAvatar] = useState<string | null>(
     avatarUrl || null
   );
 
   useEffect(() => {
-    const count = notifications.filter((n) => !n.isRead).length;
-    setUnreadCount(count);
+    setUnreadCount(notifications.length);
   }, [notifications]);
   const handleMarkAllAsRead = () => {
     markAllAsRead(userId);
@@ -302,7 +305,7 @@ export default function TaskManagerHeader({
             <Bell size={20} />
             {unreadCount > 0 && (
               <span className="notification-badge">{unreadCount}</span>
-            )}
+            )}{" "}
           </button>
 
           {showNotifications && (

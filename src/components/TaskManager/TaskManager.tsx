@@ -20,15 +20,17 @@ function TaskManager({
   userEmail,
   userRole,
   userId,
+  taskId,
 }: {
   session: Session;
   onLogout: () => void;
   userEmail: string;
   userRole: string;
   userId: string;
+  taskId: string;
 }) {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [taskId, setTaskId] = useState<string | null>(null);
+  const [tasksId, setTaskId] = useState<string | null>(null);
   const { notifyTaskUpdated, notifyTaskDeleted } = useTaskNotifications();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -167,6 +169,7 @@ function TaskManager({
     userId: string,
     changes: string
   ) => {
+    console.log("🚀 ~ taskId:", taskId);
     console.log("🚀 ~ title:", title);
     if (newDescription === originalDescription) {
       setEditingId(null);
@@ -181,8 +184,9 @@ function TaskManager({
     if (!error) {
       // Gửi thông báo cho user khi manager cập nhật task
       if (userRole === "manager") {
-        notifyTaskUpdated(userId, title, currentManagerName, changes);
+        notifyTaskUpdated(`${taskId}`, title, currentManagerName, changes);
       }
+      console.log("🚀 ~ userId:", userId);
       console.log("🚀 ~ title:", title);
       setTasks((prev) =>
         prev.map((task) =>
@@ -300,6 +304,7 @@ function TaskManager({
         onLogout={onLogout}
         userRole={userRole}
         userId={userId}
+        taskId={tasksId!}
         searchComponent={
           <SearchTasks
             keyword={keyword}

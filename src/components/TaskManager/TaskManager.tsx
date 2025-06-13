@@ -27,7 +27,7 @@ function TaskManager({
   userEmail: string;
   userRole: string;
   userId: string;
-  taskId: string;
+  taskId?: string;
 }) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [tasksId, setTaskId] = useState<string | null>(null);

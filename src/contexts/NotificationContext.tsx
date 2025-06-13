@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext } from "react";
 
 export interface AppNotification {
   id: string;
-  userId: string;
+  taskId: string;
   message: string;
   timestamp: string;
   isRead: boolean;
@@ -20,10 +20,10 @@ export interface AppNotification {
 }
 interface NotificationContextType {
   notifications: AppNotification[];
-  addNotification: (message: string, userId: string, type?: string) => void;
-  markAllAsRead: (userId: string) => void;
+  addNotification: (message: string, taskId: string, type?: string) => void;
+  markAllAsRead: (taskId: string) => void;
   deleteNotification: (id: string) => void;
-  getUserNotifications: (userId: string) => AppNotification[];
+  getUserNotifications: () => AppNotification[];
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(
@@ -36,26 +36,29 @@ export function NotificationProvider({
   children: React.ReactNode;
 }) {
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
+  console.log("🚀 ~ notifications:", notifications);
 
   const addNotification = (
     message: string,
-    userId: string,
+    taskId: string,
     type: string = "general"
   ) => {
+    console.log("?????????");
+
     const newNotification: AppNotification = {
       id: Date.now().toString(),
-      userId,
+      taskId,
       message,
       timestamp: new Date().toLocaleString(),
-      isRead: false,
+      isRead: true,
       type: type as any,
     };
     setNotifications((prev) => [newNotification, ...prev]);
   };
 
-  const markAllAsRead = (userId: string) => {
+  const markAllAsRead = (taskId: string) => {
     setNotifications((prev) =>
-      prev.map((n) => (n.userId === userId ? { ...n, isRead: true } : n))
+      prev.map((n) => (n.taskId === taskId ? { ...n, isRead: true } : n))
     );
   };
 
@@ -63,8 +66,8 @@ export function NotificationProvider({
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   };
 
-  const getUserNotifications = (userId: string) => {
-    return notifications.filter((n) => n.userId === userId);
+  const getUserNotifications = () => {
+    return notifications;
   };
 
   return (

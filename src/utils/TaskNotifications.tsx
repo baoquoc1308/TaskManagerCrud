@@ -30,22 +30,21 @@ export const useTaskNotifications = () => {
   };
 
   const notifyTaskUpdated = (
-    userId: string,
+    taskId: string,
     title: string,
     updatedBy?: string,
     changes?: string
   ) => {
+    console.log("🚀 ~ useTaskNotifications ~ taskId:", taskId);
     console.log("🚀 ~ useTaskNotifications ~ title:", title);
     const updaterName = updatedBy || "Manager";
+    console.log("🚀 ~ useTaskNotifications ~ updaterName:", updaterName);
     const changeDetails = changes ? ` (${changes})` : "";
+    console.log("🚀 ~ useTaskNotifications ~ changeDetails:", changeDetails);
     addNotification(
       `${updaterName} updated your task "${title}"${changeDetails}`,
-      userId,
+      taskId,
       "task_updated"
-    );
-    console.log(
-      "🚀 ~ useTaskNotifications ~ addNotification:",
-      addNotification
     );
     console.log("🚀 ~ useTaskNotifications ~ title:", title);
   };

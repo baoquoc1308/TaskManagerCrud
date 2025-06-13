@@ -949,10 +949,10 @@
 }
 
 .dots-menu {
-  margin-left: auto; /* Đẩy sang phải */
+  margin-left: auto;
   position: relative;
   display: flex;
-  align-items: center; /* Căn giữa dọc */
+  align-items: center;
 }
 
 .dots-button {
@@ -1651,8 +1651,8 @@ body {
   color: #333;
 }
 .dots-dropdown button:hover {
-  background-color: #e6deeb;
-  color: #a782d8;
+  background-color: #e7f5f3;
+  color: #67a59c;
 }
 .task-title {
   cursor: pointer;

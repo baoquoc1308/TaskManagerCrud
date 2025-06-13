@@ -339,7 +339,8 @@
   align-items: center;
   font-size: 0.9rem;
   margin-bottom: 8px;
-  color: #555;
+  color: #333;
+  font-weight: 550;
 }
 .dark .profile-modal .form-group label {
   color: #fff;
@@ -400,7 +401,10 @@
 }
 
 .profile-modal .cancel-button:hover {
-  background-color: #e2e6ea;
+  background: linear-gradient(135deg, #4d525c, #313741);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
+  transition: all 0.3s ease;
 }
 
 @media (max-width: 768px) {
@@ -670,14 +674,18 @@
   transform: translateX(-50%);
   background: white;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   min-width: 120px;
   z-index: 10;
   margin-top: 0px;
 }
+.dark .avatar-actions-dropdown {
+  background-color: #333;
+}
 
 .avatar-action {
+  margin: 0.5rem 0;
   padding: 8px 12px;
   cursor: pointer;
   border-bottom: 1px solid #eee;
@@ -695,7 +703,7 @@
   color: #fff;
 }
 .dark .avatar-action:hover {
-  background: #413c3c;
+  background: #635252;
 }
 .avatar-file-input {
   display: none;

@@ -143,9 +143,9 @@
 
 .save-button:hover {
   transform: translateY(-2px);
+  background: linear-gradient(135deg, #0ea371, #0a7956);
   box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
 }
-
 .cancel-button {
   background: linear-gradient(135deg, #6b7280, #4b5563);
   color: white;

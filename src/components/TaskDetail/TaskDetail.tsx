@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "../../supabase-client";
 import type { Task } from "../../types/Task";
 import "./TaskDetail.css";
@@ -46,7 +46,6 @@ function TaskDetail({
   const [loading, setLoading] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isCollapseOpen, setIsCollapseOpen] = useState(false);
-  const modalRef = useRef<HTMLDivElement>(null);
   const isEditingThisTask = editingId === Number(taskId);
   useEffect(() => {
     if (!taskId) return;
@@ -137,43 +136,35 @@ function TaskDetail({
       onClose();
     }
   };
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
-        onClose();
-      }
-    }
+  // useEffect(() => {
+  //   function handleClickOutside(event: MouseEvent) {
+  //     if (
+  //       modalRef.current &&
+  //       !modalRef.current.contains(event.target as Node)
+  //     ) {
+  //       onClose();
+  //     }
+  //   }
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [onClose]);
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [onClose]);
   if (!taskId) return null;
 
   if (loading || !task)
     return (
       <div className="modal-overlay" onClick={onClose}>
-        <div
-          className="modal-content"
-          ref={modalRef}
-          onClick={(e) => e.stopPropagation()}
-        >
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <p>Loading...</p>
         </div>
       </div>
     );
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div
-        className="modal-content"
-        ref={modalRef}
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className="modal-overlay">
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="close-button" onClick={onClose}>
           &times;
         </button>

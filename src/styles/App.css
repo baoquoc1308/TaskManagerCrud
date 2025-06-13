@@ -100,8 +100,8 @@ textarea {
 }
 input:focus,
 textarea:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+  border-color: #388884;
+  box-shadow: 0 0 5px rgba(37, 130, 230, 0.3);
   outline: none;
 }
 
@@ -140,7 +140,7 @@ input[type="file"] {
 
 .dark input:focus,
 .dark textarea:focus {
-  border-color: #6a9aff;
+  border-color: #388884;
   box-shadow: 0 0 5px rgba(106, 154, 255, 0.5);
 }
 

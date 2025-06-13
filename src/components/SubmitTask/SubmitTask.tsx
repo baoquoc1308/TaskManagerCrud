@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { supabase } from "../../supabase-client";
 import { fetchTasks } from "../FetchTasks/FetchTasks";
 import type { Dispatch, SetStateAction } from "react";
+import { Calendar, Flag, ClipboardList, FileText } from "lucide-react";
 
 interface SubmitTaskProps {
   session: any;
@@ -167,7 +168,7 @@ export const SubmitTaskDropdown = ({
       </button>
       {open && (
         <div className="modal-overlay">
-          <div className="modal-content">
+          <div className="modal-submit">
             {" "}
             <h3>CREATE TASK</h3>
             <button
@@ -179,6 +180,11 @@ export const SubmitTaskDropdown = ({
             </button>
             <form onSubmit={handleSubmit} className="task-form">
               <div className="row row-1">
+                <label>
+                  {" "}
+                  <FileText size={16} style={{ marginRight: "6px" }} />
+                  Title
+                </label>
                 <input
                   type="text"
                   placeholder="Task Title"
@@ -188,6 +194,13 @@ export const SubmitTaskDropdown = ({
                   }
                   required
                 />
+              </div>
+              <div className="row row-1">
+                <label>
+                  {" "}
+                  <FileText size={16} style={{ marginRight: "6px" }} />
+                  Description
+                </label>
                 <textarea
                   placeholder="Task Description"
                   value={newTask.description}
@@ -200,53 +213,74 @@ export const SubmitTaskDropdown = ({
                   required
                 />
               </div>
-
-              <div className="row row-2">
-                <input
-                  type="datetime-local"
-                  value={newTask.time || ""}
-                  onChange={(e) =>
-                    setNewTask((prev) => ({ ...prev, time: e.target.value }))
-                  }
-                  required
-                />
-                <Select
-                  options={priorityOptions}
-                  placeholder="Priority"
-                  isSearchable={false}
-                  menuPlacement="top"
-                  value={
-                    priorityOptions.find(
-                      (opt) => opt.value === newTask.priority
-                    ) || null
-                  }
-                  onChange={(option) =>
-                    setNewTask((prev) => ({
-                      ...prev,
-                      priority: option?.value || "",
-                    }))
-                  }
-                  className="priority-select"
-                  classNamePrefix="react-select"
-                />
-                <Select
-                  options={statusOptions}
-                  placeholder="Status"
-                  isSearchable={false}
-                  menuPlacement="top"
-                  value={
-                    statusOptions.find((opt) => opt.value === newTask.status) ||
-                    null
-                  }
-                  onChange={(option) =>
-                    setNewTask((prev) => ({
-                      ...prev,
-                      status: option?.value || "",
-                    }))
-                  }
-                  className="status-select"
-                  classNamePrefix="react-select"
-                />
+              <div className="row-2-container">
+                <div className="row row-2">
+                  <label>
+                    {" "}
+                    <Calendar size={16} style={{ marginRight: "6px" }} />
+                    Date
+                  </label>
+                  <input
+                    type="datetime-local"
+                    value={newTask.time || ""}
+                    onChange={(e) =>
+                      setNewTask((prev) => ({ ...prev, time: e.target.value }))
+                    }
+                    required
+                  />
+                </div>
+                <div className="row row-2">
+                  <label>
+                    {" "}
+                    <Flag size={16} style={{ marginRight: "6px" }} />
+                    Priority
+                  </label>
+                  <Select
+                    options={priorityOptions}
+                    placeholder="Priority"
+                    isSearchable={false}
+                    menuPlacement="top"
+                    value={
+                      priorityOptions.find(
+                        (opt) => opt.value === newTask.priority
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setNewTask((prev) => ({
+                        ...prev,
+                        priority: option?.value || "",
+                      }))
+                    }
+                    className="priority-select"
+                    classNamePrefix="react-select"
+                  />
+                </div>
+                <div className="row row-2">
+                  <label>
+                    {" "}
+                    <ClipboardList size={16} style={{ marginRight: "6px" }} />
+                    Status
+                  </label>
+                  <Select
+                    options={statusOptions}
+                    placeholder="Status"
+                    isSearchable={false}
+                    menuPlacement="top"
+                    value={
+                      statusOptions.find(
+                        (opt) => opt.value === newTask.status
+                      ) || null
+                    }
+                    onChange={(option) =>
+                      setNewTask((prev) => ({
+                        ...prev,
+                        status: option?.value || "",
+                      }))
+                    }
+                    className="status-select"
+                    classNamePrefix="react-select"
+                  />
+                </div>
               </div>
               <div className="dropdown-actions">
                 <button type="submit" className="submit-button">

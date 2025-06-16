@@ -50,17 +50,21 @@ export const useTaskNotifications = () => {
   };
 
   const notifyTaskRenamed = (
-    oldName: string,
-    newName: string,
-    userId: string,
-    renamedBy?: string
+    taskId: string,
+    title: string,
+    renamedBy?: string,
+    changes?: string
   ) => {
+    console.log("🚀 ~ useTaskNotifications ~ title:", title);
+    console.log("🚀 ~ useTaskNotifications ~ taskId:", taskId);
     const renamerName = renamedBy || "Manager";
+    const changeDetails = changes ? ` (${changes})` : "";
     addNotification(
-      `${renamerName} renamed your task from "${oldName}" to "${newName}"`,
-      userId,
+      `${renamerName} renamed your task from "${title}" to "${changeDetails}"`,
+      taskId,
       "task_renamed"
     );
+    console.log("🚀 ~ useTaskNotifications ~ title:", title);
   };
 
   const notifyTaskStatusChanged = (

@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./components/SearchTasks/SearchTasks.css";
 import ManagerDashboard from "./components/ManagerDashboard";
 import UserDashboard from "./components/UserDashboard/UserDashboard";
+import Contact from "./components/Contact/Contact";
 
 function App() {
   const [session, setSession] = useState<any>(null);
@@ -127,6 +128,12 @@ function App() {
             )
           }
         />
+        <Route
+          path="/contact"
+          element={session ? <Contact /> : <Navigate to="/login" replace />}
+        />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
       <ToastContainer

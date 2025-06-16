@@ -120,6 +120,7 @@
   padding: 15px;
   border-bottom: 1px solid #eee;
   position: relative;
+  text-align: left;
 }
 
 .notification-item.unread {
@@ -130,6 +131,7 @@
   margin: 0;
   font-size: 14px;
   color: #333;
+  width: 265px;
 }
 
 .notification-time {
@@ -141,8 +143,8 @@
 
 .delete-notification {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 5px;
+  right: 2px;
   background: none;
   border: none;
   cursor: pointer;

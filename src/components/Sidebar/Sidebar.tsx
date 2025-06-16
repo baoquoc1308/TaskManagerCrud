@@ -36,6 +36,15 @@ export default function Sidebar({ submitComponent, userRole }: SidebarProps) {
           </li>
         )}
         <li>
+          <NavLink
+            to="/contact"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            <span className="icon">📞</span> Contact
+            <span className="badge">5</span>
+          </NavLink>
+        </li>
+        <li>
           <a href="#">
             <span className="icon">🌙</span>
             <span style={{ marginRight: "17px" }}>DarkMode</span>
@@ -67,12 +76,7 @@ export default function Sidebar({ submitComponent, userRole }: SidebarProps) {
             <span className="badge">1</span>
           </a>
         </li>
-        <li>
-          <a href="#">
-            <span className="icon">🛠️</span> Support
-            <span className="badge">5</span>
-          </a>
-        </li>
+
         <li>
           <a href="#">
             <span className="icon">⚙️</span> Settings

@@ -9,6 +9,7 @@ import { Empty, Modal, Input } from "antd";
 import { toast } from "react-toastify";
 import Sidebar from "../Sidebar/Sidebar";
 import TaskSection from "../TaskSection/TaskSection";
+import { useTaskNotifications } from "../../utils/TaskNotifications";
 
 interface TaskListProps {
   tasks: Task[];
@@ -44,6 +45,7 @@ export default function TaskList({
   submitComponent,
   userRole,
 }: TaskListProps) {
+  const { notifyTaskRenamed } = useTaskNotifications();
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [isDeleteConfirmModalVisible, setIsDeleteConfirmModalVisible] =
     useState(false);
@@ -138,13 +140,15 @@ export default function TaskList({
   const handleConfirmRename = async () => {
     if (taskToRename && newTitle.trim() !== "") {
       try {
+        const oldTitle = taskToRename.title;
+
         const { error } = await supabase
           .from("tasks")
           .update({ title: newTitle.trim() })
           .eq("id", taskToRename.id);
 
         if (error) {
-          throw new Error(error.message);
+          throw error;
         }
 
         setTasks((prevTasks) =>
@@ -154,6 +158,15 @@ export default function TaskList({
               : task
           )
         );
+
+        if (userRole === "manager") {
+          await notifyTaskRenamed(
+            taskToRename.id.toString(),
+            oldTitle,
+            "Manager",
+            newTitle.trim()
+          );
+        }
 
         toast.success("✏️ Task renamed successfully!");
         handleCloseRenameModal();
@@ -169,7 +182,6 @@ export default function TaskList({
       }
     }
   };
-
   const getInitialsFromEmail = (email: string) => {
     if (!email) return "NA";
     const username = email.split("@")[0];

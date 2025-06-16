@@ -28,8 +28,7 @@ export default function TaskManagerHeader({
   userId: string;
   taskId: string;
 }) {
-  const { getUserNotifications, markAllAsRead, deleteNotification } =
-    useNotifications();
+  const { getUserNotifications, deleteNotification } = useNotifications();
   const notifications = getUserNotifications();
   console.log("🚀 ~ notifications 123:", notifications);
   // const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -42,13 +41,32 @@ export default function TaskManagerHeader({
   const [currentAvatar, setCurrentAvatar] = useState<string | null>(
     avatarUrl || null
   );
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        showNotifications &&
+        !(event.target as HTMLElement).closest(".notifications-wrapper")
+      ) {
+        setShowNotifications(false);
+      }
+    };
 
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showNotifications]);
+
+  console.log("🚀 ~ handleMarkAllAsRead ~ setUnreadCount:", setUnreadCount);
+
+  // useEffect(() => {
+  //   const unreadNotifications = notifications.filter((n) => !n.isRead);
+  //   setUnreadCount(unreadNotifications.length);
+  // }, [notifications]);
+  const handleMarkAllAsRead = () => {
+    setUnreadCount(0);
+  };
   useEffect(() => {
     setUnreadCount(notifications.length);
   }, [notifications]);
-  const handleMarkAllAsRead = () => {
-    markAllAsRead(userId);
-  };
 
   const handleDeleteNotification = (id: string) => {
     deleteNotification(id);

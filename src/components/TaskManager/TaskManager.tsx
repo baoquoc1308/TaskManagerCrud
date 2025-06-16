@@ -182,7 +182,6 @@ function TaskManager({
       .eq("id", taskId);
 
     if (!error) {
-      // Gửi thông báo cho user khi manager cập nhật task
       if (userRole === "manager") {
         notifyTaskUpdated(`${taskId}`, title, currentManagerName, changes);
       }
@@ -220,8 +219,6 @@ function TaskManager({
 
       if (error) throw error;
 
-      // Gửi thông báo cho user khi manager xóa task
-      // Sử dụng user_id hoặc userId tùy thuộc vào trường nào được sử dụng
       const taskOwnerId = taskToDelete.user_id || taskToDelete.userId;
       if (taskOwnerId && userRole === "manager") {
         notifyTaskDeleted(taskOwnerId, taskToDelete.title, currentManagerName);

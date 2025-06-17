@@ -13,7 +13,7 @@ import {
   Share2,
   ArrowLeft,
 } from "lucide-react";
-import "./contact.css";
+import "./Contact.css";
 import { useNavigate } from "react-router-dom";
 
 const Contact = () => {

@@ -52,36 +52,51 @@ export default function Sidebar({ submitComponent, userRole }: SidebarProps) {
           </a>
         </li>
         <li>
-          <a href="#">
+          <NavLink
+            to="/inbox"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
             <span className="icon">📥</span>Inbox
             <span className="badge">3</span>
-          </a>
+          </NavLink>
         </li>
         <li>
-          <a href="#">
+          <NavLink
+            to="/teams"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
             <span className="icon">👥</span>Teams
             <span className="badge">2</span>
-          </a>
+          </NavLink>
         </li>
 
         <li>
-          <a href="#">
+          <NavLink
+            to="/timesheet"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
             <span className="icon">🕒</span> Timesheet
             <span className="badge">2</span>
-          </a>
+          </NavLink>
         </li>
         <li>
-          <a href="#">
+          <NavLink
+            to="/calendar"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
             <span className="icon">📅</span> Calendar
             <span className="badge">1</span>
-          </a>
+          </NavLink>
         </li>
 
         <li>
-          <a href="#">
+          <NavLink
+            to="/settings"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
             <span className="icon">⚙️</span> Settings
             <span className="badge">1</span>
-          </a>
+          </NavLink>
         </li>
       </ul>
 

@@ -176,7 +176,6 @@
     font-size: 0.6rem;
     height: auto;
     display: block;
-    text-align: left;
   }
   .task-item span.time-meta {
     font-size: 0.8rem;
@@ -205,7 +204,6 @@
     font-size: 0.7rem;
     height: auto;
     display: block;
-    text-align: left;
   }
 
   .meta-row {

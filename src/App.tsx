@@ -10,6 +10,11 @@ import "./components/SearchTasks/SearchTasks.css";
 import ManagerDashboard from "./components/ManagerDashboard";
 import UserDashboard from "./components/UserDashboard/UserDashboard";
 import Contact from "./components/Contact/Contact";
+// import Inbox from "./components/Inbox/Inbox";
+// import Teams from "./components/Teams/Teams";
+// import Timesheet from "./components/Timesheet/Timesheet";
+// import Calendar from "./components/Calendar/Calendar";
+// import Settings from "./components/Settings/Settings";
 
 function App() {
   const [session, setSession] = useState<any>(null);
@@ -132,7 +137,26 @@ function App() {
           path="/contact"
           element={session ? <Contact /> : <Navigate to="/login" replace />}
         />
-
+        {/* <Route
+          path="/inbox"
+          element={session ? <Inbox /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/teams"
+          element={session ? <Teams /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/timesheet"
+          element={session ? <Timesheet /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/calendar"
+          element={session ? <Calendar /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/settings"
+          element={session ? <Settings /> : <Navigate to="/login" replace />}
+        /> */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 

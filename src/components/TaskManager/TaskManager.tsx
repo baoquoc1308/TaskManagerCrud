@@ -38,11 +38,8 @@ function TaskManager({
   const [newTaskAdded, setNewTaskAdded] = useState<number | null>(null);
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  // const fileInputRef = useRef<HTMLInputElement>(null);
   const [newTask, setNewTask] = useState({ title: "", description: "" });
-  // const [taskImage, setTaskImage] = useState<File | null>(null);
   const [editingId, setEditingId] = useState<number | null>(null);
-  // const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [originalDescription, setOriginalDescription] = useState("");
   const lastTaskRef = useRef<HTMLLIElement | null>(null);
@@ -64,9 +61,7 @@ function TaskManager({
     time: "",
   });
   const currentManagerName = "Manager";
-  // useEffect(() => {
-  //   fetchTasks(currentPage, pageSize, setTasks, setTotalPages, setTotalCount);
-  // }, [currentPage]);
+
   const avatarUrl = session?.user?.user_metadata?.avatar_url ?? "";
   useEffect(() => {
     if (newTaskAdded !== null) {
@@ -228,14 +223,12 @@ function TaskManager({
         (task) => task.id !== taskToDelete.id
       );
 
-      // Update master data
       if (filteredTasks) {
         setFilteredTasks(updatedTasks);
       } else {
         setTasks(updatedTasks);
       }
 
-      // Delete 1 task --> auto fill
       const totalAfterDelete = updatedTasks.length;
       const newTotalPages = Math.ceil(totalAfterDelete / pageSize);
       if (currentPage > newTotalPages) {

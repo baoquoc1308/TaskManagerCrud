@@ -4,22 +4,13 @@ import { supabase } from "../../supabase-client";
 import { useNotifications } from "../../contexts/NotificationContext";
 import { Bell, User, Calendar, Phone, Mail } from "lucide-react";
 import { toast } from "react-toastify";
-
-// interface Notification {
-//   id: string;
-//   message: string;
-//   timestamp: string;
-//   isRead: boolean;
-// }
-
 export default function TaskManagerHeader({
   userEmail,
   avatarUrl,
   onLogout,
   searchComponent,
   userId,
-}: // taskId,
-{
+}: {
   userEmail: string;
   avatarUrl: string | null;
   onLogout: () => void;
@@ -31,7 +22,6 @@ export default function TaskManagerHeader({
   const { getUserNotifications, deleteNotification } = useNotifications();
   const notifications = getUserNotifications();
   console.log("🚀 ~ notifications 123:", notifications);
-  // const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showAvatarDropdown, setShowAvatarDropdown] = useState(false);
   const [tempAvatar, setTempAvatar] = useState<string | null>(null);
@@ -57,10 +47,6 @@ export default function TaskManagerHeader({
 
   console.log("🚀 ~ handleMarkAllAsRead ~ setUnreadCount:", setUnreadCount);
 
-  // useEffect(() => {
-  //   const unreadNotifications = notifications.filter((n) => !n.isRead);
-  //   setUnreadCount(unreadNotifications.length);
-  // }, [notifications]);
   const handleMarkAllAsRead = () => {
     setUnreadCount(0);
   };
@@ -172,7 +158,6 @@ export default function TaskManagerHeader({
     "idle" | "saving" | "success" | "error"
   >("idle");
 
-  // Add state for display name
   const [displayName, setDisplayName] = useState<string>(userEmail);
 
   useEffect(() => {
@@ -199,7 +184,6 @@ export default function TaskManagerHeader({
           gender: data.gender || "male",
           phone: data.phone || "",
         });
-        // Set display name - use full name if available, otherwise use email
         setDisplayName(
           data.full_name && data.full_name.trim() ? data.full_name : userEmail
         );
@@ -211,14 +195,12 @@ export default function TaskManagerHeader({
     }
   };
 
-  // Function to convert date from yyyy-mm-dd to dd/mm/yyyy for display
   const convertToDisplayDate = (dateString: string): string => {
     if (!dateString) return "";
     const [year, month, day] = dateString.split("-");
     return `${day}/${month}/${year}`;
   };
 
-  // Function to convert date from dd/mm/yyyy to yyyy-mm-dd for storage
   const convertToStorageDate = (dateString: string): string => {
     if (!dateString) return "";
     const [day, month, year] = dateString.split("/");
@@ -238,12 +220,10 @@ export default function TaskManagerHeader({
     try {
       setSaveStatus("saving");
 
-      // Validate data before saving
       if (!profile.fullName.trim()) {
         throw new Error("Full name is required");
       }
 
-      // Convert date back to yyyy-mm-dd format for storage
       const storageDate = profile.dateOfBirth
         ? convertToStorageDate(profile.dateOfBirth)
         : "";
@@ -263,7 +243,6 @@ export default function TaskManagerHeader({
       setSaveStatus("success");
       toast.success("Profile saved successfully!");
 
-      // Update display name after successful save
       setDisplayName(
         profile.fullName && profile.fullName.trim()
           ? profile.fullName
@@ -272,11 +251,6 @@ export default function TaskManagerHeader({
 
       setShowEditProfile(false);
       setSaveStatus("idle");
-
-      // setTimeout(() => {
-      //   setShowEditProfile(false);
-      //   setSaveStatus("idle");
-      // }, 100);
     } catch (error) {
       console.error("Error updating profile:", error);
       setSaveStatus("error");
@@ -284,7 +258,6 @@ export default function TaskManagerHeader({
       setTimeout(() => setSaveStatus("idle"), 2000);
     }
   };
-  // useEffect
   useEffect(() => {
     const handleDocumentClick = (e: MouseEvent) => {
       if (
@@ -314,7 +287,6 @@ export default function TaskManagerHeader({
       </div>
       <div className="header-right">
         <div className="search-tasks-wrapper">{searchComponent}</div>
-        {/* Notifications Bell */}
         <div className="notifications-wrapper">
           <button
             className="notification-bell-button"
@@ -431,11 +403,9 @@ export default function TaskManagerHeader({
         </div>
       </div>
 
-      {/* Modal Edit Profile với Avatar */}
       {showEditProfile && (
         <div className="modal-backdrop">
           <div className="modal-content profile-modal">
-            {/* Close button */}
             <button
               className="modal-close-btn"
               onClick={() => {
@@ -460,7 +430,6 @@ export default function TaskManagerHeader({
                 <div className="loading-spinner">Loading profile data...</div>
               ) : (
                 <>
-                  {/* Avatar Section at Top */}
                   <div className="avatar-section">
                     <div
                       className="profile-avatar"
@@ -483,7 +452,6 @@ export default function TaskManagerHeader({
                       )}
                     </div>
 
-                    {/* Avatar Actions Dropdown */}
                     {showAvatarActions && (
                       <div className="avatar-actions-dropdown">
                         <div
@@ -507,7 +475,6 @@ export default function TaskManagerHeader({
                       </div>
                     )}
 
-                    {/* Hidden file input */}
                     <input
                       type="file"
                       accept="image/*"
@@ -516,7 +483,6 @@ export default function TaskManagerHeader({
                       className="avatar-file-input"
                     />
 
-                    {/* Show preview and save/cancel when file selected */}
                     {tempAvatar && (
                       <div className="avatar-actions-buttons">
                         <button
@@ -541,7 +507,6 @@ export default function TaskManagerHeader({
                     )}
                   </div>
 
-                  {/* --- Form Fields --- */}
                   <div className="form-group">
                     <label>
                       <User size={16} className="icon" />
@@ -647,7 +612,6 @@ export default function TaskManagerHeader({
           </div>
         </div>
       )}
-      {/* Expanded Avatar Modal */}
       {showExpandedAvatar && (
         <div
           className="modal-backdrop expanded-avatar-backdrop"

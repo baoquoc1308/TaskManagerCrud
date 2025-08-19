@@ -85,7 +85,6 @@ function TaskManager({
     }
   }, [displayedTasks, tasks, newTaskAdded]);
 
-  // Realtime subscription
   useEffect(() => {
     const channel = supabase.channel("tasks-channel");
 
@@ -329,8 +328,7 @@ function TaskManager({
             }
           }
         }}
-        // newTitle={newTitle}
-        // setNewTitle={setNewTitle}
+        
         newDescription={newDescription}
         setNewDescription={setNewDescription}
         confirmDeleteTask={confirmDeleteTask}

@@ -1,4 +1,3 @@
-// components/TaskList/TaskList.jsx
 import { useState, useEffect } from "react";
 import type { Task } from "../../types/Task";
 import { fetchUserAvatar } from "../../utils/FetchUserAvatar";
@@ -56,7 +55,7 @@ export default function TaskList({
   const [taskToRename, setTaskToRename] = useState<Task | null>(null);
   const [newTitle, setNewTitle] = useState<string>("");
   const [avatars, setAvatars] = useState<Record<string, string>>({});
-
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
   useEffect(() => {
     const fetchAvatars = async () => {
       const emailsToFetch = [
@@ -218,13 +217,21 @@ export default function TaskList({
       statusClass: "completed",
     },
   ];
-
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed(!isSidebarCollapsed);
+  };
+  
   return (
     <>
       <div className="main-container">
-        <Sidebar submitComponent={submitComponent} userRole={userRole} />
+        <Sidebar 
+          submitComponent={submitComponent} 
+          userRole={userRole}
+          isCollapsed={isSidebarCollapsed}
+          onToggle={toggleSidebar}
+        />
 
-        <div className="content-area">
+<div className="content-area">
           <div className="task-sections">
             {taskSections.map((section) => (
               <TaskSection

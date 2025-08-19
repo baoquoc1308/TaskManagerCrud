@@ -75,8 +75,6 @@ function TaskDetail({
   }, [isEditingThisTask, task, setNewDescription]);
 
   const fetchRelatedTasks = async (priority: string, excludeId: string) => {
-    // --- CHANGED ---
-    // Removed the .limit(6) to fetch all related tasks
     const { data, error } = await supabase
       .from("tasks")
       .select("*")
@@ -136,21 +134,7 @@ function TaskDetail({
       onClose();
     }
   };
-  // useEffect(() => {
-  //   function handleClickOutside(event: MouseEvent) {
-  //     if (
-  //       modalRef.current &&
-  //       !modalRef.current.contains(event.target as Node)
-  //     ) {
-  //       onClose();
-  //     }
-  //   }
 
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [onClose]);
   if (!taskId) return null;
 
   if (loading || !task)

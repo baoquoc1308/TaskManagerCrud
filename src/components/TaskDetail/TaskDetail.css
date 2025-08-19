@@ -304,9 +304,6 @@
   color: white;
 }
 
-/* .status-in-progress {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-} */
 
 .status-completed {
   background: linear-gradient(135deg, #10b981, #059669);

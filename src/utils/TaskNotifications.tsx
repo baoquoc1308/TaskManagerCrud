@@ -137,7 +137,6 @@ export const useTaskNotifications = () => {
     );
   };
 
-  // Bulk notifications for multiple users
   const notifyMultipleUsers = (
     message: string,
     userIds: string[],

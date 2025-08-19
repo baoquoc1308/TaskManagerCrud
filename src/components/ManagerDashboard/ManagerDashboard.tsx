@@ -103,7 +103,6 @@ const ManagerDashboard = () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Process daily data
     const todayTasks = allTasks.filter((task) => {
       const taskDate = new Date(task.created_at);
       return taskDate.toDateString() === today.toDateString();
@@ -124,7 +123,6 @@ const ManagerDashboard = () => {
     setData(todayChartData);
     setTodayCount(todayTasks.length);
 
-    // Process weekly data
     const last7Days = Array.from({ length: 7 }, (_, i) => {
       const date = new Date();
       date.setDate(date.getDate() - (6 - i));
@@ -150,7 +148,6 @@ const ManagerDashboard = () => {
 
     setWeeklyData(weeklyChartData);
 
-    // Process monthly data
     const currentMonth = today.getMonth();
     const currentYear = today.getFullYear();
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -179,7 +176,6 @@ const ManagerDashboard = () => {
 
     setMonthlyData(monthlyChartData);
 
-    // Calculate top performers based on current view mode
     const performers = calculateTopPerformers(allTasks, viewMode);
     const topPerformersWithEmails = performers.map((p) => ({
       email: userMap[p.userId] || p.userId,
@@ -203,7 +199,6 @@ const ManagerDashboard = () => {
         return;
       }
 
-      // Fetch user role and email
       const { data: userData, error: userError } = await supabase
         .from("users")
         .select("role, email")
@@ -218,7 +213,6 @@ const ManagerDashboard = () => {
 
       setManagerEmail(formatEmail(userData.email));
 
-      // Fetch all tasks
       const { data: tasks, error: taskErr } = await supabase
         .from("tasks")
         .select("user_id, created_at");
@@ -229,7 +223,6 @@ const ManagerDashboard = () => {
         return;
       }
 
-      // Get user emails
       const userIds = [...new Set(tasks?.map((task) => task.user_id))];
       const { data: userList } = await supabase
         .from("users")

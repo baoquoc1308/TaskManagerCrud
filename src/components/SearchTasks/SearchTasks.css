@@ -186,6 +186,7 @@ h2.react-datepicker__current-month {
   }
   .search-input {
     font-size: 12px;
+    margin-bottom: 1rem;
   }
 }
 @media (max-width: 1629px) {

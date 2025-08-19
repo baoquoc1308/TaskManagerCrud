@@ -70,7 +70,6 @@ export const SubmitTaskDropdown = ({
   const [open, setOpen] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
 
-  // Đóng dropdown khi click ngoài
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (formRef.current && !formRef.current.contains(event.target as Node)) {
@@ -88,14 +87,12 @@ export const SubmitTaskDropdown = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Reset filters/search
     if (setKeyword) setKeyword("");
     if (setPriority) setPriority("");
     if (setDate) setDate(null);
     if (setShowPriority) setShowPriority(false);
     if (setShowDatePicker) setShowDatePicker(false);
 
-    // Validation
     if (!newTask.title || !newTask.description || !newTask.time) {
       toast.error("Please fill all fields.");
       return;
@@ -139,7 +136,6 @@ export const SubmitTaskDropdown = ({
     setTotalCount(newTotalCount);
     setNewTaskAdded(data?.id ?? null);
 
-    // Reset form
     setNewTask({
       title: "",
       description: "",

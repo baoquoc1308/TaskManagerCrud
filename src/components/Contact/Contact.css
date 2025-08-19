@@ -788,7 +788,8 @@ body {
   display: flex;
   gap: 10px;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  margin-bottom: 5px;
 }
 
 .contact-social-links a {

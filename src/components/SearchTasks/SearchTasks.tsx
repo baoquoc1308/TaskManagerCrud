@@ -117,7 +117,6 @@ export function SearchTasks({
 
   const handleDateChange = (selectedDate: Date | null) => {
     setDate(selectedDate);
-    // Close calendar
     setShowDatePicker(false);
   };
   const handleClearSearch = (e: React.MouseEvent<HTMLSpanElement>) => {
@@ -129,7 +128,6 @@ export function SearchTasks({
     setShowPriority(false);
     setShowDatePicker(false);
 
-    //Toast notification
     toast.info("Search filters cleared!", {
       position: "top-right",
       autoClose: 2000,

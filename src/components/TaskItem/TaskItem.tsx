@@ -1,6 +1,7 @@
 import type { Task } from "../../types/Task";
 import FormattedTime from "../../utils/FormattedTime";
 import AvatarWithTooltip from "../AvatarWithTooltip/AvatarWithTooltip";
+import "./TaskItem.css";
 
 interface TaskItemProps {
   task: Task;

@@ -1,19 +1,64 @@
 .task-header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   gap: 1rem;
   margin-bottom: 1rem;
   background-color: #e7f5f3;
+  padding: 10px 20px;
+  border-radius: 10px;
+  flex-wrap: wrap;
+}
+
+.dark .task-header {
+  background-color: #333;
 }
 
 .dark .task-header span {
   color: #fff;
 }
-.dark .task-header {
-  background-color: #333;
+
+.app-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
+.dark .app-title {
+  color: #fff;
+}
+
+.list-icon {
+  margin-bottom: -10px;
+  display: flex;
+  align-items: center;
+}
+
+.list-icon img {
+  transition: all 0.3s ease;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.search-tasks-wrapper {
+  flex: 1;
+  min-width: 200px;
+  max-width: 400px;
+}
+
+.notifications-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
 @media (max-width: 320px) {
   .task-header {
     flex-wrap: wrap;
@@ -21,34 +66,6 @@
     align-items: center;
     margin-bottom: 1rem;
   }
-}
-.task-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 5px;
-  border-radius: 10px;
-}
-
-.dark .app-title {
-  color: #fff;
-}
-.list-icon {
-  margin-bottom: -10px;
-}
-.dark .list-icon {
-  color: #a89eec;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-right: 10px;
-}
-.notifications-wrapper {
-  position: relative;
-  margin: 0 15px;
 }
 
 .notification-bell-button {
@@ -503,23 +520,13 @@
   color: #dc3545;
   font-weight: bold;
 }
-/* Success & Error message smooth */
 .success-message,
 .error-message {
   display: inline-block;
   opacity: 0;
 }
 
-/* @keyframes fadeInSmooth {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-} */
+
 
 .success-message {
   color: #28a745;
@@ -745,4 +752,126 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
   outline: none;
+}
+@media (max-width: 1024px) {
+  .task-header {
+    padding: 8px 15px;
+    gap: 0.8rem;
+  }
+  
+  .app-title {
+    font-size: 1.3rem;
+  }
+  
+  .list-icon img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .search-tasks-wrapper {
+    min-width: 180px;
+    max-width: 300px;
+  }
+  
+  .header-right {
+    gap: 12px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .task-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 15px;
+    gap: 12px;
+  }
+  
+  .app-title {
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  
+  .list-icon img {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .header-right {
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+  }
+  
+  .search-tasks-wrapper {
+    flex: 1;
+    min-width: auto;
+    max-width: none;
+    margin-right: 10px;
+  }
+  
+  .notifications-wrapper {
+    flex-shrink: 0;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .task-header {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+  
+  .app-title {
+    font-size: 1.1rem;
+    gap: 8px;
+  }
+  
+  .list-icon img {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .header-right {
+    gap: 8px;
+  }
+  
+  .search-tasks-wrapper {
+    margin-right: 5px;
+  }
+}
+
+
+@media (max-width: 320px) {
+  .task-header {
+    padding: 8px 10px;
+  }
+  
+  .app-title {
+    font-size: 1rem;
+  }
+  
+  .list-icon img {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .notifications-dropdown {
+    width: 280px;
+    right: -10px;
+    max-height: 350px;
+  }
+}
+
+@media (max-width: 320px) {
+  .notifications-dropdown {
+    width: 260px;
+    right: -20px;
+    max-height: 300px;
+  }
 }

@@ -28,32 +28,6 @@ const Contact = () => {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<any>({});
 
-  // const validateForm = () => {
-  //   const newErrors: any = {};
-
-  //   if (!formData.name.trim()) {
-  //     newErrors.name = "Name is required";
-  //   }
-
-  //   if (!formData.email.trim()) {
-  //     newErrors.email = "Email is required";
-  //   } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-  //     newErrors.email = "Email is invalid";
-  //   }
-
-  //   if (!formData.subject.trim()) {
-  //     newErrors.subject = "Subject is required";
-  //   }
-
-  //   if (!formData.message.trim()) {
-  //     newErrors.message = "Message is required";
-  //   } else if (formData.message.trim().length < 10) {
-  //     newErrors.message = "Message must be at least 10 characters long";
-  //   }
-
-  //   setErrors(newErrors);
-  //   return Object.keys(newErrors).length === 0;
-  // };
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -77,9 +51,6 @@ const Contact = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    // if (!validateForm()) {
-    //   return;
-    // }
 
     setIsSubmitting(true);
 
@@ -122,7 +93,7 @@ const Contact = () => {
       ),
       title: "Call Us",
       content: "+84 868 123 456",
-      description: "Monday - Friday from 8:30 AM to 5:30 PM",
+      description: "Contact us when you need",
     },
     {
       icon: (
@@ -253,7 +224,6 @@ const Contact = () => {
         <ArrowLeft className="w-5 h-5" />
         <span>Back to Home</span>
       </button>
-      {/* Header Section */}
       <div className="contact-header-bg">
         <div className="contact-container">
           <div>
@@ -270,9 +240,7 @@ const Contact = () => {
         className="contact-container"
         style={{ paddingTop: 48, paddingBottom: 48 }}
       >
-        {/* Main Content Grid: Form + Sidebar */}
         <div className="contact-main-layout">
-          {/* Contact Form - Left Side */}
           <div className="contact-form-container">
             <div className="contact-form-card">
               <div className="contact-form-header">
@@ -405,9 +373,7 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Right Sidebar */}
           <div className="contact-sidebar">
-            {/* Contact Info */}
             <div className="contact-info-card">
               <h3 className="contact-info-title">Contact Information</h3>
               <div className="contact-info-list">
@@ -430,11 +396,9 @@ const Contact = () => {
               </div>
             </div>
 
-            {/* Team Members */}
           </div>
         </div>
 
-        {/* FAQ Section - Full Width Below */}
         <div className="contact-faq-section">
           <div className="contact-team-card">
             <h3 className="contact-team-title">Our Team</h3>
@@ -468,7 +432,6 @@ const Contact = () => {
         </div>
       </div>
 
-      {/* Footer Section */}
       <div className="contact-footer-bg">
         <div className="contact-container">
           <div>

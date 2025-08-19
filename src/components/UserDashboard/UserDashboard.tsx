@@ -74,14 +74,12 @@ const UserDashboard = () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Process daily tasks
     const todayTasks = tasks.filter((task) => {
       const taskDate = new Date(task.created_at);
       return taskDate.toDateString() === today.toDateString();
     });
     setTodayCount(todayTasks.length);
 
-    // Process weekly data
     const last7Days = Array.from({ length: 7 }, (_, i) => {
       const date = new Date();
       date.setDate(date.getDate() - (6 - i));
@@ -107,7 +105,6 @@ const UserDashboard = () => {
       }))
     );
 
-    // Process monthly data
     const currentMonth = today.getMonth();
     const currentYear = today.getFullYear();
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -136,7 +133,6 @@ const UserDashboard = () => {
       }))
     );
 
-    // Calculate status and priority stats
     setStatusStats(calculateStats(tasks, "status"));
     setPriorityStats(calculateStats(tasks, "priority"));
   }, [tasks, calculateStats]);

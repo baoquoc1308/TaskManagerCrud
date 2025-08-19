@@ -2,8 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import "./TaskManagerHeader.css";
 import { supabase } from "../../supabase-client";
 import { useNotifications } from "../../contexts/NotificationContext";
-import { Bell, User, Calendar, Phone, Mail } from "lucide-react";
+import { Bell, User, Calendar, Phone, Mail, Edit, LogOut } from "lucide-react";
 import { toast } from "react-toastify";
+
 export default function TaskManagerHeader({
   userEmail,
   avatarUrl,
@@ -345,10 +346,8 @@ export default function TaskManagerHeader({
           )}
         </div>
 
-        {/* Display full name if available, otherwise email */}
         <span>{displayName}</span>
 
-        {/* Avatar & Dropdown */}
         <div className="user-avatar-wrapper" style={{ position: "relative" }}>
           <div
             className="user-avatar"
@@ -386,7 +385,13 @@ export default function TaskManagerHeader({
                     setShowEditProfile(true);
                     setShowAvatarDropdown(false);
                   }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                  }}
                 >
+                  <Edit size={16} />
                   Edit Profile
                 </li>
                 <li
@@ -394,7 +399,13 @@ export default function TaskManagerHeader({
                     setShowAvatarDropdown(false);
                     onLogout();
                   }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                  }}
                 >
+                  <LogOut size={16} />
                   Log Out
                 </li>
               </ul>

@@ -1,4 +1,3 @@
-// components/TaskSection/TaskSection.jsx
 import type { Task } from "../../types/Task";
 import TaskItem from "../TaskItem/TaskItem";
 

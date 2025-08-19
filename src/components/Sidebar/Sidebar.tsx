@@ -1,4 +1,3 @@
-// components/Sidebar/Sidebar.jsx
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
 import ThemeToggle from "../ThemeToggle";
@@ -6,124 +5,114 @@ import ThemeToggle from "../ThemeToggle";
 interface SidebarProps {
   submitComponent?: React.ReactNode;
   userRole?: string;
+  isCollapsed?: boolean;
+  onToggle?: () => void;
 }
 
-export default function Sidebar({ submitComponent, userRole }: SidebarProps) {
+export default function Sidebar({ 
+  submitComponent, 
+  userRole, 
+  isCollapsed = false,
+  onToggle 
+}: SidebarProps) {
   return (
-    <div className="dashboard">
-      <ul className="dashboard-menu">
-        <li>{submitComponent}</li>
-        {userRole === "manager" && (
+    <>
+      <button 
+        className="mobile-menu-toggle"
+        onClick={onToggle}
+        aria-label="Toggle sidebar menu"
+      >
+        <span className="hamburger-line"></span>
+        <span className="hamburger-line"></span>
+        <span className="hamburger-line"></span>
+      </button>
+
+      {!isCollapsed && (
+        <div 
+          className="sidebar-overlay"
+          onClick={onToggle}
+        />
+      )}
+
+      <div className={`dashboard ${isCollapsed ? 'collapsed' : 'expanded'}`}>
+        <button 
+          className="sidebar-close-btn"
+          onClick={onToggle}
+          aria-label="Close sidebar"
+        >
+        </button>
+
+        <ul className="dashboard-menu">
+          <li>{submitComponent}</li>
+          {userRole === "manager" && (
+            <li>
+              <Link to="/manager-dashboard">
+                <span className="icon">🏢</span> 
+                <span className="menu-text">Manager</span>
+              </Link>
+            </li>
+          )}
           <li>
-            <Link to="/manager-dashboard">
-              <span className="icon">🏢</span> Manager
-            </Link>
+            <NavLink
+              to="/"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              <span className="icon">📋</span>
+              <span className="menu-text">Dashboard</span>
+            </NavLink>
           </li>
-        )}
-        <li>
-          <NavLink
-            to="/"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            <span className="icon">📋</span>Dashboard
-          </NavLink>
-        </li>
-        {userRole === "user" && (
+          {userRole === "user" && (
+            <li>
+              <Link to="/user-dashboard">
+                <span className="icon">🏢</span> 
+                <span className="menu-text">My Chart</span>
+              </Link>
+            </li>
+          )}
           <li>
-            <Link to="/user-dashboard">
-              <span className="icon">🏢</span> My Chart
-            </Link>
+            <NavLink
+              to="/contact"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              <span className="icon">📞</span> 
+              <span className="menu-text">Contact</span>
+              <span className="badge">5</span>
+            </NavLink>
           </li>
-        )}
-        <li>
-          <NavLink
-            to="/contact"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            <span className="icon">📞</span> Contact
-            <span className="badge">5</span>
-          </NavLink>
-        </li>
-        <li>
-          <a href="#">
-            <span className="icon">🌙</span>
-            <span style={{ marginRight: "17px" }}>DarkMode</span>
-            <ThemeToggle />
-          </a>
-        </li>
-        <li>
-          <NavLink
-            to="/inbox"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            <span className="icon">📥</span>Inbox
-            <span className="badge">3</span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/teams"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            <span className="icon">👥</span>Teams
-            <span className="badge">2</span>
-          </NavLink>
-        </li>
+          <li>
+            <a href="#">
+              <span className="icon">🌙</span>
+              <span className="menu-text" style={{ marginRight: "17px" }}>DarkMode</span>
+              <ThemeToggle />
+            </a>
+          </li>
+        </ul>
 
-        <li>
-          <NavLink
-            to="/timesheet"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            <span className="icon">🕒</span> Timesheet
-            <span className="badge">2</span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/calendar"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            <span className="icon">📅</span> Calendar
-            <span className="badge">1</span>
-          </NavLink>
-        </li>
-
-        <li>
-          <NavLink
-            to="/settings"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            <span className="icon">⚙️</span> Settings
-            <span className="badge">1</span>
-          </NavLink>
-        </li>
-      </ul>
-
-      <div className="projects-section">
-        <h3>Projects</h3>
-        <div className="project-item">
-          <div
-            className="project-icon"
-            style={{ backgroundColor: "#667eea" }}
-          ></div>
-          Main Project
-        </div>
-        <div className="project-item">
-          <div
-            className="project-icon"
-            style={{ backgroundColor: "#28a745" }}
-          ></div>
-          Design Project
-        </div>
-        <div className="project-item">
-          <div
-            className="project-icon"
-            style={{ backgroundColor: "#ffc107" }}
-          ></div>
-          Landing Page
+        <div className="projects-section">
+          <h3>Projects</h3>
+          <div className="project-item">
+            <div
+              className="project-icon"
+              style={{ backgroundColor: "#667eea" }}
+            ></div>
+            <span className="project-text">Main Project</span>
+          </div>
+          <div className="project-item">
+            <div
+              className="project-icon"
+              style={{ backgroundColor: "#28a745" }}
+            ></div>
+            <span className="project-text">Design Project</span>
+          </div>
+          <div className="project-item">
+            <div
+              className="project-icon"
+              style={{ backgroundColor: "#ffc107" }}
+            ></div>
+            <span className="project-text">Landing Page</span>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
